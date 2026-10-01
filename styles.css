@@ -410,3 +410,21 @@ body{background:var(--bg)}.nav{border-bottom:1px solid var(--border);box-shadow:
 .hero-grid>.terminal .terminal-foot{font-size:11px;padding:12px 21px}
 @media(max-width:760px){.hero-grid>.terminal .terminal-code{font-size:11px!important;padding:16px 13px!important}.hero-grid>.terminal .terminal-bar{padding:12px 14px;font-size:10px}.hero-grid>.terminal .terminal-foot{padding:12px 14px;font-size:10px}}
 @media(max-width:420px){.hero-grid>.terminal .terminal-code{font-size:10px!important}}
+
+/* Consistent blocks for every content section and timeline entry. */
+.main-col{gap:28px}
+.main-col>section>.card,.sidebar>.card,.mindset-step,.contact-card{
+ background:var(--card);border:1px solid var(--border);border-radius:16px;
+ box-shadow:0 8px 28px rgba(0,0,0,.08);
+}
+.main-col>section>.card{padding:28px}
+.main-col>section>.card>.card-head{margin-bottom:24px}
+.timeline{gap:14px}
+.timeline>.tl-item{background:var(--bg);border:1px solid var(--border);border-radius:12px;padding:20px 18px;grid-template-columns:68px 18px minmax(0,1fr);transition:border-color .2s}
+.timeline>.tl-item:hover{border-color:var(--accent-text)}
+.timeline>.tl-item .tl-content{padding-bottom:0}
+.timeline>.tl-item .tl-line{display:none}
+.project-card{background:var(--bg)}
+.mindset-step{height:100%}
+@media(max-width:760px){.main-col>section>.card{padding:22px}.timeline>.tl-item{padding:17px 14px;grid-template-columns:58px 17px minmax(0,1fr)}}
+@media(max-width:520px){.main-col{gap:22px}.main-col>section>.card{padding:17px}.timeline>.tl-item{grid-template-columns:14px minmax(0,1fr);padding:16px 12px}.timeline>.tl-item .tl-date-col{display:none}.timeline>.tl-item .tl-date-inline{display:block}.main-col>section>.card>.card-head{gap:8px}.main-col>section>.card>.card-head .card-title{font-size:19px}.activity-gallery{gap:8px}.activity-gallery img{height:100px}}
