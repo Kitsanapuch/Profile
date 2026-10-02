@@ -42,31 +42,94 @@
   }, {threshold:0.08});
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
-  // lightbox: click any photo to view it full-size
+  // Each project or activity owns its own gallery.
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
   const lightboxClose = document.getElementById('lightboxClose');
-  let previousFocus;
-  function openLightbox(img){
- previousFocus=document.activeElement;
-    lightboxImg.src = img.src;
+  const galleryPrev = document.createElement('button');
+  const galleryNext = document.createElement('button');
+  const galleryCaption = document.createElement('div');
+  galleryPrev.className = 'gallery-arrow gallery-prev';
+  galleryNext.className = 'gallery-arrow gallery-next';
+  galleryPrev.type = galleryNext.type = 'button';
+  galleryPrev.textContent = '‹'; galleryNext.textContent = '›';
+  galleryPrev.setAttribute('aria-label', 'Previous photo in this project or activity');
+  galleryNext.setAttribute('aria-label', 'Next photo in this project or activity');
+  galleryCaption.className = 'gallery-caption';
+  galleryCaption.id = 'galleryCaption';
+  galleryCaption.setAttribute('aria-live', 'polite');
+  galleryCaption.setAttribute('aria-atomic', 'true');
+  lightbox.setAttribute('aria-describedby', galleryCaption.id);
+  lightbox.append(galleryPrev, galleryNext, galleryCaption);
+  let previousFocus, galleryImages = [], galleryIndex = 0, previousOverflow = '', touchStart = null;
+  function imagesFor(img){
+    const group = img.closest('.project-card, #activities .tl-item');
+    return group ? Array.from(group.querySelectorAll('img.zoomable')) : [img];
+  }
+  function renderGallery(){
+    const img = galleryImages[galleryIndex];
+    lightboxImg.src = img.currentSrc || img.src;
     lightboxImg.alt = img.alt || '';
-    lightbox.classList.add('open'); lightboxClose.focus();
+    galleryCaption.textContent = `${galleryIndex + 1} / ${galleryImages.length} — ${img.alt || 'Photo'}`;
+    galleryPrev.hidden = galleryNext.hidden = galleryImages.length < 2;
+  }
+  function moveGallery(step){
+    if (!lightbox.classList.contains('open') || galleryImages.length < 2) return;
+    galleryIndex = (galleryIndex + step + galleryImages.length) % galleryImages.length;
+    renderGallery();
+  }
+  function openLightbox(img){
+    previousFocus = document.activeElement;
+    previousOverflow = document.body.style.overflow;
+    galleryImages = imagesFor(img);
+    galleryIndex = galleryImages.indexOf(img);
+    renderGallery();
+    lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
+    lightboxClose.focus();
   }
   function closeLightbox(){
-    if(!lightbox.classList.contains('open')) return; lightbox.classList.remove('open'); previousFocus?.focus();
-    document.body.style.overflow = '';
+    if (!lightbox.classList.contains('open')) return;
+    lightbox.classList.remove('open');
+    document.body.style.overflow = previousOverflow;
+    touchStart = null;
+    previousFocus?.focus();
   }
   document.querySelectorAll('img.zoomable').forEach(img => {
     img.addEventListener('click', () => openLightbox(img));
-    img.addEventListener('keydown', (e) => {
-      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); openLightbox(img); }
+    img.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){e.preventDefault(); openLightbox(img);}
     });
   });
+  galleryPrev.addEventListener('click', () => moveGallery(-1));
+  galleryNext.addEventListener('click', () => moveGallery(1));
   lightboxClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => { if(e.target === lightbox) closeLightbox(); });
-  document.addEventListener('keydown', (e) => { if(e.key === 'Escape') closeLightbox(); });
+  lightbox.addEventListener('click', e => {if(e.target === lightbox) closeLightbox();});
+  document.addEventListener('keydown', e => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault(); moveGallery(e.key === 'ArrowRight' ? 1 : -1);
+    }
+    if (e.key === 'Tab') {
+      const controls = [lightboxClose, galleryPrev, galleryNext].filter(el => !el.hidden);
+      const index = controls.indexOf(document.activeElement);
+      e.preventDefault();
+      controls[(index + (e.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
+    }
+  });
+  lightboxImg.addEventListener('touchstart', e => {
+    touchStart = e.touches.length === 1 ? {x:e.touches[0].clientX, y:e.touches[0].clientY} : null;
+  }, {passive:true});
+  lightboxImg.addEventListener('touchmove', e => {if(e.touches.length !== 1) touchStart = null;}, {passive:true});
+  lightboxImg.addEventListener('touchcancel', () => {touchStart = null;}, {passive:true});
+  lightboxImg.addEventListener('touchend', e => {
+    if (!touchStart || !e.changedTouches.length) return;
+    const dx = e.changedTouches[0].clientX - touchStart.x;
+    const dy = e.changedTouches[0].clientY - touchStart.y;
+    touchStart = null;
+    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) moveGallery(dx < 0 ? 1 : -1);
+  }, {passive:true});
 
 document.documentElement.classList.add('motion-ready');
 const progress=document.querySelector('.scroll-progress');
@@ -74,4 +137,4 @@ const topLink=document.createElement('a');topLink.className='back-top';topLink.h
 let lastY=window.scrollY, queued=false;
 function updateScroll(){const y=window.scrollY,total=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform='scaleX('+(total>0?y/total:0)+')';document.querySelector('.nav').classList.toggle('nav-hidden',y>lastY&&y>400&&!mobileMenu.classList.contains('open'));topLink.classList.toggle('show',y>600);lastY=y;queued=false;}
 window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateScroll);}},{passive:true});updateScroll();
-lightbox.addEventListener('keydown',e=>{if(e.key==='Tab'){e.preventDefault();lightboxClose.focus();}});
+
