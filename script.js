@@ -1,3 +1,4 @@
+const isThai = document.documentElement.lang === 'th';
 
   const root = document.documentElement;
   const themeToggle = document.getElementById('themeToggle');
@@ -53,8 +54,8 @@
   galleryNext.className = 'gallery-arrow gallery-next';
   galleryPrev.type = galleryNext.type = 'button';
   galleryPrev.textContent = '‹'; galleryNext.textContent = '›';
-  galleryPrev.setAttribute('aria-label', 'Previous photo in this project or activity');
-  galleryNext.setAttribute('aria-label', 'Next photo in this project or activity');
+  galleryPrev.setAttribute('aria-label', (isThai ? 'ภาพก่อนหน้าในโปรเจกต์หรือกิจกรรมนี้' : 'Previous photo in this project or activity'));
+  galleryNext.setAttribute('aria-label', (isThai ? 'ภาพถัดไปในโปรเจกต์หรือกิจกรรมนี้' : 'Next photo in this project or activity'));
   galleryCaption.className = 'gallery-caption';
   galleryCaption.id = 'galleryCaption';
   galleryCaption.setAttribute('aria-live', 'polite');
@@ -133,8 +134,19 @@
 
 document.documentElement.classList.add('motion-ready');
 const progress=document.querySelector('.scroll-progress');
-const topLink=document.createElement('a');topLink.className='back-top';topLink.href='#home';topLink.setAttribute('aria-label','Back to top');topLink.textContent='↑';document.body.append(topLink);
+const topLink=document.createElement('a');topLink.className='back-top';topLink.href='#home';topLink.setAttribute('aria-label',(isThai ? 'กลับด้านบน' : 'Back to top'));topLink.textContent='↑';document.body.append(topLink);
 let lastY=window.scrollY, queued=false;
 function updateScroll(){const y=window.scrollY,total=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform='scaleX('+(total>0?y/total:0)+')';document.querySelector('.nav').classList.toggle('nav-hidden',y>lastY&&y>400&&!mobileMenu.classList.contains('open'));topLink.classList.toggle('show',y>600);lastY=y;queued=false;}
 window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateScroll);}},{passive:true});updateScroll();
 
+
+// English is the default at the root; Thai remains available through its own URL.
+(() => {
+ const links = document.querySelectorAll('[data-language]');
+ links.forEach(link => {
+   const target = new URL(link.getAttribute('href'), location.href);
+   if (location.protocol !== 'file:') target.pathname = target.pathname.replace(/index\.html$/, '');
+   target.hash = location.hash;
+   link.href = target.href;
+ });
+})();
