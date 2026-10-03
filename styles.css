@@ -454,3 +454,7 @@ html[lang="th"] .nav-links{gap:16px}
 html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
 @media(max-width:1200px){.nav-links{display:none}.nav-burger{display:flex}}
 @media(max-width:600px){.nav .brand-name{display:none}.nav-right{gap:8px}.language-switch a{padding:8px}.nav-inner{gap:10px}}
+
+/* Separators only between certificate entries. */
+.sidebar .certificate-block{margin-top:0;padding-top:0;border-top:0}
+.sidebar .certificate-block + .certificate-block{margin-top:24px;padding-top:24px;border-top:1px solid var(--border)}
