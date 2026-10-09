@@ -12,9 +12,9 @@
   reader.querySelector('.paper-open').href=button.dataset.paper;
   frame.replaceChildren();
   const scam=button.dataset.paper.includes('scamgraph-ai'),count=scam?13:8;
-  const directory=button.dataset.paper.replace(/\.pdf$/,'');
+  const directory=button.dataset.paper.split('?')[0].replace(/\.pdf$/,'');
   for(let page=1;page<=count;page++){
-   const img=document.createElement('img');img.src=directory+'/page-'+String(page).padStart(scam?2:1,'0')+'.jpg';
+   const img=document.createElement('img');img.src=directory+'/page-'+String(page).padStart(scam?2:1,'0')+'.jpg'+(scam?'':'?v=author-1');
    img.alt=button.dataset.title+' — '+(document.documentElement.lang==='th'?'หน้า ':'Page ')+page;
    img.loading=page===1?'eager':'lazy';frame.append(img);
   }
