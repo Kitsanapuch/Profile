@@ -150,3 +150,12 @@
 @media(min-width:761px){.hero-grid{row-gap:24px}}
 @media(max-width:650px){.hero-grid>.hero-info{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding-top:12px}.hero-info>.info-row,.hero-info>.info-row:nth-child(4),.hero-info>.info-row:nth-child(5){grid-column:auto;padding:10px 11px;gap:8px}.hero-info>.info-row:nth-child(3),.hero-info>.info-row:nth-child(4),.hero-info>.info-row:nth-child(5){grid-column:1/-1}}
 @media(max-width:360px){.hero-grid>.hero-info{grid-template-columns:1fr}}
+
+/* Project tabs are generated from the Projects cards in each language. */
+.journey-view-controls{flex-wrap:wrap}.journey-view-controls button{max-width:100%;white-space:normal}.journey-code .jc-project{white-space:pre-wrap;overflow-wrap:anywhere}
+.journey-product-head img[hidden]{display:none!important}
+.is-immersive .journey-display{height:clamp(360px,58svh,550px)}
+.is-immersive .journey-product{padding:16px}
+.is-immersive .journey-product-head{margin-bottom:8px;flex-shrink:0}
+.is-immersive .journey-product h3{font-size:20px}
+.is-immersive .journey-tech{margin-top:8px;flex-shrink:0}
