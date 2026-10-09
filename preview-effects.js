@@ -28,10 +28,10 @@
 (() => {
  const section=document.querySelector('.code-journey');if(!section)return;
  const th=document.documentElement.lang==='th';
- const cards=Array.from(document.querySelectorAll('#projects .project-card'));
+ const cards=Array.from(document.querySelectorAll('#projects .project-card:not([data-monitor-hidden])'));
  const projects=cards.map(card=>{
    const title=card.querySelector('.project-title')?.textContent.trim()||'';
-   const image=card.querySelector('.myschool-screen img, .project-thumb img, img');
+   const image=card.querySelector('.myschool-screen img') || card.querySelector('.project-thumb img') || card.querySelector('img');
    return {title,name:title.split(' — ')[0],image,tech: Array.from(card.querySelectorAll('.project-tags span')).map(x=>x.textContent).join(' · ')};
  }).filter(p=>p.title&&p.image);
  if(!projects.length)return;
