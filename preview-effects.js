@@ -27,28 +27,49 @@
 
 (() => {
  const section=document.querySelector('.code-journey');if(!section)return;
- const media=matchMedia('(min-width:761px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');let frame=0,manual=null;
  const th=document.documentElement.lang==='th';
- const heading=section.querySelector('.journey-heading p');
- heading.textContent=th?'เลื่อนเพื่อเปลี่ยนจากโค้ดเป็นผลงาน หรือเลือกดูด้วยปุ่มด้านล่าง':'Scroll from code to product, or choose a view below.';
+ const cards=Array.from(document.querySelectorAll('#projects .project-card'));
+ const projects=cards.map(card=>{
+   const title=card.querySelector('.project-title')?.textContent.trim()||'';
+   const image=card.querySelector('.myschool-screen img, .project-thumb img, img');
+   return {title,name:title.split(' — ')[0],image,tech: Array.from(card.querySelectorAll('.project-tags span')).map(x=>x.textContent).join(' · ')};
+ }).filter(p=>p.title&&p.image);
+ if(!projects.length)return;
+ const media=matchMedia('(min-width:761px) and (min-height:650px) and (prefers-reduced-motion:no-preference)');let frame=0,manual=null,current=-1;
+ const code=section.querySelector('.journey-code'),work=section.querySelector('.journey-product');
+ const toolbar=section.querySelector('.journey-toolbar span:nth-child(2)');
+ const building=section.querySelector('.jc-project');if(building)building.textContent=JSON.stringify(projects.map(p=>p.name));
+ const featured=section.querySelector('.journey-profile-project b');if(featured)featured.textContent=projects[0].name+' ↗';
+ section.querySelector('.journey-heading p').textContent=th?'เลือกดูทุกโปรเจกต์ หรือเลื่อนจากโค้ดไปสู่ผลงาน':'Explore every project, or scroll from code to product.';
  const controls=document.createElement('div');controls.className='journey-view-controls';controls.setAttribute('role','group');controls.setAttribute('aria-label',th?'เลือกเนื้อหาในจอ':'Choose screen content');
- const buttons=['developer.ts','MySchool',th?'ตามการเลื่อน':'Auto scroll'].map((label,i)=>{const button=document.createElement('button');button.type='button';button.textContent=label;button.addEventListener('click',()=>{manual=i===2?null:i;render();});controls.append(button);return button;});
- section.querySelector('.journey-monitor').after(controls);
- const clamp=x=>Math.min(1,Math.max(0,x));
- function render(){frame=0;
-   controls.hidden=!media.matches;
-   if(!media.matches)return;
-   const r=section.getBoundingClientRect(),p=clamp(-r.top/Math.max(1,r.height-innerHeight));
-   const product=manual===null ? p>.48 : manual===1;
-   section.style.setProperty('--zoom-p',p);
-   section.style.setProperty('--monitor-scale',.97+p*.03);
-   section.style.setProperty('--code-alpha',product?0:1);
-   section.style.setProperty('--product-alpha',product?1:0);
-   const code=section.querySelector('.journey-code'),work=section.querySelector('.journey-product');
-   code.setAttribute('aria-hidden',String(product));work.setAttribute('aria-hidden',String(!product));
-   buttons.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===2?manual===null:manual===i)));
+ const autoIndex=projects.length+1;
+ const buttons=['developer.ts',...projects.map(p=>p.name),th?'ตามการเลื่อน':'Auto scroll'].map((label,i)=>{
+  const button=document.createElement('button');button.type='button';button.textContent=label;
+  button.addEventListener('click',()=>{manual=i===autoIndex?null:i;render();});controls.append(button);return button;
+ });section.querySelector('.journey-monitor').after(controls);
+ function showProject(index){
+  if(current===index)return;current=index;const p=projects[index];
+  work.querySelector('h3').textContent=p.name;
+  work.querySelector('.journey-product-head p').textContent=p.title.includes(' — ')?p.title.split(' — ').slice(1).join(' — '):'';
+  work.querySelector('.journey-product-head span').textContent='PROJECT / '+String(index+1).padStart(2,'0');
+  const icon=work.querySelector('.journey-product-head img');icon.hidden=true;
+  const image=work.querySelector('.journey-screens');image.src=p.image.src;image.alt=p.image.alt||p.title;image.removeAttribute('width');image.removeAttribute('height');
+  work.querySelector('.journey-tech').textContent=p.tech;
  }
- function sync(){section.classList.toggle('is-immersive',media.matches);if(!media.matches){section.querySelector('.journey-code').removeAttribute('aria-hidden');section.querySelector('.journey-product').removeAttribute('aria-hidden');}render();}
+ function render(){frame=0;
+  const r=section.getBoundingClientRect(),p=Math.min(1,Math.max(0,-r.top/Math.max(1,r.height-innerHeight)));
+  const automatic=media.matches?(p<.35?0:1+Math.min(projects.length-1,Math.floor((p-.35)/.65*projects.length))):1;
+  const selected=manual===null?automatic:manual;const product=selected>0;
+  showProject(product?selected-1:0);
+  toolbar.textContent=product?'developer.ts → '+projects[selected-1].name:'developer.ts';
+  section.style.setProperty('--zoom-p',p);section.style.setProperty('--monitor-scale',.97+p*.03);
+  section.style.setProperty('--code-alpha',product?0:1);section.style.setProperty('--product-alpha',product?1:0);
+  code.style.display=media.matches?'':(product?'none':'');work.style.display=media.matches?'':(product?'':'none');
+  code.setAttribute('aria-hidden',String(product));work.setAttribute('aria-hidden',String(!product));
+  code.inert=product;work.inert=!product;
+  buttons.forEach((button,i)=>button.setAttribute('aria-pressed',String(i===autoIndex?manual===null:manual===i)));
+ }
+ function sync(){section.classList.toggle('is-immersive',media.matches);render();}
  window.addEventListener('scroll',()=>{if(!frame&&media.matches)frame=requestAnimationFrame(render);},{passive:true});window.addEventListener('resize',sync);media.addEventListener('change',sync);sync();
 })();
 
