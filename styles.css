@@ -476,3 +476,6 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
 
 /* Compact document thumbnails; the reader keeps full-size pages. */
 .paper-cover{width:160px;max-width:100%;margin:0 auto;border-radius:6px;box-shadow:3px 4px 0 #667fa52b}.paper-card h3{margin-top:18px}.paper-card{text-align:center}@media(max-width:600px){.paper-cover{width:140px}}
+
+/* Fit a complete page inside the reader, including its toolbar. */
+.paper-reader{width:min(860px,96vw)}.paper-reader-bar,.paper-reader-hint{flex-shrink:0}.paper-pages{padding:16px;scroll-snap-type:y proximity;scroll-padding:16px}.paper-pages img{width:auto;max-width:100%;height:auto;max-height:var(--paper-page-height,75dvh);object-fit:contain;margin:0 auto 16px;scroll-snap-align:start}.paper-pages img:last-child{margin-bottom:0}@media(max-width:600px){.paper-pages{padding:8px;scroll-padding:8px}}
