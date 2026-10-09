@@ -150,3 +150,24 @@ window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFr
    link.href = target.href;
  });
 })();
+
+// Soft card highlight; native mouse and keyboard behavior remain intact.
+(() => {
+ const enabled=matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+ document.querySelectorAll('.sidebar .card, .project-card, .mindset-step, .terminal, .timeline > .tl-item, .contact-card').forEach(card=>{
+  card.classList.add('fx-card');
+  let frame=0,point;
+  function reset(){cancelAnimationFrame(frame);frame=0;card.classList.remove('pointer-active');}
+  card.addEventListener('pointermove',e=>{
+   if(!enabled.matches||e.pointerType==='touch')return;
+   point={x:e.clientX,y:e.clientY};if(frame)return;
+   frame=requestAnimationFrame(()=>{
+    frame=0;const rect=card.getBoundingClientRect();
+    card.style.setProperty('--pointer-x',`${point.x-rect.left}px`);
+    card.style.setProperty('--pointer-y',`${point.y-rect.top}px`);
+    card.classList.add('pointer-active');
+   });
+  },{passive:true});
+  card.addEventListener('pointerleave',reset);card.addEventListener('pointercancel',reset);enabled.addEventListener('change',reset);
+ });
+})();

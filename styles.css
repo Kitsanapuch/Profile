@@ -458,3 +458,10 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
 /* Separators only between certificate entries. */
 .sidebar .certificate-block{margin-top:0;padding-top:0;border-top:0}
 .sidebar .certificate-block + .certificate-block{margin-top:24px;padding-top:24px;border-top:1px solid var(--border)}
+
+/* Two optional interaction effects only. */
+.fx-card{position:relative;isolation:isolate}
+.fx-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:1;opacity:0;background:radial-gradient(240px circle at var(--pointer-x,50%) var(--pointer-y,50%),#699aff16,transparent 75%);transition:opacity .25s}
+.fx-card.pointer-active::after{opacity:1}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.btn{transition:transform .2s,box-shadow .2s,background .2s}.btn:hover{transform:translateY(-3px);box-shadow:0 8px 24px #527dce24}.btn:active{transform:translateY(0)}}
+@media(hover:none),(pointer:coarse),(prefers-reduced-motion:reduce){.fx-card::after{display:none}}
