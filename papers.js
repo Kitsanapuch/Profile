@@ -14,7 +14,7 @@
   const scam=button.dataset.paper.includes('scamgraph-ai'),count=scam?14:10;
   const directory=button.dataset.paper.split('?')[0].replace(/\.pdf$/,'');
   for(let page=1;page<=count;page++){
-   const img=document.createElement('img');img.src=directory+'/page-'+String(page).padStart(2,'0')+'.jpg'+'?v=academic-v3-20261012';
+   const img=document.createElement('img');img.src=directory+'/page-'+String(page).padStart(2,'0')+'.jpg'+'?v=academic-v4-20261012';
    img.alt=button.dataset.title+' — '+(document.documentElement.lang==='th'?'หน้า ':'Page ')+page;
    img.loading=page===1?'eager':'lazy';frame.append(img);
   }
