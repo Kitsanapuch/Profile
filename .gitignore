@@ -1,0 +1,23 @@
+# macOS metadata
+.DS_Store
+.AppleDouble
+
+# Editor and local tooling
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Dependencies and generated output
+node_modules/
+dist/
+build/
+coverage/
+.vercel/
+
+# Local secrets and logs
+.env
+.env.*
+!.env.example
+*.log
