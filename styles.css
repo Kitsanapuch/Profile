@@ -510,9 +510,19 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
 }
 @media(max-width:520px){.activity-gallery .certificate-figure{padding:8px}}
 
-/* Show complete activity images inside balanced thumbnail frames. */
+/* Let activity photos keep their natural proportions without empty image bars. */
+#activities .activity-gallery{
+  display:block;
+  columns:2;
+  column-gap:10px;
+}
 #activities .activity-gallery figure:not(.certificate-figure){
-  padding:6px;
+  display:inline-block;
+  width:100%;
+  margin:0 0 10px;
+  padding:0;
+  overflow:hidden;
+  break-inside:avoid;
   border:1px solid var(--border);
   border-radius:8px;
   background:var(--card);
@@ -520,22 +530,29 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
 #activities .activity-gallery figure:not(.certificate-figure) img{
   display:block;
   width:100%;
-  height:clamp(120px,16vw,168px);
+  height:auto;
+  max-height:none;
+  aspect-ratio:auto;
   object-fit:contain;
-  object-position:center;
   border:0;
-  border-radius:5px;
-  background:var(--bg);
+  border-radius:0;
+  background:none;
 }
 #activities .activity-gallery figure:not(.certificate-figure) figcaption{
-  margin-top:7px;
-  padding:0 2px 2px;
+  margin:0;
+  padding:7px 8px 8px;
+}
+#activities .activity-gallery .certificate-figure{
+  display:block;
+  column-span:all;
+  margin:8px auto 10px;
 }
 #activities .activity-photo img{
   display:block;
-  box-sizing:border-box;
-  padding:6px;
+  width:100%;
+  height:auto;
+  max-height:none;
+  padding:0;
   object-fit:contain;
-  object-position:center;
-  background:var(--card);
+  background:none;
 }
