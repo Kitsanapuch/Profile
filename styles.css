@@ -510,19 +510,16 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
 }
 @media(max-width:520px){.activity-gallery .certificate-figure{padding:8px}}
 
-/* Let activity photos keep their natural proportions without empty image bars. */
+/* Fill each activity thumbnail; the lightbox still shows the uncropped original. */
 #activities .activity-gallery{
-  display:block;
-  columns:2;
-  column-gap:10px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
 }
 #activities .activity-gallery figure:not(.certificate-figure){
-  display:inline-block;
-  width:100%;
-  margin:0 0 10px;
-  padding:0;
+  min-width:0;
+  margin:0;
   overflow:hidden;
-  break-inside:avoid;
   border:1px solid var(--border);
   border-radius:8px;
   background:var(--card);
@@ -531,21 +528,40 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
   display:block;
   width:100%;
   height:auto;
-  max-height:none;
-  aspect-ratio:auto;
-  object-fit:contain;
+  aspect-ratio:4 / 3;
+  object-fit:cover;
   border:0;
   border-radius:0;
-  background:none;
 }
 #activities .activity-gallery figure:not(.certificate-figure) figcaption{
   margin:0;
   padding:7px 8px 8px;
 }
+#activities .activity-gallery figure:last-child:nth-child(odd):not(.certificate-figure){
+  grid-column:1 / -1;
+}
+#activities .activity-gallery figure:last-child:nth-child(odd):not(.certificate-figure) img{
+  aspect-ratio:16 / 9;
+}
 #activities .activity-gallery .certificate-figure{
-  display:block;
-  column-span:all;
-  margin:8px auto 10px;
+  grid-column:1 / -1;
+  width:100%;
+  margin:0;
+  padding:0;
+  overflow:hidden;
+}
+#activities .activity-gallery .certificate-figure img{
+  width:100%;
+  height:auto;
+  aspect-ratio:auto;
+  border-radius:0;
+}
+#activities .activity-gallery .certificate-figure figcaption{
+  margin:0;
+  padding:8px;
+}
+#activities .activity-photo{
+  max-width:100%;
 }
 #activities .activity-photo img{
   display:block;
