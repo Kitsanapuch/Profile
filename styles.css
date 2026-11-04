@@ -482,4 +482,30 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
 
 .share-dialog{position:fixed;margin:auto;width:min(420px,calc(100vw - 32px));padding:32px 24px 16px;border:1px solid var(--border);border-radius:20px;background:var(--bg);color:var(--text);text-align:center;max-height:90dvh;overflow:auto;box-shadow:0 24px 80px #0006}.share-dialog::backdrop{background:#080d1ac9;backdrop-filter:blur(5px)}.share-close{position:absolute;right:12px;top:12px}.share-dialog h2{font-size:22px;margin:12px 0}.share-dialog p{font-size:13px;color:var(--text-muted);line-height:1.7}.share-qr{display:block;margin:22px auto 16px;background:#fff;border:0;border-radius:12px;width:240px;height:240px;max-width:100%}.share-dialog strong{display:block;font-size:14px}.share-link-row{display:flex;gap:8px;margin-top:22px}.share-link-row input{min-width:0;flex:1;border:1px solid var(--border);border-radius:8px;padding:10px;background:var(--bg);color:inherit;font-size:12px}.share-copy{border:0;border-radius:8px;padding:10px 14px;background:#4169c8;color:white;cursor:pointer}.share-status{min-height:22px;margin-top:10px}#profileShare{flex-shrink:0}
 
-.activity-gallery img.certificate-thumb{object-fit:contain;background:#fff;padding:4px}
+/* Give the Discovery Piscine certificate its own full-width preview. */
+.activity-gallery .certificate-figure{
+  grid-column:1 / -1;
+  justify-self:center;
+  width:min(100%,520px);
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:var(--card);
+}
+.activity-gallery .certificate-figure img{
+  display:block;
+  width:100%;
+  height:auto;
+  aspect-ratio:2000 / 1414;
+  object-fit:contain;
+  padding:0;
+  border:0;
+  border-radius:5px;
+  background:#fff;
+}
+.activity-gallery .certificate-figure figcaption{
+  margin-top:9px;
+  text-align:center;
+  letter-spacing:.08em;
+}
+@media(max-width:520px){.activity-gallery .certificate-figure{padding:8px}}
