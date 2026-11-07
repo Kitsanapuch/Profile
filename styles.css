@@ -509,5 +509,3 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
   letter-spacing:.08em;
 }
 @media(max-width:520px){.activity-gallery .certificate-figure{padding:8px}}
-/* Keep the original certificate PDF accessible next to its preview. */
-.certificate-pdf-link{display:inline-block;margin-top:7px;color:var(--accent-text);text-decoration:underline;text-underline-offset:3px}
