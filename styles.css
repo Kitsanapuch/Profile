@@ -509,3 +509,24 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
   letter-spacing:.08em;
 }
 @media(max-width:520px){.activity-gallery .certificate-figure{padding:8px}}
+
+/* Physics Plus: a compact showcase with all test captures in one accessible gallery. */
+.physics-showcase{margin:22px 0 14px;padding:12px;background:#fff;border:1px solid var(--border);border-radius:12px}
+.physics-showcase img{display:block;width:100%;height:auto;max-height:none;border-radius:7px}
+.physics-showcase figcaption{margin-top:9px;font:10px/1.6 var(--mono);color:#52627a;text-align:center}
+.physics-screen-list{margin:16px 0;border:1px solid var(--border);border-radius:10px;background:var(--bg);overflow:hidden}
+.physics-screen-list>summary{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:14px 18px;cursor:pointer;color:var(--accent-text);font:12px/1.5 var(--mono);list-style:none}
+.physics-screen-list>summary::-webkit-details-marker{display:none}
+.physics-screen-list>summary span{font-size:20px;line-height:1;transition:transform .2s}
+.physics-screen-list[open]>summary span{transform:rotate(45deg)}
+.physics-screen-group{padding:6px 18px 20px}
+.physics-screen-group h4{display:flex;justify-content:space-between;gap:10px;margin:8px 0 12px;color:var(--text);font-size:13px}
+.physics-screen-group h4 span{color:var(--text-faint);font:10px var(--mono)}
+.physics-screen-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.physics-screen-grid figure{min-width:0;margin:0;padding:7px;background:#fff;border:1px solid var(--border);border-radius:8px}
+.physics-screen-grid img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px}
+.physics-screen-grid figcaption{margin:6px 3px 1px;color:#52627a;font:10px/1.35 var(--mono)}
+.physics-preview-note{margin:13px 0 18px;line-height:1.6}
+.physics-project-links{display:flex;flex-wrap:wrap;gap:10px}
+@media(max-width:700px){.physics-screen-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.physics-showcase{padding:6px}.physics-screen-grid{grid-template-columns:1fr}.physics-screen-list>summary{font-size:11px}}
