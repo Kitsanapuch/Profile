@@ -530,3 +530,12 @@ html[lang="th"] .terminal-code{font-family:monospace;line-height:1.6}
 .physics-project-links{display:flex;flex-wrap:wrap;gap:10px}
 @media(max-width:700px){.physics-screen-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.physics-showcase{padding:6px}.physics-screen-grid{grid-template-columns:1fr}.physics-screen-list>summary{font-size:11px}}
+
+/* Make the administrator workspace visible before the optional full gallery. */
+.physics-admin-feature{margin:0 0 16px;padding:12px;border:1px solid rgba(244,207,78,.3);border-radius:12px;background:var(--card);overflow:hidden}
+.physics-admin-feature-head{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:14px;row-gap:3px;padding:4px 4px 12px}
+.physics-admin-kicker{color:#d1aa30;font:10px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase}
+.physics-admin-feature h4{font-size:16px;line-height:1.35}
+.physics-admin-feature p{flex-basis:100%;color:var(--text-muted);font-size:12px;line-height:1.5}
+.physics-admin-feature img{width:100%;max-height:300px;object-fit:cover;object-position:center top;border-radius:7px;cursor:zoom-in}
+.physics-admin-feature figcaption{margin:8px 3px 2px;color:var(--text-faint);font:10px/1.5 var(--mono)}
