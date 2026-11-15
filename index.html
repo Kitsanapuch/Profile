@@ -61,7 +61,7 @@
 <link rel="stylesheet" href="./motion-effects.css?v=6">
 <link rel="stylesheet" href="./portfolio-polish.css?v=7">
 <link rel="stylesheet" href="./intro-sequence.css?v=8">
-<link rel="stylesheet" href="./multipage.css?v=4">
+<link rel="stylesheet" href="./multipage.css?v=5">
 <link rel="stylesheet" href="./route-motion.css?v=3">
 </head>
 <body id="top" class="motion-preview multipage-route route-home"><canvas id="motion-particles" aria-hidden="true"></canvas>
@@ -94,7 +94,7 @@
       <img class="brand-logo" src="./brand-mark.svg" alt="Kitsanapuch logo" width="48" height="48">
       <span class="brand-name">Kitsanapuch Chuaibamrung</span>
     </a>
-    <div class="nav-links"><a href="./" class="active" aria-current="page">Home</a><a href="./about/">About</a><a href="./experience/">Experience</a><a href="./activities/">Activities</a><a href="./projects/">Projects</a><a href="./skills/">Skills</a><a href="./certifications/">Certifications</a><a href="./papers/">Papers</a><a href="./contact/">Contact</a></div>
+    <div class="nav-links"><a href="./" class="active" aria-current="page">Home</a><a href="./experience/">Experience</a><a href="./activities/">Activities</a><a href="./projects/">Projects</a><a href="./skills/">Skills</a><a href="./certifications/">Certifications</a><a href="./papers/">Papers</a><a href="./contact/">Contact</a></div>
     <div class="nav-right"><span class="nav-current-label" id="navCurrent" aria-live="polite">Home</span><div class="language-switch" role="group" aria-label="Language"><a href="./" data-language="en" lang="en" hreflang="en" aria-current="page">EN</a><a href="./th/" data-language="th" lang="th" hreflang="th">TH</a></div>
 <button class="icon-btn" id="profileShare" type="button" aria-label="Share profile" title="Share profile"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 10.5 6.8-4M8.6 13.5l6.8 4"/></svg></button>
       <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode">
@@ -106,7 +106,7 @@
     </div>
   </div>
 </nav>
-<div class="mobile-menu" id="mobileMenu"><a href="./" aria-current="page">Home</a><a href="./about/">About</a><a href="./experience/">Experience</a><a href="./activities/">Activities</a><a href="./projects/">Projects</a><a href="./skills/">Skills</a><a href="./certifications/">Certifications</a><a href="./papers/">Papers</a><a href="./contact/">Contact</a></div>
+<div class="mobile-menu" id="mobileMenu"><a href="./" aria-current="page">Home</a><a href="./experience/">Experience</a><a href="./activities/">Activities</a><a href="./projects/">Projects</a><a href="./skills/">Skills</a><a href="./certifications/">Certifications</a><a href="./papers/">Papers</a><a href="./contact/">Contact</a></div>
 <section class="hero motion-hero" id="home" aria-labelledby="motion-name">
   <svg class="motion-ribbon" viewBox="0 0 1000 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <defs>
@@ -145,20 +145,90 @@
   </div>
 </section>
 <main id="main-content" class="home-summary">
-  <div class="home-summary-head reveal"><span class="route-eyebrow">START HERE</span><h2>At a glance</h2></div>
+<section class="home-about-complete" aria-labelledby="home-about-heading">
+  <div class="home-summary-head reveal"><span class="route-eyebrow">ABOUT</span><h2 id="home-about-heading">About me</h2></div>
+  <div class="home-about-stack">
+<section class="home-about-intro" data-scene><div class="card reveal" id="about">
+        <div class="card-head">
+          <span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.3-4.4 4.4-6.6 7.5-6.6s6.2 2.2 7.5 6.6"/></svg></span>
+          <div><h3 class="card-title">Profile</h3></div>
+        </div>
+        <p class="about-quote">"AI can accelerate how we build software, but it cannot replace how we think."</p>
+        <p class="about-text">As a Software Engineer, I believe our role is not only to write code, but to understand problems, evaluate solutions, make responsible decisions, and design technology around human needs.</p>
+        <div class="interest-tags">
+          <span>Software Engineering</span><span>Artificial Intelligence</span><span>IoT</span><span>Technology Innovation</span><span>Problem Solving</span>
+        </div>
+        <div class="home-about-work"><span>SELECTED WORK</span><a href="./projects/#physics-plus-project"><strong>Physics Plus</strong><small>Tutoring platform</small></a><a href="./projects/#scamgraph-project"><strong>ScamGraph AI</strong><small>Scam-risk prototype</small></a><a href="./projects/#myschool-project"><strong>MySchool</strong><small>School learning platform</small></a></div>
+      </div></section><section data-scene id="education" style="padding:0;">
+        <div class="card reveal">
+          <div class="card-head">
+            <span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg></span>
+            <div><h2 class="card-title">Education</h2><p class="card-sub">Academic background.</p></div>
+          </div>
+          <div class="timeline">
+            <div class="tl-item">
+              <span class="tl-date-col">2026 –<br>Present</span>
+              <div class="tl-rail"><span class="tl-dot"></span><span class="tl-line"></span></div>
+              <div class="tl-content">
+                <span class="tl-date-inline">2026 – Present</span>
+                <p class="tl-role">Thammasat University</p>
+                <span class="tl-org">Bachelor of Engineering — Software Engineering</span>
+              </div>
+            </div>
+            <div class="tl-item">
+              <span class="tl-date-col">2020 –<br>2025</span>
+              <div class="tl-rail"><span class="tl-dot"></span></div>
+              <div class="tl-content">
+                <span class="tl-date-inline">2020 – 2025</span>
+                <p class="tl-role">PSU.Witthayanusorn Suratthani School</p>
+                <span class="tl-org">Science-Mathematics Study Plan</span>
+                <span class="tl-gpa">GPA 3.53 / 6</span>
+              </div>
+            </div>
+          </div>
+          <div class="tl-callout">
+            <span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 9l10-5 10 5-10 5-10-5z"/><path d="M6 11v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg></span>
+            <p>My current studies cover software design, implementation, and testing; I apply these methods in coursework and project development.</p>
+          </div>
+        </div>
+      </section><section id="mindset" class="route-mindset" data-scene>
+    <div class="section-heading reveal">
+      <span class="eyebrow">How I Work</span>
+      <h2>Engineering Mindset</h2>
+    </div>
+    <div class="mindset">
+      <div class="mindset-step reveal">
+        <span class="num">01</span>
+        <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg></span>
+        <h4>Understand</h4>
+        <p>Start by understanding the real problem before jumping to a solution.</p>
+      </div>
+      <div class="mindset-step reveal">
+        <span class="num">02</span>
+        <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 16l5-11 5 7 3-4 5 8"/></svg></span>
+        <h4>Design</h4>
+        <p>Design the right solution with the constraints and people involved in mind.</p>
+      </div>
+      <div class="mindset-step reveal">
+        <span class="num">03</span>
+        <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a1 1 0 0 1 1.4 0l1.6 1.6a1 1 0 0 1 0 1.4L9 17l-4 1 1-4 8.7-7.7z"/></svg></span>
+        <h4>Build</h4>
+        <p>Turn the design into a working system, one careful step at a time.</p>
+      </div>
+      <div class="mindset-step reveal">
+        <span class="num">04</span>
+        <span class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="3 12 8 7 12 11 21 3"/><polyline points="21 8 21 3 16 3"/></svg></span>
+        <h4>Improve</h4>
+        <p>Test, learn, and refine — engineering is never really finished.</p>
+      </div>
+    </div>
+  </section>
+  </div>
+</section>
+  <div class="home-summary-head reveal"><span class="route-eyebrow">AT A GLANCE</span><h2>Skills &amp; contact</h2></div>
   <div class="route-summary-grid">
-    <article class="route-summary-card reveal" data-scene aria-labelledby="home-about">
-      <span class="route-summary-index">01 / ABOUT</span>
-      <h3 id="home-about">About</h3>
-      <p>I study Software Engineering at Thammasat University. My projects cover tutoring operations, school software, and scam-risk analysis. I focus on clear workflows and responsible use of AI.</p>
-      <ul class="route-fact-list">
-        <li><strong>2026–present</strong><span>B.Eng. Software Engineering · Thammasat University</span></li>
-        <li><strong>2020–2025</strong><span>Science–Mathematics Study Plan · PSU.Witthayanusorn Suratthani School</span></li>
-      </ul>
-      <a class="route-summary-link" href="./about/">Read more about me <span aria-hidden="true">↗</span></a>
-    </article>
     <article class="route-summary-card reveal" data-scene aria-labelledby="home-skills">
-      <span class="route-summary-index">02 / SKILLS</span>
+      <span class="route-summary-index">01 / SKILLS</span>
       <h3 id="home-skills">Skills</h3>
       <div class="route-skill-groups">
         <div><strong>Programming</strong><span>Python · PHP · SQL · JavaScript · TypeScript · Git &amp; GitHub</span></div>
@@ -168,21 +238,8 @@
       </div>
       <a class="route-summary-link" href="./skills/">View all skills <span aria-hidden="true">↗</span></a>
     </article>
-    <article class="route-summary-card reveal" data-scene aria-labelledby="home-certifications">
-      <span class="route-summary-index">03 / CERTIFICATIONS</span>
-      <h3 id="home-certifications">Certifications</h3>
-      <ul class="route-credential-list">
-        <li><time datetime="2026-11-06">06 Nov 2026</time><span>AI FOR ALL HACKATHON · Amazon Quick</span></li>
-        <li><time datetime="2026-10-16">16 Oct 2026</time><span>U Hackathon · AI Track</span></li>
-        <li><time datetime="2026-10-16">16 Oct 2026</time><span>Discovery Piscine · Web Programming Essentials</span></li>
-        <li><time datetime="2025-10-05">05 Oct 2025</time><span>Coding Thailand · Bronze Prize</span></li>
-        <li><span>09/05/2025</span><span>FutureSkill · Ethical Hacking and Penetration Testing</span></li>
-        <li><time datetime="2025-05-05">05 May 2025</time><span>NCSA · Cybersecurity Professional Course</span></li>
-      </ul>
-      <a class="route-summary-link" href="./certifications/">View certificate images <span aria-hidden="true">↗</span></a>
-    </article>
     <article class="route-summary-card reveal" data-scene aria-labelledby="home-contact">
-      <span class="route-summary-index">04 / CONTACT</span>
+      <span class="route-summary-index">02 / CONTACT</span>
       <h3 id="home-contact">Contact</h3>
       <p>For a software role, an AI prototype, or a project collaboration, send me a note with the context and timeline.</p>
       <div class="route-contact-links">
@@ -215,7 +272,7 @@
 <script src="./studio.js?v=7"></script>
 <script src="./motion-effects.js?v=7"></script>
 <script src="./route-motion.js?v=2"></script>
-<script src="./multipage-nav.js?v=1"></script>
+<script src="./multipage-nav.js?v=2"></script>
 <dialog class="paper-reader" aria-labelledby="paper-reader-title"><div class="paper-reader-bar"><h2 id="paper-reader-title">Paper</h2><a class="paper-open" target="_blank" rel="noopener noreferrer">Open in new tab ↗</a><button class="paper-close" type="button" aria-label="Close reader">✕</button></div><p class="paper-reader-hint">Scroll inside the document to read. If the PDF does not display, open it in a new tab.</p><div class="paper-pages" tabindex="0" role="region" aria-label="Paper pages"></div></dialog><script src="./papers.js?v=13"></script>
 <dialog class="share-dialog" aria-labelledby="share-title"><button class="share-close icon-btn" type="button" aria-label="Close share dialog">✕</button><h2 id="share-title">Share profile</h2><p>Scan the QR code or copy the link to share this profile.</p><img class="share-qr" src="./profile-share-qr.svg?v=2" width="200" height="200" alt="QR Code: https://kitsanapuch.vercel.app/"><strong>Kitsanapuch Chuaibamrung</strong><div class="share-link-row"><input aria-label="Profile link" readonly value="https://kitsanapuch.vercel.app/"><button type="button" class="share-copy">Copy</button></div><p class="share-status" role="status" aria-live="polite"></p></dialog><script src="./share.js?v=1"></script>
 </body>

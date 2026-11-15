@@ -19,7 +19,6 @@
   // Older links to the previous one-page portfolio still reach the right section.
   if (document.body.classList.contains('route-home') && location.hash) {
     const sections = {
-      about: 'about', education: 'about', mindset: 'about',
       skills: 'skills', certifications: 'certifications',
       experience: 'experience', activities: 'activities',
       projects: 'projects', 'studio-focus': 'projects',
