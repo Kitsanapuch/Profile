@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Kitsanapuch monogram">
+  <defs>
+    <linearGradient id="tile" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#111a32"/>
+      <stop offset="1" stop-color="#090f22"/>
+    </linearGradient>
+    <linearGradient id="edge" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#77e5f5"/>
+      <stop offset=".56" stop-color="#7f91ff"/>
+      <stop offset="1" stop-color="#c49cff"/>
+    </linearGradient>
+    <linearGradient id="glyph" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#d9faff"/>
+      <stop offset=".52" stop-color="#8cd5ff"/>
+      <stop offset="1" stop-color="#a697ff"/>
+    </linearGradient>
+  </defs>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="16" fill="url(#tile)" stroke="url(#edge)" stroke-width="2"/>
+  <path d="M20 17v30" fill="none" stroke="#eaf6ff" stroke-width="6.5" stroke-linecap="round"/>
+  <path d="M43 17 27 32l17 15" fill="none" stroke="url(#glyph)" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="49" cy="15" r="2.4" fill="#8de8f6"/>
+</svg>

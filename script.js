@@ -124,7 +124,7 @@ const isThai = document.documentElement.lang === 'th';
 
 document.documentElement.classList.add('motion-ready');
 const progress=document.querySelector('.scroll-progress');
-const topLink=document.createElement('a');topLink.className='back-top';topLink.href='#home';topLink.setAttribute('aria-label',(isThai ? 'กลับด้านบน' : 'Back to top'));topLink.textContent='↑';document.body.append(topLink);
+const topLink=document.createElement('a');topLink.className='back-top';topLink.href='#top';topLink.setAttribute('aria-label',(isThai ? 'กลับด้านบน' : 'Back to top'));topLink.textContent='↑';document.body.append(topLink);
 let lastY=window.scrollY, queued=false;
 function updateScroll(){const y=window.scrollY,total=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform='scaleX('+(total>0?y/total:0)+')';document.querySelector('.nav').classList.remove('nav-hidden');topLink.classList.toggle('show',y>600);lastY=y;queued=false;}
 window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateScroll);}},{passive:true});updateScroll();

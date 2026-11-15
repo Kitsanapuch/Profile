@@ -19,7 +19,7 @@
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const isThai = document.documentElement.lang === 'th';
-  const assetRoot = new URL(isThai ? '../' : './', document.baseURI);
+  const assetRoot = new URL(isThai ? '../../' : '../', document.baseURI);
   const allowedTargets = new Set(['#physics-plus-project', '#scamgraph-project', '#myschool-project']);
   function localImage(raw) {
     try {

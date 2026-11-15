@@ -6,6 +6,14 @@ Welcome to my personal portfolio repository.
 
 This repository contains my personal portfolio website, showcasing my **projects, technical skills, experiences, achievements, and interests** in Software Engineering, Artificial Intelligence, Machine Learning, and technology development.
 
+## DevTutor preview
+
+The `DevTutor` branch contains a multipage design preview. The Home page presents my background, skills, dated certifications, and contact details directly. Full English and Thai routes are available for About, Experience, Activities, Projects, Skills, Certifications, Papers, and Contact. The live Vercel site remains on the production branch until this design is reviewed.
+
+To preview the static pages locally, run `python3 -m http.server 8765` from the repository root and open `http://127.0.0.1:8765/`. Each route is a directory with an `index.html` file. Internal page changes skip the opening animation; a direct visit or refresh plays it.
+
+The Contact page posts to the same-origin Vercel Function at `/api/contact`. To enable delivery to `kitsanapuch@gmail.com`, set `RESEND_API_KEY` and `CONTACT_FROM_EMAIL` in the Vercel Preview environment. The sender address must use a domain verified with Resend. Until those values are configured, the form reports that delivery is unavailable and shows direct email links. Do not put either value in browser code or Git.
+
 ## 🌐 Portfolio
 
 **Live Website:**  
