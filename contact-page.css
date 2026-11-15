@@ -10,35 +10,35 @@
   --contact-field: #0a1020;
 }
 
-body.route-contact .route-content { padding-top: clamp(58px, 8vw, 110px); padding-bottom: clamp(80px, 9vw, 130px); }
+body.route-contact .route-content { padding-top: clamp(42px, 5.5vw, 72px); padding-bottom: clamp(64px, 7vw, 96px); }
 body.route-contact .route-content #contact { min-width: 0; padding: 0; }
 
 body.route-contact .contact-split {
   display: grid;
   grid-template-columns: minmax(0, .86fr) minmax(0, 1.14fr);
   align-items: start;
-  gap: clamp(38px, 6vw, 92px);
+  gap: clamp(30px, 4.5vw, 64px);
 }
-body.route-contact .contact-copy { padding-top: clamp(12px, 2vw, 26px); }
-body.route-contact .contact-copy .route-eyebrow { margin-bottom: 22px; }
+body.route-contact .contact-copy { padding-top: clamp(8px, 1.5vw, 18px); }
+body.route-contact .contact-copy .route-eyebrow { margin-bottom: 16px; }
 body.route-contact .contact-copy h1,
 body.route-contact .contact-copy h2 {
   max-width: 13ch;
   margin: 0;
   color: var(--text);
-  font: 700 clamp(43px, 5vw, 70px)/1.05 var(--motion-display);
-  letter-spacing: -.065em;
+  font: 700 clamp(38px, 4.2vw, 56px)/1.08 var(--motion-display);
+  letter-spacing: -.055em;
 }
 html[lang="th"] body.route-contact .contact-copy h1,
 html[lang="th"] body.route-contact .contact-copy h2 { max-width: 16ch; line-height: 1.18; letter-spacing: -.04em; }
 body.route-contact .contact-copy > p {
   max-width: 47ch;
-  margin: 28px 0 36px;
+  margin: 20px 0 26px;
   color: var(--text-muted);
-  font-size: clamp(15px, 1.35vw, 18px);
+  font-size: clamp(14px, 1.25vw, 16px);
   line-height: 1.75;
 }
-body.route-contact .contact-direct { display: grid; gap: 16px; }
+body.route-contact .contact-direct { display: grid; gap: 13px; }
 body.route-contact .contact-direct a {
   display: inline-flex;
   align-items: center;
@@ -67,7 +67,7 @@ body.route-contact .contact-direct .contact-link-icon {
 body.route-contact .contact-form-panel {
   position: relative;
   min-width: 0;
-  padding: clamp(24px, 3vw, 42px);
+  padding: clamp(20px, 2.5vw, 32px);
   overflow: hidden;
   border: 1px solid var(--border);
   border-radius: 18px;
@@ -88,9 +88,9 @@ body.route-contact .contact-form-panel h2 {
   font: 700 24px/1.25 var(--motion-display);
   letter-spacing: -.035em;
 }
-body.route-contact .contact-form-panel > p { margin: 0 0 28px; color: var(--text-muted); font-size: 14px; line-height: 1.65; }
-body.route-contact #contact-form { display: grid; gap: 20px; }
-body.route-contact .contact-field-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+body.route-contact .contact-form-panel > p { margin: 0 0 22px; color: var(--text-muted); font-size: 14px; line-height: 1.65; }
+body.route-contact #contact-form { display: grid; gap: 16px; }
+body.route-contact .contact-field-pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 body.route-contact #contact-form label { display: grid; min-width: 0; gap: 9px; color: var(--text); font-size: 13px; font-weight: 600; }
 body.route-contact #contact-form input,
 body.route-contact #contact-form textarea {
@@ -108,7 +108,7 @@ body.route-contact #contact-form textarea {
   outline: none;
   box-shadow: none;
 }
-body.route-contact #contact-form textarea { min-height: 170px; resize: vertical; }
+body.route-contact #contact-form textarea { min-height: 145px; resize: vertical; }
 body.route-contact #contact-form input::placeholder,
 body.route-contact #contact-form textarea::placeholder { color: var(--text-faint); opacity: 1; }
 body.route-contact #contact-form input:hover,
@@ -139,16 +139,16 @@ body.route-contact #form-status[data-state="success"] { color: var(--contact-acc
 body.route-contact #form-status[data-state="error"] { color: #ef9e97; }
 
 @media (max-width: 830px) {
-  body.route-contact .contact-split { grid-template-columns: 1fr; gap: 45px; }
+  body.route-contact .contact-split { grid-template-columns: 1fr; gap: 32px; }
   body.route-contact .contact-copy h1,
   body.route-contact .contact-copy h2 { max-width: 18ch; }
 }
 @media (max-width: 530px) {
-  body.route-contact .route-content { padding-top: 40px; }
+  body.route-contact .route-content { padding-top: 32px; }
   body.route-contact .contact-copy h1,
-  body.route-contact .contact-copy h2 { font-size: clamp(39px, 10.6vw, 55px); }
+  body.route-contact .contact-copy h2 { font-size: clamp(34px, 9vw, 44px); }
   body.route-contact .contact-field-pair { grid-template-columns: 1fr; }
-  body.route-contact .contact-form-panel { padding: 23px; }
+  body.route-contact .contact-form-panel { padding: 20px; }
   body.route-contact .contact-direct a { font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) {
