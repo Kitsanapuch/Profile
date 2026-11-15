@@ -63,6 +63,22 @@ I am continuously learning, experimenting with new technologies, and developing 
 
 ## 🚀 Featured Projects
 
+### 📚 Physics Plus — Tutoring Platform
+
+A role-based tutoring website for students, teachers, and administrators. It coordinates enrollment, classes, teaching hours, tuition, and staff workflows across 16 courses.
+
+**Technologies:** Python · Flask · JavaScript · Turso · Vercel Queue · Google Sheets
+
+**Links:** [Live site](https://physicsplus.vercel.app/) · [Repository](https://github.com/Kitsanapuch/Physics-Plus-Website)
+
+### 🛡️ ScamGraph AI — Scam Risk Detection Prototype
+
+A four-person team project exploring ML-based risk analysis for suspicious messages, links, images, QR codes, phone numbers, and account details across mobile and web. The prototype also presents scan history, reports, and relationship graphs. Its ML work uses synthetic training data and has not established real-world accuracy.
+
+**Technologies:** React Native · Expo · TypeScript · Python · FastAPI · Machine Learning
+
+**Repository:** [UHackathon](https://github.com/Hard2Coding/UHackathon)
+
 ### 🌱 Plant Nutrient Deficiency AI
 
 An AI-powered system for diagnosing plant nutrient deficiencies from leaf characteristics.
