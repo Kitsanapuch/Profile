@@ -1,0 +1,152 @@
+/* Ambient effects for the isolated Motion Studio portfolio preview. */
+body.motion-preview {
+  --motion-cyan: #75e8ff;
+  --motion-violet: #aa88ff;
+  --motion-rose: #ff80bd;
+  --motion-amber: #ffbe82;
+}
+
+#motion-particles {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+  opacity: .48;
+  mix-blend-mode: screen;
+}
+
+body.motion-preview .motion-shell,
+body.motion-preview .motion-content {
+  position: relative;
+  z-index: 1;
+}
+
+body.motion-preview .motion-gradient-text {
+  background: linear-gradient(100deg, #dffaff 0%, #61eaff 20%, #8896ff 43%, #c37aff 66%, #ffa4bd 85%, #ffd4a6 100%);
+  background-size: 155% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: motion-type-flow 7s ease-in-out infinite alternate;
+}
+
+body.motion-preview .motion-ribbon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(112vw, 1350px);
+  height: auto;
+  max-height: 120%;
+  overflow: visible;
+  pointer-events: none;
+  transform: translate3d(-50%, -50%, 0);
+  z-index: 0;
+}
+
+body.motion-preview .motion-ribbon .motion-ribbon-halo {
+  fill: none;
+  stroke: url(#motion-ribbon-gradient);
+  stroke-width: 9;
+  stroke-linecap: round;
+  opacity: .26;
+  filter: blur(3px);
+  vector-effect: non-scaling-stroke;
+}
+
+body.motion-preview .motion-ribbon .motion-ribbon-base {
+  fill: none;
+  stroke: url(#motion-ribbon-gradient);
+  stroke-width: 2.35;
+  stroke-linecap: round;
+  opacity: .82;
+  vector-effect: non-scaling-stroke;
+}
+
+body.motion-preview .motion-ribbon .motion-ribbon-flow {
+  fill: none;
+  stroke: #f6fbff;
+  stroke-width: 3.15;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 3px rgba(113, 229, 255, .9));
+}
+
+body.motion-preview .motion-ribbon .motion-ribbon-pin {
+  fill: #f8fdff;
+  stroke: #7ceaff;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 6px #74dfff);
+}
+
+body.motion-preview .motion-ribbon .motion-ribbon-runner-glow {
+  fill: #8aefff;
+  opacity: .28;
+  filter: blur(4px);
+}
+
+body.motion-preview .motion-ribbon .motion-ribbon-node-ring {
+  fill: #0b1327;
+  stroke: #9ee8ff;
+  stroke-width: 1.5;
+  opacity: .95;
+  vector-effect: non-scaling-stroke;
+}
+
+body.motion-preview .motion-ribbon .motion-ribbon-node-core {
+  fill: #e7f9ff;
+  filter: drop-shadow(0 0 3px #87e4ff);
+}
+
+body.motion-preview .motion-ribbon .motion-ribbon-node-tick {
+  fill: none;
+  stroke: #bceaff;
+  stroke-width: 1;
+  opacity: .65;
+  vector-effect: non-scaling-stroke;
+}
+
+body.motion-preview .motion-section-rule {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(90deg, transparent, rgba(117, 232, 255, .58) 20%, rgba(170, 136, 255, .48) 52%, rgba(255, 128, 189, .38) 80%, transparent);
+}
+
+body.motion-preview .motion-hairline {
+  border-color: rgba(143, 177, 218, .18);
+}
+
+body.motion-preview .motion-hover-lift {
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
+}
+
+@media (hover: hover) {
+  body.motion-preview .motion-hover-lift:hover {
+    transform: translateY(-5px);
+    border-color: rgba(139, 224, 255, .4);
+    box-shadow: 0 18px 48px rgba(3, 8, 26, .3), 0 0 25px rgba(96, 167, 255, .08);
+  }
+}
+
+@keyframes motion-type-flow {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.motion-preview .motion-gradient-text,
+  body.motion-preview .motion-ribbon .motion-ribbon-flow {
+    animation: none !important;
+  }
+  body.motion-preview .motion-hover-lift {
+    transition: none;
+  }
+}
+
+@media (max-width: 700px) {
+  body.motion-preview .motion-ribbon .motion-ribbon-halo { stroke-width: 9; opacity: .22; }
+  body.motion-preview .motion-ribbon .motion-ribbon-base { stroke-width: 2; }
+}
