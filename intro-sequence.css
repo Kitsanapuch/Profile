@@ -1,0 +1,231 @@
+/* A short code-to-layout opening. All motion is CSS so content remains usable without JS. */
+body.motion-preview .intro-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 52% 43%, #152a4252, transparent 38%), #070b15;
+  color: #edf7ff;
+  animation: intro-overlay-out 2.18s ease both;
+}
+
+body.motion-preview .intro-loader::before {
+  content: "";
+  position: absolute;
+  inset: -15%;
+  background-image: linear-gradient(#b9dfff0b 1px, transparent 1px), linear-gradient(90deg, #b9dfff0b 1px, transparent 1px);
+  background-size: 62px 62px;
+  mask-image: radial-gradient(ellipse at center, #000 13%, transparent 65%);
+  transform: perspective(700px) rotateX(23deg) scale(1.08);
+}
+
+body.motion-preview .intro-loader::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #7adfff22 32%, #a38fff24 68%, transparent);
+  box-shadow: 0 0 26px #82aaff21;
+}
+
+body.motion-preview .intro-ambient {
+  position: absolute;
+  width: min(37vw, 420px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: .29;
+}
+body.motion-preview .intro-ambient-one { left: 9%; top: 12%; background: #2cb7cb; }
+body.motion-preview .intro-ambient-two { right: 6%; bottom: 10%; background: #6b58e4; }
+
+body.motion-preview .intro-sequence {
+  position: relative;
+  z-index: 2;
+  width: min(474px, calc(100vw - 40px));
+  animation: intro-panel-in .48s .08s cubic-bezier(.18,.76,.22,1) both;
+}
+body.motion-preview .intro-sequence-top,
+body.motion-preview .intro-sequence-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #a8bfd0;
+  font: 600 10px/1.5 var(--motion-mono, ui-monospace, monospace);
+  letter-spacing: .16em;
+}
+body.motion-preview .intro-sequence-top { padding: 0 3px 15px; }
+body.motion-preview .intro-sequence-identity { color: #8fe8ee; }
+body.motion-preview .intro-sequence-bottom {
+  justify-content: center;
+  padding-top: 18px;
+  color: #9db3c5;
+  letter-spacing: .2em;
+}
+body.motion-preview .intro-sequence-cross { color: #7fdfe7; font-size: 10px; opacity: .7; }
+
+body.motion-preview .intro-window {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid #a8c8e257;
+  border-radius: 12px;
+  background: linear-gradient(155deg, #111a2ce8, #0a1020f5 76%);
+  box-shadow: 0 26px 80px #0008, 0 0 0 1px #ffffff0b, 0 0 65px #6a8cff20;
+}
+body.motion-preview .intro-window::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 2px;
+  background: linear-gradient(180deg, #7deaf0, #8d85fd 67%, #d69dde);
+  box-shadow: 0 0 15px #81d6ff8c;
+}
+body.motion-preview .intro-window::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, #9be9f3, #7779ec, transparent);
+}
+body.motion-preview .intro-window-head,
+body.motion-preview .intro-window-foot {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 13px 18px;
+  font: 600 10px/1.3 var(--motion-mono, ui-monospace, monospace);
+  letter-spacing: .05em;
+}
+body.motion-preview .intro-window-head {
+  border-bottom: 1px solid #c2d9f022;
+  color: #c8d8ec;
+  background: #ffffff06;
+}
+body.motion-preview .intro-window-head strong { color: #f0f6ff; font-size: 11px; }
+body.motion-preview .intro-window-command { margin-left: auto; color: #7f9aaf; }
+body.motion-preview .intro-window-dots { display: inline-flex; gap: 5px; }
+body.motion-preview .intro-window-dots i { display: block; width: 6px; height: 6px; border-radius: 50%; background: #75d9e7; }
+body.motion-preview .intro-window-dots i:nth-child(2) { background: #9a9cff; }
+body.motion-preview .intro-window-dots i:nth-child(3) { background: #e9a5c9; }
+body.motion-preview .intro-window-body {
+  display: grid;
+  gap: 3px;
+  min-height: 157px;
+  padding: 24px 20px 19px;
+}
+body.motion-preview .intro-code-line {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  white-space: nowrap;
+  opacity: 0;
+  animation: intro-line-in .28s cubic-bezier(.2,.82,.25,1) both;
+}
+body.motion-preview .intro-code-line-one { animation-delay: .25s; }
+body.motion-preview .intro-code-line-two { animation-delay: .49s; }
+body.motion-preview .intro-code-line-three { animation-delay: .73s; }
+body.motion-preview .intro-code-line-four { animation-delay: .94s; }
+body.motion-preview .intro-line-number { width: 16px; flex: 0 0 16px; color: #6c859a; font: 500 11px/1.45 var(--motion-mono, ui-monospace, monospace); }
+body.motion-preview .intro-code-line code { color: #e5edfb; font: 500 12px/1.45 var(--motion-mono, ui-monospace, monospace); }
+body.motion-preview .intro-code-purple { color: #c4a8ff; }
+body.motion-preview .intro-code-blue { color: #88d9ff; }
+body.motion-preview .intro-code-green { color: #98ebd6; }
+body.motion-preview .intro-code-caret { color: #9fecef; animation: intro-caret .52s steps(1) infinite; }
+body.motion-preview .intro-window-foot {
+  justify-content: space-between;
+  padding: 11px 19px 12px;
+  border-top: 1px solid #c2d9f01b;
+  color: #a7b7cb;
+  letter-spacing: .13em;
+}
+body.motion-preview .intro-window-ready { color: #82e6dc; opacity: 0; animation: intro-ready-in .22s 1.18s both; }
+body.motion-preview .intro-progress-track { height: 2px; background: #a4c7ed21; }
+body.motion-preview .intro-progress-track span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: linear-gradient(90deg, #68e3e6, #8299ff 57%, #d79bdc);
+  box-shadow: 0 0 16px #7aaaff;
+  animation: intro-progress 1.2s .24s cubic-bezier(.24,.65,.24,1) both;
+}
+
+/* The outlines read as a layout being assembled, without following the pointer. */
+body.motion-preview .intro-blueprint {
+  position: absolute;
+  z-index: 1;
+  width: clamp(145px, 21vw, 310px);
+  height: clamp(150px, 31vh, 280px);
+  border: 1px solid #79cadf5c;
+  background: linear-gradient(#78d5e513 1px, transparent 1px), linear-gradient(90deg, #78d5e513 1px, transparent 1px);
+  background-size: 32px 32px;
+  box-shadow: inset 0 0 42px #60c9e00a, 0 0 30px #5bc5da0b;
+  opacity: 0;
+  animation: intro-blueprint-in .47s 1.08s cubic-bezier(.18,.82,.22,1) both;
+}
+body.motion-preview .intro-blueprint-left { left: max(3vw, calc(50% - 540px)); top: 19%; transform: translateY(10px) rotate(-4deg); }
+body.motion-preview .intro-blueprint-right { right: max(3vw, calc(50% - 540px)); bottom: 15%; transform: translateY(10px) rotate(4deg); animation-delay: 1.21s; border-color: #a799ef52; }
+body.motion-preview .intro-blueprint span { position: absolute; left: 12%; right: 12%; height: 1px; background: #a3dff05e; }
+body.motion-preview .intro-blueprint span:first-child { top: 26%; }
+body.motion-preview .intro-blueprint span:last-child { top: 63%; right: 29%; }
+
+@keyframes intro-panel-in { from { opacity: 0; transform: translateY(13px) scale(.975); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes intro-line-in { from { opacity: 0; transform: translateY(5px); clip-path: inset(0 100% 0 0); } to { opacity: 1; transform: translateY(0); clip-path: inset(0 0 0 0); } }
+@keyframes intro-progress { to { transform: scaleX(1); } }
+@keyframes intro-ready-in { to { opacity: 1; } }
+@keyframes intro-caret { 50% { opacity: 0; } }
+@keyframes intro-blueprint-in { from { opacity: 0; translate: 0 15px; scale: .97; } to { opacity: .65; translate: 0 0; scale: 1; } }
+@keyframes intro-overlay-out { 0%, 77% { opacity: 1; visibility: visible; } 100% { opacity: 0; visibility: hidden; } }
+@keyframes intro-content-enter { from { opacity: 0; transform: translateY(13px); } to { opacity: 1; transform: none; } }
+
+/* Reveal the actual hero as the intro clears, then leave every element at rest. */
+body.motion-preview .motion-hero-top { animation: intro-content-enter .48s 1.54s ease both; }
+body.motion-preview .motion-eyebrow { animation: intro-content-enter .46s 1.57s ease both; }
+body.motion-preview .motion-hero h1 > span { animation: intro-content-enter .65s 1.65s cubic-bezier(.18,.82,.22,1) both; }
+body.motion-preview .motion-hero h1 > span:last-child { animation: intro-content-enter .65s 1.74s cubic-bezier(.18,.82,.22,1) both, motion-type-flow 7s 2.4s ease-in-out infinite alternate; }
+body.motion-preview .motion-headline { animation: intro-content-enter .55s 1.8s ease both; }
+body.motion-preview .motion-summary { animation: intro-content-enter .55s 1.88s ease both; }
+body.motion-preview .motion-actions { animation: intro-content-enter .55s 1.95s ease both; }
+body.motion-preview .motion-portrait-frame { animation: motion-frame-enter .7s 1.62s cubic-bezier(.18,.82,.22,1) both; }
+body.motion-preview .motion-terminal { animation: intro-content-enter .58s 1.82s cubic-bezier(.18,.82,.22,1) both; }
+
+html.intro-skip body.motion-preview .intro-loader { display: none; animation: none; }
+html.intro-skip body.motion-preview .motion-hero-top,
+html.intro-skip body.motion-preview .motion-eyebrow,
+html.intro-skip body.motion-preview .motion-hero h1 > span,
+html.intro-skip body.motion-preview .motion-headline,
+html.intro-skip body.motion-preview .motion-summary,
+html.intro-skip body.motion-preview .motion-actions,
+html.intro-skip body.motion-preview .motion-portrait-frame,
+html.intro-skip body.motion-preview .motion-terminal { animation: none; opacity: 1; transform: none; }
+
+@media (max-width: 700px) {
+  body.motion-preview .intro-blueprint { display: none; }
+  body.motion-preview .intro-sequence { width: min(440px, calc(100vw - 30px)); }
+  body.motion-preview .intro-window-body { padding-inline: 14px; }
+  body.motion-preview .intro-code-line { gap: 10px; }
+  body.motion-preview .intro-code-line code { font-size: clamp(9px, 2.7vw, 12px); }
+  body.motion-preview .intro-line-number { font-size: 10px; }
+  body.motion-preview .intro-sequence-top, body.motion-preview .intro-sequence-bottom { font-size: 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.motion-preview .intro-loader { display: none; animation: none; }
+  body.motion-preview .motion-hero-top,
+  body.motion-preview .motion-eyebrow,
+  body.motion-preview .motion-hero h1 > span,
+  body.motion-preview .motion-headline,
+  body.motion-preview .motion-summary,
+  body.motion-preview .motion-actions,
+  body.motion-preview .motion-portrait-frame,
+  body.motion-preview .motion-terminal { animation: none; opacity: 1; transform: none; }
+}
