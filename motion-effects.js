@@ -144,16 +144,17 @@
     const colors = ['#83e9ff', '#9c9cff', '#d8a1ff', '#ffc2bd'];
     const sprites = colors.map((color) => {
       const sprite = document.createElement('canvas');
-      sprite.width = sprite.height = 64;
+      sprite.width = sprite.height = 48;
       const ctx = sprite.getContext('2d');
-      const glow = ctx.createRadialGradient(32, 32, 0, 32, 32, 31);
+      const glow = ctx.createRadialGradient(24, 24, 0, 24, 24, 23);
       glow.addColorStop(0, '#ffffff');
-      glow.addColorStop(.045, color);
-      glow.addColorStop(.18, color + '88');
-      glow.addColorStop(.55, color + '18');
+      glow.addColorStop(.07, '#ffffff');
+      glow.addColorStop(.14, color);
+      glow.addColorStop(.31, color + '55');
+      glow.addColorStop(.58, color + '0c');
       glow.addColorStop(1, color + '00');
       ctx.fillStyle = glow;
-      ctx.fillRect(0, 0, 64, 64);
+      ctx.fillRect(0, 0, 48, 48);
       return sprite;
     });
 
@@ -164,7 +165,6 @@
     let raf = 0;
     let lastFrame = 0;
     let scrollY = window.scrollY || 0;
-    const pointer = { x: -1000, y: -1000, active: false };
 
     function random(seed) {
       const value = Math.sin(seed * 78.233 + 27.861) * 43758.5453;
@@ -179,7 +179,7 @@
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const fullCount = Math.max(24, Math.min(72, Math.round(width * height / 17000)));
+      const fullCount = Math.max(18, Math.min(44, Math.round(width * height / 26000)));
       const count = reduceMotion.matches || saveData ? Math.max(12, Math.round(fullCount / 2)) : fullCount;
       particles = Array.from({ length: count }, (_, index) => ({
         x: random(index + 1) * width,
@@ -199,31 +199,20 @@
       context.clearRect(0, 0, width, height);
       const seconds = time / 1000;
       const active = !reduceMotion.matches && !saveData;
-      const positions = [];
       for (const p of particles) {
         const driftX = active ? Math.sin(seconds * p.speed + p.wave) * (4 + p.size * 2) : 0;
         const driftY = active ? Math.cos(seconds * p.speed * .63 + p.wave) * 7 : 0;
         const parallax = active ? (scrollY * p.depth) % Math.max(height, 1) : 0;
-        let x = p.x + driftX;
-        let y = (p.y - parallax + driftY + height) % height;
-        if (pointer.active && active) {
-          const dx = x - pointer.x;
-          const dy = y - pointer.y;
-          const distance = Math.hypot(dx, dy);
-          if (distance < 145 && distance > .01) {
-            const pressure = (1 - distance / 145) * 12;
-            x += dx / distance * pressure;
-            y += dy / distance * pressure;
-          }
-        }
+        const x = p.x + driftX;
+        const y = (p.y - parallax + driftY + height) % height;
         const twinkle = active ? .76 + Math.sin(seconds * (1.2 + p.speed) + p.wave) * .18 : 1;
-        const size = p.size * (width < 700 ? 10 : 13);
+        const size = p.size * (width < 700 ? 8 : 10);
         context.globalAlpha = p.alpha * twinkle * .82;
         context.drawImage(sprites[p.color], x - size / 2, y - size / 2, size, size);
         context.globalAlpha = Math.min(1, p.alpha * twinkle + .2);
         context.fillStyle = colors[p.color];
         context.beginPath();
-        context.arc(x, y, p.size * .57, 0, Math.PI * 2);
+        context.arc(x, y, p.size * .52, 0, Math.PI * 2);
         context.fill();
         if (p.signal) {
           context.globalAlpha = .26 * twinkle;
@@ -233,19 +222,6 @@
           context.arc(x, y, 5.5 + Math.sin(seconds * 1.2 + p.wave) * .8, 0, Math.PI * 2);
           context.stroke();
         }
-        if (pointer.active && Math.hypot(x - pointer.x, y - pointer.y) < 175) positions.push({ x, y, color: colors[p.color] });
-      }
-      if (pointer.active && active) {
-        positions.slice(0, 7).forEach((p) => {
-          const distance = Math.hypot(p.x - pointer.x, p.y - pointer.y);
-          context.beginPath();
-          context.moveTo(p.x, p.y);
-          context.lineTo(pointer.x, pointer.y);
-          context.lineWidth = .65;
-          context.strokeStyle = p.color;
-          context.globalAlpha = .12 * (1 - distance / 175);
-          context.stroke();
-        });
       }
       context.globalAlpha = 1;
     }
@@ -266,8 +242,6 @@
 
     window.addEventListener('resize', () => { configure(); syncAnimation(); }, { passive: true });
     window.addEventListener('scroll', () => { scrollY = window.scrollY || 0; if (reduceMotion.matches || saveData) draw(0); }, { passive: true });
-    window.addEventListener('pointermove', (event) => { pointer.x = event.clientX; pointer.y = event.clientY; pointer.active = event.pointerType !== 'touch'; }, { passive: true });
-    window.addEventListener('pointerleave', () => { pointer.active = false; }, { passive: true });
     document.addEventListener('visibilitychange', syncAnimation);
     if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', () => { configure(); syncAnimation(); });
     configure();
