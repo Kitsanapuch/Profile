@@ -26,17 +26,7 @@ const isThai = document.documentElement.lang === 'th';
     burger.setAttribute('aria-expanded', 'false');
   }));
 
-  const sectionIds = ['home','about','education','experience','activities','projects','skills','contact'];
-  const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean);
-  const navLinks = document.querySelectorAll('.nav-links a');
-  const navObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if(entry.isIntersecting){
-        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + entry.target.id));
-      }
-    });
-  }, {rootMargin: '-40% 0px -50% 0px'});
-  sections.forEach(s => navObserver.observe(s));
+  // The preview uses motion-nav.js for its sticky current-section state.
 
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
@@ -136,7 +126,7 @@ document.documentElement.classList.add('motion-ready');
 const progress=document.querySelector('.scroll-progress');
 const topLink=document.createElement('a');topLink.className='back-top';topLink.href='#home';topLink.setAttribute('aria-label',(isThai ? 'กลับด้านบน' : 'Back to top'));topLink.textContent='↑';document.body.append(topLink);
 let lastY=window.scrollY, queued=false;
-function updateScroll(){const y=window.scrollY,total=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform='scaleX('+(total>0?y/total:0)+')';document.querySelector('.nav').classList.toggle('nav-hidden',y>lastY&&y>400&&!mobileMenu.classList.contains('open'));topLink.classList.toggle('show',y>600);lastY=y;queued=false;}
+function updateScroll(){const y=window.scrollY,total=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform='scaleX('+(total>0?y/total:0)+')';document.querySelector('.nav').classList.remove('nav-hidden');topLink.classList.toggle('show',y>600);lastY=y;queued=false;}
 window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateScroll);}},{passive:true});updateScroll();
 
 

@@ -8,13 +8,16 @@
  }
  new ResizeObserver(fitPages).observe(frame);
  document.querySelectorAll('[data-paper]').forEach(button=>button.addEventListener('click',()=>{
+  const match=/^\.\.?\/papers\/(scamgraph-ai|ai-training-intelligence)\.pdf(?:\?v=[a-zA-Z0-9-]+)?$/.exec(button.dataset.paper||'');
+  if(!match)return;
+  const pdf=new URL(button.dataset.paper,document.baseURI);
+  const directory=new URL((document.documentElement.lang==='th'?'../':'./')+'papers/'+match[1]+'/',document.baseURI);
   trigger=button;reader.querySelector('h2').textContent=button.dataset.title;
-  reader.querySelector('.paper-open').href=button.dataset.paper;
+  reader.querySelector('.paper-open').href=pdf.href;
   frame.replaceChildren();
-  const scam=button.dataset.paper.includes('scamgraph-ai'),count=scam?14:10;
-  const directory=button.dataset.paper.split('?')[0].replace(/\.pdf$/,'');
+  const count=match[1]==='scamgraph-ai'?14:10;
   for(let page=1;page<=count;page++){
-   const img=document.createElement('img');img.src=directory+'/page-'+String(page).padStart(2,'0')+'.jpg'+'?v=academic-v6-20261012';
+   const img=document.createElement('img');img.src=new URL('page-'+String(page).padStart(2,'0')+'.jpg',directory).href;
    img.alt=button.dataset.title+' — '+(document.documentElement.lang==='th'?'หน้า ':'Page ')+page;
    img.loading=page===1?'eager':'lazy';frame.append(img);
   }
