@@ -1,2 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://kitsanapuch.vercel.app/</loc></url><url><loc>https://kitsanapuch.vercel.app/th/</loc></url></urlset>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://kitsanapuch.vercel.app/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/experience/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/activities/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/projects/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/skills/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/certifications/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/papers/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/contact/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/th/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/th/experience/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/th/activities/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/th/projects/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/th/skills/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/th/certifications/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/th/papers/</loc></url>
+  <url><loc>https://kitsanapuch.vercel.app/th/contact/</loc></url>
+</urlset>

@@ -1,0 +1,188 @@
+/* Multipage motion and depth. The existing blue, violet, and rose palette stays intact. */
+body.motion-preview #motion-particles { opacity: .26; }
+body.motion-preview .motion-ribbon { opacity: .42; }
+body.motion-preview .motion-ribbon .motion-ribbon-flow { opacity: .7; }
+body.motion-preview a:focus-visible,
+body.motion-preview button:focus-visible,
+body.motion-preview input:focus-visible,
+body.motion-preview textarea:focus-visible {
+  outline: 2px solid #91e9ff;
+  outline-offset: 3px;
+}
+body.motion-preview .nav-inner { height: 72px; }
+body.motion-preview .brand { gap: 10px; }
+body.motion-preview .brand-logo {
+  width: 35px;
+  height: 35px;
+  border-radius: 10px;
+  box-shadow: 0 0 0 1px #a9ddff34, 0 5px 20px #0006;
+  transition: transform .25s ease, box-shadow .25s ease;
+}
+body.motion-preview .brand:hover .brand-logo {
+  transform: translateY(-2px) rotate(-3deg);
+  box-shadow: 0 0 0 1px #a9ddff80, 0 10px 25px #0007;
+}
+body.motion-preview .brand-name {
+  max-width: none;
+  font: 700 13px/1.2 var(--motion-display);
+  letter-spacing: -.035em;
+  white-space: nowrap;
+}
+body.motion-preview .brand-name::after {
+  content: ".";
+  margin-left: 1px;
+  color: #91e9ff;
+}
+body.motion-preview .nav-links { gap: 3px; }
+body.motion-preview .nav-links a {
+  margin: 0;
+  padding: 9px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: #bbc5da;
+  font: 600 10px/1.1 var(--motion-mono);
+  letter-spacing: -.015em;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+body.motion-preview .nav-links a:hover {
+  color: #f0f5ff;
+  background: #8f96ff14;
+  text-shadow: none;
+}
+body.motion-preview .nav-links a.active,
+body.motion-preview .nav-links a[aria-current="page"] {
+  color: #b9eeff;
+  background: linear-gradient(105deg, #70d9f821, #8d82fa20);
+  border-color: #a2c9ff40;
+  text-shadow: none;
+}
+body.motion-preview .nav-links a.active::after { display: none; }
+body.motion-preview .mobile-menu a.active,
+body.motion-preview .mobile-menu a[aria-current="page"] { color: #a9eeff; }
+
+/* The portrait and code panel occupy different visual planes without pointer trails. */
+body.motion-preview .motion-hero-grid { perspective: 1300px; }
+body.motion-preview .motion-portrait {
+  transform-style: preserve-3d;
+  transition: transform .55s cubic-bezier(.2,.8,.2,1);
+}
+@media (hover: hover) {
+  body.motion-preview .motion-portrait:hover { transform: translateY(-5px) rotateY(-2deg); }
+}
+body.motion-preview .motion-portrait-frame {
+  box-shadow: 0 24px 58px #020611c9, 0 0 0 6px #9eacff0a, 0 0 60px #b291ff39;
+}
+body.motion-preview .motion-terminal {
+  transform-style: preserve-3d;
+  box-shadow: 0 23px 54px #0007, inset 0 1px #ffffff12;
+}
+body.motion-preview .route-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+body.motion-preview .route-hero::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: min(48vw, 570px);
+  aspect-ratio: 1;
+  right: -14%;
+  top: -54%;
+  border: 1px solid #b4a5ff2e;
+  border-radius: 50%;
+  box-shadow: 0 0 0 70px #8588f80a, 0 0 0 160px #72c3e906;
+  transform: translateY(calc(var(--route-scroll, 0) * 28px));
+  pointer-events: none;
+}
+body.motion-preview .route-hero-rule {
+  background: linear-gradient(90deg, #75e8ff, #ab90fa 53%, #ed9abb, transparent);
+}
+body.motion-preview .route-summary-card,
+body.motion-preview .route-content .card {
+  box-shadow: 0 18px 44px #0002, inset 0 1px #ffffff08;
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
+}
+@media (hover: hover) {
+  body.motion-preview .route-summary-card:hover,
+  body.motion-preview .route-content .card:hover {
+    transform: translateY(-3px);
+    border-color: #91cfff8a;
+    box-shadow: 0 23px 50px #0004, 0 0 24px #7a90ff0e;
+  }
+}
+body.motion-preview .route-summary-card:hover .route-summary-link span {
+  transform: translate(4px, -4px);
+}
+
+/* Sections appear quietly as they enter the viewport. */
+body.motion-preview .scene-target {
+  position: relative;
+  transition:
+    opacity .8s ease var(--scene-delay, 0ms),
+    transform .85s cubic-bezier(.2,.75,.2,1) var(--scene-delay, 0ms),
+    filter .8s ease var(--scene-delay, 0ms);
+}
+body.motion-preview .scene-target:not(.scene-visible) {
+  opacity: 0;
+  transform: translateY(12px) scale(.99);
+  filter: blur(2px);
+}
+body.motion-preview .scene-target.scene-visible {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+body.motion-preview .scene-guide { display: none; }
+@media (max-width: 1300px) {
+  body.motion-preview .nav-links a { padding-inline: 7px; font-size: 9px; }
+  body.motion-preview .brand-name { max-width: 150px; font-size: 12px; }
+}
+@media (max-width: 1050px) {
+  body.motion-preview .nav-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 6px 12px;
+    height: auto;
+    min-height: 102px;
+    padding-block: 8px 6px;
+  }
+  body.motion-preview .brand { grid-column: 1; grid-row: 1; }
+  body.motion-preview .nav-right { grid-column: 2; grid-row: 1; }
+  body.motion-preview .nav-current-label { display: none; }
+  body.motion-preview .nav-links {
+    display: flex;
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    gap: 4px;
+    justify-content: center;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    white-space: nowrap;
+    scrollbar-width: none;
+    padding: 2px 0 4px;
+  }
+  body.motion-preview .nav-links::-webkit-scrollbar { display: none; }
+  body.motion-preview .nav-links a {
+    flex: 0 0 auto;
+    font-size: 10px;
+    padding: 8px 11px;
+  }
+  body.motion-preview .nav-burger { display: none; }
+  body.motion-preview .brand-name { max-width: none; }
+  html { scroll-padding-top: 115px; }
+}
+@media (max-width: 680px) {
+  body.motion-preview .nav-inner { min-height: 92px; }
+  body.motion-preview .brand-logo { width: 31px; height: 31px; }
+  body.motion-preview .brand-name { display: none; }
+  body.motion-preview .nav-links { justify-content: flex-start; }
+  body.motion-preview .route-hero::before { width: 90vw; right: -40%; top: -20%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  body.motion-preview .scene-target { transition: none; opacity: 1; transform: none; filter: none; }
+  body.motion-preview .scene-guide { display: none; }
+  body.motion-preview .brand-logo,
+  body.motion-preview .motion-portrait { transition: none; }
+}
