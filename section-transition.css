@@ -37,6 +37,19 @@
     mix-blend-mode: normal;
   }
 
+  /* Embedded and older browsers can still move the arriving content. */
+  html.section-arriving body.motion-preview > :is(.motion-hero, .route-hero, main) {
+    animation: section-fallback-in .58s cubic-bezier(.2,.73,.24,1);
+  }
+
+  @keyframes section-fallback-in {
+    from {
+      opacity: .32;
+      translate: calc(var(--section-direction, 1) * clamp(25px, 5vw, 52px)) 7px;
+    }
+    to { opacity: 1; translate: none; }
+  }
+
   @keyframes section-slide-out {
     from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
     to {

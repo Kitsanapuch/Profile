@@ -1,277 +1,106 @@
-const isThai = document.documentElement.lang === 'th';
+/* Small shared interactions for the portfolio pages. */
+(() => {
+  'use strict';
 
   const root = document.documentElement;
-  const themeToggle = document.getElementById('themeToggle');
-  const themeIcon = document.getElementById('themeIcon');
-  const moonPath = '<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/>';
-  const sunPath = '<circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>';
-  function applyTheme(theme) {
-    const isLight = theme === 'light';
-    root.dataset.theme = theme;
-    themeIcon.innerHTML = isLight ? sunPath : moonPath;
-    const toggleLabel = isThai
-      ? (isLight ? 'เปลี่ยนเป็นโหมดมืด' : 'เปลี่ยนเป็นโหมดสว่าง')
-      : (isLight ? 'Switch to dark mode' : 'Switch to light mode');
-    themeToggle.setAttribute('aria-label', toggleLabel);
-    themeToggle.title = toggleLabel;
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isLight ? '#fff3dd' : '#090e1a');
-    try { sessionStorage.setItem('kc-engineer-session-theme', theme); } catch (_) {}
-    document.dispatchEvent(new Event('portfolio:theme-change'));
-  }
+  const isThai = root.lang === 'th';
 
-  const themeDirectory = new URL('.', document.currentScript.src);
-  const themeBackgrounds = {
-    light: 'assets/sunrise-clouds.jpg',
-    dark: 'assets/cinematic-clouds.jpg',
-  };
-  const backdropLoads = new Map();
-  const reducedThemeMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let switchingTheme = false;
+  function initMobileMenu() {
+    const toggle = document.getElementById('burger');
+    const menu = document.getElementById('mobileMenu');
+    if (!toggle || !menu) return;
 
-  function otherTheme() {
-    return root.dataset.theme === 'dark' ? 'light' : 'dark';
-  }
+    toggle.addEventListener('click', () => {
+      toggle.setAttribute('aria-expanded', String(menu.classList.toggle('open')));
+    });
 
-  function warmBackdrop(theme) {
-    if (!backdropLoads.has(theme)) {
-      const image = new Image();
-      image.src = new URL(themeBackgrounds[theme], themeDirectory).href;
-      backdropLoads.set(theme, typeof image.decode === 'function' ? image.decode().catch(() => {}) : Promise.resolve());
-    }
-    return backdropLoads.get(theme);
-  }
-
-  async function revealWithGlow(theme) {
-    if (typeof themeToggle.animate !== 'function') {
-      applyTheme(theme);
-      return;
-    }
-
-    const glow = document.createElement('span');
-    glow.className = `theme-switch-glow theme-switch-glow--${theme}`;
-    glow.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(glow);
-    try {
-      await glow.animate([{ opacity: 0 }, { opacity: .94 }], {
-        duration: 135,
-        easing: 'ease-out',
-        fill: 'both',
-      }).finished;
-      applyTheme(theme);
-      await glow.animate([{ opacity: .94 }, { opacity: 0 }], {
-        duration: 320,
-        easing: 'cubic-bezier(.23,.7,.26,1)',
-        fill: 'both',
-      }).finished;
-    } finally {
-      glow.remove();
-    }
-  }
-
-  async function switchTheme() {
-    if (switchingTheme) return;
-    const theme = otherTheme();
-    if (reducedThemeMotion.matches) {
-      applyTheme(theme);
-      return;
-    }
-
-    switchingTheme = true;
-    themeToggle.setAttribute('aria-busy', 'true');
-    try {
-      await Promise.race([
-        warmBackdrop(theme),
-        new Promise(resolve => window.setTimeout(resolve, 150)),
-      ]);
-      if (reducedThemeMotion.matches) {
-        applyTheme(theme);
-        return;
-      }
-
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      const x = width * (theme === 'light' ? .74 : .25);
-      const y = height * (theme === 'light' ? .66 : .28);
-      const outer = Math.hypot(Math.max(x, width - x), Math.max(y, height - y)) + 90;
-      root.style.setProperty('--theme-center-x', `${x}px`);
-      root.style.setProperty('--theme-center-y', `${y}px`);
-      root.style.setProperty('--theme-reveal-limit', `${outer}px`);
-      root.dataset.themeTarget = theme;
-
-      if (typeof document.startViewTransition === 'function') {
-        root.classList.add('theme-switching');
-        root.classList.toggle('theme-switch-feathered', typeof window.CSS?.registerProperty === 'function');
-        const transition = document.startViewTransition(() => applyTheme(theme));
-        // A hidden or resizing page can skip the snapshot animation.
-        transition.ready.catch(() => {});
-        await transition.finished;
-      } else {
-        await revealWithGlow(theme);
-      }
-    } catch (_) {
-      if (root.dataset.theme !== theme) applyTheme(theme);
-    } finally {
-      delete root.dataset.themeTarget;
-      root.classList.remove('theme-switching', 'theme-switch-feathered');
-      for (const variable of ['--theme-center-x', '--theme-center-y', '--theme-reveal-limit']) {
-        root.style.removeProperty(variable);
-      }
-      themeToggle.removeAttribute('aria-busy');
-      switchingTheme = false;
-    }
-  }
-
-  applyTheme(root.dataset.theme === 'light' ? 'light' : 'dark');
-  themeToggle.addEventListener('click', switchTheme);
-  for (const eventName of ['pointerenter', 'focus']) {
-    themeToggle.addEventListener(eventName, () => {
-      if (!reducedThemeMotion.matches && !navigator.connection?.saveData) warmBackdrop(otherTheme());
+    menu.addEventListener('click', (event) => {
+      if (!event.target.closest('a')) return;
+      menu.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
     });
   }
 
-  const burger = document.getElementById('burger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  burger.addEventListener('click', () => {
-    const open = mobileMenu.classList.toggle('open');
-    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
-  });
-  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
-    mobileMenu.classList.remove('open');
-    burger.setAttribute('aria-expanded', 'false');
-  }));
+  function initReveals() {
+    if (!('IntersectionObserver' in window) || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const observer = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    }, { rootMargin: '0px 0px -18px 0px' });
 
-  // The preview uses motion-nav.js for its sticky current-section state.
+    document.querySelectorAll('.reveal').forEach((element) => observer.observe(element));
+    root.classList.add('motion-ready');
+  }
 
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
-  }, {threshold:0.08});
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  function initScrollControls() {
+    const progress = document.querySelector('.scroll-progress');
+    if (!progress) return;
 
-  // Each project or activity owns its own gallery.
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightboxImg');
-  const lightboxClose = document.getElementById('lightboxClose');
-  const galleryPrev = document.createElement('button');
-  const galleryNext = document.createElement('button');
-  const galleryCaption = document.createElement('div');
-  galleryPrev.className = 'gallery-arrow gallery-prev';
-  galleryNext.className = 'gallery-arrow gallery-next';
-  galleryPrev.type = galleryNext.type = 'button';
-  galleryPrev.textContent = '‹'; galleryNext.textContent = '›';
-  galleryPrev.setAttribute('aria-label', (isThai ? 'ภาพก่อนหน้าในโปรเจกต์หรือกิจกรรมนี้' : 'Previous photo in this project or activity'));
-  galleryNext.setAttribute('aria-label', (isThai ? 'ภาพถัดไปในโปรเจกต์หรือกิจกรรมนี้' : 'Next photo in this project or activity'));
-  galleryCaption.className = 'gallery-caption';
-  galleryCaption.id = 'galleryCaption';
-  galleryCaption.setAttribute('aria-live', 'polite');
-  galleryCaption.setAttribute('aria-atomic', 'true');
-  lightbox.setAttribute('aria-describedby', galleryCaption.id);
-  lightbox.append(galleryPrev, galleryNext, galleryCaption);
-  let previousFocus, galleryImages = [], galleryIndex = 0, previousOverflow = '', touchStart = null;
-  function imagesFor(img){
-    const group = img.closest('.project-card, #activities .tl-item');
-    return group ? Array.from(group.querySelectorAll('img.zoomable')) : [img];
+    const backToTop = document.createElement('a');
+    backToTop.className = 'back-top';
+    backToTop.href = '#top';
+    backToTop.textContent = '↑';
+    backToTop.setAttribute('aria-label', isThai ? 'กลับด้านบน' : 'Back to top');
+    document.body.appendChild(backToTop);
+
+    let frame = 0;
+    function updateScroll() {
+      frame = 0;
+      const total = root.scrollHeight - window.innerHeight;
+      const position = total > 0 ? Math.max(0, Math.min(1, window.scrollY / total)) : 0;
+      progress.style.transform = `scaleX(${position})`;
+      backToTop.classList.toggle('show', window.scrollY > 600);
+    }
+
+    function scheduleScrollUpdate() {
+      if (!frame) frame = requestAnimationFrame(updateScroll);
+    }
+
+    window.addEventListener('scroll', scheduleScrollUpdate, { passive: true });
+    window.addEventListener('resize', scheduleScrollUpdate, { passive: true });
+    updateScroll();
   }
-  function renderGallery(){
-    const img = galleryImages[galleryIndex];
-    lightboxImg.src = img.currentSrc || img.src;
-    lightboxImg.alt = img.alt || '';
-    galleryCaption.textContent = `${galleryIndex + 1} / ${galleryImages.length} — ${img.alt || 'Photo'}`;
-    galleryPrev.hidden = galleryNext.hidden = galleryImages.length < 2;
-  }
-  function moveGallery(step){
-    if (!lightbox.classList.contains('open') || galleryImages.length < 2) return;
-    galleryIndex = (galleryIndex + step + galleryImages.length) % galleryImages.length;
-    renderGallery();
-  }
-  function openLightbox(img){
-    previousFocus = document.activeElement;
-    previousOverflow = document.body.style.overflow;
-    galleryImages = imagesFor(img);
-    galleryIndex = galleryImages.indexOf(img);
-    renderGallery();
-    lightbox.classList.add('open');
-    document.body.style.overflow = 'hidden';
-    lightboxClose.focus();
-  }
-  function closeLightbox(){
-    if (!lightbox.classList.contains('open')) return;
-    lightbox.classList.remove('open');
-    document.body.style.overflow = previousOverflow;
-    touchStart = null;
-    previousFocus?.focus();
-  }
-  document.querySelectorAll('img.zoomable').forEach(img => {
-    img.addEventListener('click', () => openLightbox(img));
-    img.addEventListener('keydown', e => {
-      if(e.key === 'Enter' || e.key === ' '){e.preventDefault(); openLightbox(img);}
+
+  function initCardHighlight() {
+    const enabled = matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
+    const cards = document.querySelectorAll('.sidebar .card, .project-card, .mindset-step, .terminal, .timeline > .tl-item, .contact-card');
+
+    cards.forEach((card) => {
+      card.classList.add('fx-card');
+      let frame = 0;
+      let point;
+
+      function reset() {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        card.classList.remove('pointer-active');
+      }
+
+      card.addEventListener('pointermove', (event) => {
+        if (!enabled.matches || event.pointerType === 'touch') return;
+        point = { x: event.clientX, y: event.clientY };
+        if (frame) return;
+
+        frame = requestAnimationFrame(() => {
+          frame = 0;
+          const bounds = card.getBoundingClientRect();
+          card.style.setProperty('--pointer-x', `${point.x - bounds.left}px`);
+          card.style.setProperty('--pointer-y', `${point.y - bounds.top}px`);
+          card.classList.add('pointer-active');
+        });
+      }, { passive: true });
+
+      card.addEventListener('pointerleave', reset);
+      card.addEventListener('pointercancel', reset);
+      enabled.addEventListener('change', reset);
     });
-  });
-  galleryPrev.addEventListener('click', () => moveGallery(-1));
-  galleryNext.addEventListener('click', () => moveGallery(1));
-  lightboxClose.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', e => {if(e.target === lightbox) closeLightbox();});
-  document.addEventListener('keydown', e => {
-    if (!lightbox.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-      e.preventDefault(); moveGallery(e.key === 'ArrowRight' ? 1 : -1);
-    }
-    if (e.key === 'Tab') {
-      const controls = [lightboxClose, galleryPrev, galleryNext].filter(el => !el.hidden);
-      const index = controls.indexOf(document.activeElement);
-      e.preventDefault();
-      controls[(index + (e.shiftKey ? -1 : 1) + controls.length) % controls.length].focus();
-    }
-  });
-  lightboxImg.addEventListener('touchstart', e => {
-    touchStart = e.touches.length === 1 ? {x:e.touches[0].clientX, y:e.touches[0].clientY} : null;
-  }, {passive:true});
-  lightboxImg.addEventListener('touchmove', e => {if(e.touches.length !== 1) touchStart = null;}, {passive:true});
-  lightboxImg.addEventListener('touchcancel', () => {touchStart = null;}, {passive:true});
-  lightboxImg.addEventListener('touchend', e => {
-    if (!touchStart || !e.changedTouches.length) return;
-    const dx = e.changedTouches[0].clientX - touchStart.x;
-    const dy = e.changedTouches[0].clientY - touchStart.y;
-    touchStart = null;
-    if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy) * 1.3) moveGallery(dx < 0 ? 1 : -1);
-  }, {passive:true});
+  }
 
-document.documentElement.classList.add('motion-ready');
-const progress=document.querySelector('.scroll-progress');
-const topLink=document.createElement('a');topLink.className='back-top';topLink.href='#top';topLink.setAttribute('aria-label',(isThai ? 'กลับด้านบน' : 'Back to top'));topLink.textContent='↑';document.body.append(topLink);
-let lastY=window.scrollY, queued=false;
-function updateScroll(){const y=window.scrollY,total=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform='scaleX('+(total>0?y/total:0)+')';document.querySelector('.nav').classList.remove('nav-hidden');topLink.classList.toggle('show',y>600);lastY=y;queued=false;}
-window.addEventListener('scroll',()=>{if(!queued){queued=true;requestAnimationFrame(updateScroll);}},{passive:true});updateScroll();
-
-
-// English is the default at the root; Thai remains available through its own URL.
-(() => {
- const links = document.querySelectorAll('[data-language]');
- links.forEach(link => {
-   const target = new URL(link.getAttribute('href'), location.href);
-   if (location.protocol !== 'file:') target.pathname = target.pathname.replace(/index\.html$/, '');
-   target.hash = location.hash;
-   link.href = target.href;
- });
-})();
-
-// Soft card highlight; native mouse and keyboard behavior remain intact.
-(() => {
- const enabled=matchMedia('(hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)');
- document.querySelectorAll('.sidebar .card, .project-card, .mindset-step, .terminal, .timeline > .tl-item, .contact-card').forEach(card=>{
-  card.classList.add('fx-card');
-  let frame=0,point;
-  function reset(){cancelAnimationFrame(frame);frame=0;card.classList.remove('pointer-active');}
-  card.addEventListener('pointermove',e=>{
-   if(!enabled.matches||e.pointerType==='touch')return;
-   point={x:e.clientX,y:e.clientY};if(frame)return;
-   frame=requestAnimationFrame(()=>{
-    frame=0;const rect=card.getBoundingClientRect();
-    card.style.setProperty('--pointer-x',`${point.x-rect.left}px`);
-    card.style.setProperty('--pointer-y',`${point.y-rect.top}px`);
-    card.classList.add('pointer-active');
-   });
-  },{passive:true});
-  card.addEventListener('pointerleave',reset);card.addEventListener('pointercancel',reset);enabled.addEventListener('change',reset);
- });
+  initMobileMenu();
+  initReveals();
+  initScrollControls();
+  initCardHighlight();
 })();

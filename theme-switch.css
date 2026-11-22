@@ -6,7 +6,7 @@
 
 @media (prefers-reduced-motion: no-preference) {
   html.theme-switching {
-    --theme-feather: 76px;
+    --theme-feather: clamp(30px, 6vw, 56px);
     --theme-arrival-tone: brightness(1.11) saturate(1.08);
   }
 
@@ -42,13 +42,11 @@
   @keyframes theme-switch-iris {
     from {
       clip-path: circle(0 at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
-      transform: scale(1.024);
       filter: var(--theme-arrival-tone);
     }
     65% { filter: none; }
     to {
       clip-path: circle(var(--theme-reveal-limit, 150vmax) at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
-      transform: none;
       filter: none;
     }
   }
@@ -66,14 +64,12 @@
     @keyframes theme-switch-feathered-iris {
       from {
         --theme-reveal-radius: 0px;
-        transform: scale(1.024);
-        filter: var(--theme-arrival-tone);
+          filter: var(--theme-arrival-tone);
       }
       65% { filter: none; }
       to {
         --theme-reveal-radius: var(--theme-reveal-limit, 150vmax);
-        transform: none;
-        filter: none;
+          filter: none;
       }
     }
   }
