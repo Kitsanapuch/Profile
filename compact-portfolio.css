@@ -1,0 +1,121 @@
+/* Compact proportions without changing the page layouts or browser zoom. */
+body.motion-preview.multipage-route .nav-inner {
+  height: 64px;
+  max-width: 1320px;
+}
+
+body.motion-preview.multipage-route footer { margin-top: clamp(22px, 4vw, 54px); }
+
+body.motion-preview.route-home .motion-hero {
+  padding-block: clamp(20px, 2.9vw, 39px) clamp(13px, 2vw, 25px);
+}
+
+body.motion-preview.route-home .motion-hero-inner {
+  max-width: 1072px;
+  padding-inline: clamp(16px, 3.2vw, 36px);
+}
+
+body.motion-preview.route-home .motion-hero-grid {
+  gap: clamp(15px, 2.7vw, 31px);
+  row-gap: 17px;
+  padding-block: 12px 14px;
+}
+
+body.motion-preview.route-home .motion-hero h1 {
+  font-size: clamp(38px, 4.65vw, 57px);
+  line-height: 1.04;
+}
+
+html[lang="th"] body.motion-preview.route-home .motion-hero h1 {
+  font-size: clamp(36px, 4.4vw, 53px);
+  line-height: 1.17;
+}
+
+body.motion-preview.route-home .motion-eyebrow { margin-bottom: 10px; }
+body.motion-preview.route-home .motion-headline {
+  font-size: clamp(16px, 1.55vw, 19px);
+  margin-top: 13px;
+}
+body.motion-preview.route-home .motion-summary {
+  max-width: 54ch;
+  margin-top: 9px;
+}
+body.motion-preview.route-home .motion-actions { margin-top: 15px; gap: 8px; }
+body.motion-preview.route-home :is(.motion-action, .motion-text-link) {
+  min-height: 44px;
+  gap: 13px;
+}
+body.motion-preview.route-home .motion-action { padding-inline: 14px; }
+
+body.motion-preview.route-home .motion-portrait {
+  width: min(100%, 260px);
+}
+body.motion-preview.route-home .motion-portrait-frame {
+  height: clamp(239px, 23vw, 272px);
+}
+body.motion-preview.route-home .motion-portrait figcaption { min-height: 43px; }
+
+body.motion-preview.route-home .motion-terminal-top { padding: 9px 15px; }
+body.motion-preview.route-home .motion-terminal-body { padding: 10px 15px 12px; }
+body.motion-preview.route-home .motion-terminal-note { gap: 5px; min-height: 66px; }
+body.motion-preview.route-home .motion-terminal-note strong { font-size: clamp(15px, 1.65vw, 18px); }
+body.motion-preview.route-home .motion-hero-bottom { min-height: 44px; }
+
+body.motion-preview.route-home .home-summary {
+  width: min(100% - 40px, 1000px);
+  padding-block: clamp(34px, 4.2vw, 48px) clamp(38px, 5vw, 62px);
+}
+body.motion-preview.route-home .home-summary-head { margin-bottom: 18px; }
+body.motion-preview.route-home .home-summary-head h2 {
+  font-size: clamp(26px, 3.2vw, 36px);
+}
+body.motion-preview.route-home .home-about-complete { margin-bottom: clamp(32px, 4.2vw, 50px); }
+body.motion-preview.route-home :is(.home-about-stack, .route-summary-grid, .mindset) { gap: 14px; }
+body.motion-preview.route-home .home-about-stack > section > .card,
+body.motion-preview.route-home .route-summary-card {
+  padding: clamp(16px, 2vw, 23px);
+}
+body.motion-preview.route-home .home-about-stack .card-title { font-size: clamp(19px, 1.8vw, 23px); }
+body.motion-preview.route-home .home-about-stack .card-head { margin-bottom: 15px; }
+body.motion-preview.route-home .home-about-stack .interest-tags { margin-top: 17px; }
+body.motion-preview.route-home .home-about-work { padding-top: 15px; }
+body.motion-preview.route-home .home-about-stack .route-mindset { padding-top: clamp(12px, 2.4vw, 25px); }
+body.motion-preview.route-home .mindset-step { padding: clamp(14px, 1.9vw, 22px); }
+body.motion-preview.route-home .route-summary-card { min-height: auto; }
+body.motion-preview.route-home .route-summary-card h3 {
+  font-size: clamp(20px, 2vw, 24px);
+  margin-top: 16px;
+}
+
+@media (min-width: 761px) {
+  body.motion-preview.route-home .motion-hero-grid {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 260px);
+  }
+}
+
+@media (max-width: 1050px) {
+  body.motion-preview.multipage-route .nav-inner {
+    height: auto;
+    min-height: 87px;
+    gap: 3px 10px;
+    padding-block: 6px 3px;
+  }
+  body.motion-preview.multipage-route .mobile-menu { top: 87px; }
+}
+
+@media (max-width: 760px) {
+  body.motion-preview.route-home .motion-hero-grid { gap: 18px; }
+  body.motion-preview.route-home .motion-portrait { width: min(70%, 221px); }
+  body.motion-preview.route-home .motion-portrait-frame { height: 238px; }
+}
+
+@media (max-width: 680px) {
+  body.motion-preview.route-home .motion-hero h1 { font-size: clamp(32px, 7.9vw, 46px); }
+  html[lang="th"] body.motion-preview.route-home .motion-hero h1 {
+    font-size: clamp(31px, 7.6vw, 44px);
+  }
+  body.motion-preview.route-home .motion-portrait { width: min(69%, 206px); }
+  body.motion-preview.route-home .motion-portrait-frame { height: 222px; }
+  body.motion-preview.route-home .motion-terminal-note { min-height: 0; padding-top: 10px; }
+  body.motion-preview.route-home .home-summary { width: calc(100% - 32px); }
+}

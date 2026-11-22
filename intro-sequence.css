@@ -1,4 +1,8 @@
 /* The opening runs on every document load, including reloads. */
+:root {
+  --intro-reveal: 1.28s;
+  --intro-duration: 2.1s;
+}
 body.motion-preview .intro-loader {
   position: fixed;
   inset: 0;
@@ -8,34 +12,48 @@ body.motion-preview .intro-loader {
   overflow: hidden;
   pointer-events: none;
   color: #edf7ff;
-  background: #070b15;
-  animation: intro-cover 3s both;
+  background: transparent;
+  animation: intro-cover var(--intro-duration) both;
 }
-body.motion-preview .intro-loader::before {
-  content: "";
+body.motion-preview .intro-loader::before,
+body.motion-preview .intro-loader::after {
+  content: '';
   position: absolute;
-  inset: -10%;
+  z-index: 1;
+  inset: 0 0 calc(50% - 1px);
   background:
-    radial-gradient(circle at 50% 53%, #5e9ff11a, transparent 35%),
-    linear-gradient(#b9dfff0b 1px, transparent 1px),
-    linear-gradient(90deg, #b9dfff0b 1px, transparent 1px);
-  background-size: auto, 64px 64px, 64px 64px;
-  mask-image: radial-gradient(ellipse at center, black 25%, transparent 76%);
+    linear-gradient(#a0cfff09 1px, transparent 1px) 50% 100% / 62px 62px,
+    linear-gradient(90deg, #a0cfff09 1px, transparent 1px) 50% 100% / 62px 62px,
+    radial-gradient(ellipse at 50% 100%, #152642, #080d1a 64%);
+  box-shadow: 0 1px #9bd7ff22;
+  animation: intro-panel-away calc(var(--intro-duration) - var(--intro-reveal))
+    var(--intro-reveal) cubic-bezier(.65,.04,.22,1) both;
+  --intro-panel-end: -101%;
 }
 body.motion-preview .intro-loader::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 1px solid #9dbdf517;
-  box-shadow: inset 0 0 100px #748dff0b;
+  inset: 50% 0 0;
+  background-position: 50% 0;
+  background-image:
+    linear-gradient(#a0cfff09 1px, transparent 1px),
+    linear-gradient(90deg, #a0cfff09 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 0%, #152642, #080d1a 64%);
+  box-shadow: 0 -1px #9bd7ff22;
+  --intro-panel-end: 101%;
 }
-body.motion-preview .intro-ambient,
-body.motion-preview .intro-blueprint { display: none; }
+body.motion-preview .intro-seam {
+  position: absolute;
+  z-index: 2;
+  inset: 50% 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 8%, #6da6f38c, #c8f5ff, #b99fff8c, transparent 92%);
+  box-shadow: 0 0 17px #9ad7ff65;
+  animation: intro-seam .64s 1s cubic-bezier(.2,.64,.26,1) both;
+}
 body.motion-preview .intro-sequence {
   position: relative;
   z-index: 3;
   width: min(430px, calc(100vw - 36px));
-  animation: intro-terminal-life 2.3s both;
+  animation: intro-terminal-life 1.47s cubic-bezier(.24,.7,.23,1) both;
 }
 body.motion-preview .intro-sequence-top,
 body.motion-preview .intro-sequence-bottom {
@@ -110,7 +128,7 @@ body.motion-preview .intro-command-text {
   overflow: hidden;
   white-space: nowrap;
   color: #f0f6ff;
-  animation: intro-type .88s .23s steps(20, end) forwards;
+  animation: intro-type .77s .18s steps(20, end) forwards;
 }
 body.motion-preview .intro-command-caret {
   display: inline-block;
@@ -129,7 +147,7 @@ body.motion-preview .intro-window-foot {
 body.motion-preview .intro-window-ready {
   color: #82e6dc;
   opacity: 0;
-  animation: intro-ready .18s 1.14s both;
+  animation: intro-ready .14s .98s both;
 }
 body.motion-preview .intro-progress-track { height: 2px; background: #a4c7ed21; }
 body.motion-preview .intro-progress-track span {
@@ -139,87 +157,34 @@ body.motion-preview .intro-progress-track span {
   transform-origin: left;
   background: #9fecef;
   box-shadow: 0 0 14px #9fecef;
-  animation: intro-progress 1.18s .22s cubic-bezier(.24,.68,.18,1) both;
+  animation: intro-progress .87s .16s cubic-bezier(.24,.68,.18,1) both;
 }
 
-/* The short construction scene follows the terminal. */
-body.motion-preview .intro-layout {
-  position: absolute;
-  z-index: 2;
-  width: min(1030px, calc(100vw - 66px));
-  height: min(580px, calc(100vh - 90px));
-  display: grid;
-  grid-template-columns: 1.25fr .75fr;
-  grid-template-rows: 53px 1fr 100px;
-  gap: clamp(8px, 1.8vw, 18px);
-  opacity: 0;
-  transform: scale(.955);
-  animation: intro-layout-in .7s 1.63s cubic-bezier(.2,.8,.2,1) both;
-}
-body.motion-preview .intro-layout-block {
-  position: relative;
-  display: block;
-  border: 1px solid #79cadf52;
-  background:
-    linear-gradient(#78d5e513 1px, transparent 1px),
-    linear-gradient(90deg, #78d5e513 1px, transparent 1px),
-    #0b1a2f44;
-  background-size: 35px 35px;
-  box-shadow: inset 0 0 32px #78d5e508, 0 0 20px #5bc5da0c;
-  clip-path: inset(0 100% 0 0);
-  animation: intro-trace .42s 1.75s ease-out both;
-}
-body.motion-preview .intro-layout-block::before,
-body.motion-preview .intro-layout-block::after {
-  position: absolute;
-  color: #9be9f3;
-  font: 600 9px/1 var(--motion-mono, ui-monospace, monospace);
-}
-body.motion-preview .intro-layout-block::before {
-  content: attr(data-label);
-  left: 13px;
-  top: 13px;
-  letter-spacing: .13em;
-}
-body.motion-preview .intro-layout-block::after {
-  content: "+";
-  right: -4px;
-  bottom: -5px;
-  font-size: 16px;
-}
-body.motion-preview .intro-layout-nav { grid-column: 1 / -1; grid-row: 1; animation-delay: 1.7s; }
-body.motion-preview .intro-layout-copy { grid-column: 1; grid-row: 2; animation-delay: 1.82s; }
-body.motion-preview .intro-layout-portrait { grid-column: 2; grid-row: 2; animation-delay: 1.94s; }
-body.motion-preview .intro-layout-details { grid-column: 1 / -1; grid-row: 3; animation-delay: 2.05s; }
-body.motion-preview .intro-layout-cursor {
-  display: none;
-}
 @keyframes intro-type { to { width: 20ch; } }
 @keyframes intro-caret { 50% { opacity: 0; } }
 @keyframes intro-ready { to { opacity: 1; } }
 @keyframes intro-progress { to { transform: scaleX(1); } }
 @keyframes intro-terminal-life {
-  0% { opacity: 0; transform: perspective(1000px) translate3d(0, 18px, -90px) rotateX(5deg); }
-  15%, 64% { opacity: 1; transform: perspective(1000px) translate3d(0, 0, 0) rotateX(0); }
-  83%, 100% { opacity: 0; transform: perspective(1000px) translate3d(0, -11px, 55px) rotateX(-2deg); }
+  0% { opacity: 0; transform: translate3d(0, 10px, 0) scale(.97); }
+  16%, 72% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  100% { opacity: 0; transform: translate3d(0, -12px, 0) scale(.985); }
 }
-@keyframes intro-layout-in {
-  0% { opacity: 0; transform: perspective(1300px) translate3d(0, 38px, -160px) rotateX(8deg); }
-  45%, 82% { opacity: .48; transform: perspective(1300px) translate3d(0, 0, 0) rotateX(0); }
-  100% { opacity: 0; transform: perspective(1300px) translate3d(0, -10px, 75px) rotateX(-1deg); }
+@keyframes intro-seam {
+  0% { opacity: 0; transform: scaleX(.14); }
+  38% { opacity: .82; }
+  100% { opacity: 0; transform: scaleX(1); }
 }
-@keyframes intro-trace { to { clip-path: inset(0 0 0 0); } }
-@keyframes intro-pointer {
-  0% { opacity: 0; transform: translate(25px, 25px); }
-  50%, 100% { opacity: 1; transform: none; }
+@keyframes intro-panel-away {
+  from { transform: translate3d(0, 0, 0); }
+  to { transform: translate3d(0, var(--intro-panel-end), 0); }
 }
 @keyframes intro-cover {
-  0%, 84% { opacity: 1; visibility: visible; }
-  100% { opacity: 0; visibility: hidden; }
+  from { visibility: visible; }
+  to { visibility: hidden; }
 }
 @keyframes intro-content-enter {
-  from { opacity: 0; transform: translateY(10px); filter: blur(2px); }
-  to { opacity: 1; transform: none; filter: none; }
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: none; }
 }
 body.motion-preview .motion-hero-top,
 body.motion-preview .motion-eyebrow,
@@ -229,11 +194,11 @@ body.motion-preview .motion-summary,
 body.motion-preview .motion-actions,
 body.motion-preview .motion-portrait-frame,
 body.motion-preview .motion-terminal {
-  animation: intro-content-enter .62s 2.45s cubic-bezier(.2,.75,.2,1) both;
+  animation: intro-content-enter .55s var(--intro-reveal) cubic-bezier(.2,.75,.2,1) both;
 }
-body.motion-preview .motion-hero h1 > span:last-child { animation-delay: 2.53s; }
-body.motion-preview .motion-portrait-frame { animation-delay: 2.58s; }
-body.motion-preview .motion-terminal { animation-delay: 2.65s; }
+body.motion-preview .motion-hero h1 > span:last-child { animation-delay: calc(var(--intro-reveal) + 80ms); }
+body.motion-preview .motion-portrait-frame { animation-delay: calc(var(--intro-reveal) + 140ms); }
+body.motion-preview .motion-terminal { animation-delay: calc(var(--intro-reveal) + 210ms); }
 html.intro-skip body.motion-preview .intro-loader { display: none; }
 html.intro-skip body.motion-preview .motion-hero-top,
 html.intro-skip body.motion-preview .motion-eyebrow,
@@ -249,7 +214,6 @@ html.intro-skip body.motion-preview .motion-terminal {
   filter: none;
 }
 @media (max-width: 650px) {
-  body.motion-preview .intro-layout { grid-template-columns: 1fr .7fr; grid-template-rows: 45px 1fr 70px; }
   body.motion-preview .intro-sequence-top,
   body.motion-preview .intro-sequence-bottom { font-size: 8px; }
   body.motion-preview .intro-window-command { display: none; }

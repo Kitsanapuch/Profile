@@ -35,24 +35,19 @@
     body.replaceChildren(line);
   }
 
-  const layout = document.createElement('div');
-  layout.className = 'intro-layout';
-  for (const [name, label] of [['intro-layout-copy', 'TYPE'], ['intro-layout-portrait', 'IMAGE'], ['intro-layout-nav', 'NAV'], ['intro-layout-details', 'DETAILS']]) {
-    const block = document.createElement('span');
-    block.className = `intro-layout-block ${name}`;
-    block.setAttribute('data-label', label);
-    layout.appendChild(block);
-  }
-  const cursor = document.createElement('span');
-  cursor.className = 'intro-layout-cursor';
-  cursor.textContent = '↖  build UI';
-  layout.appendChild(cursor);
-  loader.appendChild(layout);
-
-  const finish = () => {
+  function finish() {
+    if (!loader.isConnected) return;
+    window.clearTimeout(fallback);
     document.documentElement.classList.add('intro-finished');
     loader.remove();
-  };
-  // CSS clears the scene first; this timer only removes the inert overlay.
-  window.setTimeout(finish, 3100);
+    document.dispatchEvent(new Event('portfolio:intro-end'));
+  }
+
+  const fallback = window.setTimeout(finish, 2400);
+  loader.addEventListener('animationend', (event) => {
+    if (event.target === loader && event.animationName === 'intro-cover') finish();
+  });
+  reduceMotion.addEventListener('change', (event) => {
+    if (event.matches) finish();
+  }, { once: true });
 })();
