@@ -26,8 +26,8 @@
   if (!skipIntro || reducedMotion || !activation?.from || !activation.entry) return;
 
   const routes = ['', 'experience', 'activities', 'projects', 'skills', 'certifications', 'papers', 'contact'];
-  function routeIndex(url) {
-    const path = new URL(url).pathname
+  function routeIndex(pathname) {
+    const path = pathname
       .replace(/\/index\.html$/, '/')
       .replace(/^\/th(?=\/|$)/, '')
       .replace(/^\/|\/$/g, '');
@@ -36,8 +36,11 @@
 
   const { from, entry } = activation;
   const traversing = activation.navigationType === 'traverse' && from.index >= 0 && entry.index >= 0;
-  const previous = traversing ? from.index : routeIndex(from.url);
-  const current = traversing ? entry.index : routeIndex(entry.url);
+  // Some browser history entries do not expose their URL. In that case, the
+  // default entrance still plays without a direction override.
+  if (!traversing && !from.url) return;
+  const previous = traversing ? from.index : routeIndex(new URL(from.url).pathname);
+  const current = traversing ? entry.index : routeIndex(location.pathname);
   if (current >= 0 && previous >= 0 && current < previous) {
     root.style.setProperty('--section-direction', '-1');
   }
