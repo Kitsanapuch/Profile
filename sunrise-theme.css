@@ -195,6 +195,14 @@ html[data-theme="light"] body.motion-preview .motion-ribbon .motion-ribbon-node-
   fill: #fff7dc;
   stroke: #975b23;
 }
+html[data-theme="light"] body.motion-preview .motion-ribbon .motion-ribbon-pin {
+  fill: #fff7cd;
+  stroke: #b57231;
+  filter: drop-shadow(0 0 6px #df9b3d);
+}
+html[data-theme="light"] body.motion-preview .motion-ribbon .motion-ribbon-node-tick {
+  stroke: #b27c3b;
+}
 html[data-theme="light"] body.motion-preview .motion-ribbon :is(.motion-ribbon-node-core, .motion-ribbon-runner-glow) {
   fill: #a7651d;
   filter: none;
