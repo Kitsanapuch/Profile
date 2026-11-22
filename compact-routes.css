@@ -1,0 +1,286 @@
+/* Tighter spacing for the existing interior pages. */
+body.multipage-route :is(.route-hero, .route-content) {
+  width: min(100% - 48px, 990px);
+}
+
+body.multipage-route .route-hero {
+  padding-block: clamp(24px, 3.4vw, 43px) clamp(16px, 2vw, 25px);
+}
+
+body.multipage-route .route-hero-top {
+  margin-bottom: clamp(12px, 1.7vw, 20px);
+}
+
+body.multipage-route .route-hero h1 {
+  font-size: clamp(37px, 5.4vw, 65px);
+}
+
+body.multipage-route .route-hero p {
+  margin-top: 11px;
+  font-size: clamp(15px, 1.3vw, 17px);
+}
+
+body.multipage-route .route-hero-rule {
+  margin-top: clamp(14px, 2vw, 23px);
+}
+
+body.multipage-route .route-content {
+  gap: 20px;
+  padding-bottom: 68px;
+}
+
+body.multipage-route .route-content .card {
+  padding: clamp(17px, 2.1vw, 24px);
+}
+
+body.multipage-route .route-content .card-head {
+  margin-bottom: 16px;
+}
+
+body.multipage-route .route-content .card-title {
+  font-size: clamp(19px, 2vw, 23px);
+}
+
+body.route-experience .timeline,
+body.route-activities .timeline {
+  gap: 11px;
+}
+
+body.route-experience .timeline > .tl-item,
+body.route-activities .timeline > .tl-item {
+  padding: 14px;
+}
+
+body.route-experience .tl-role,
+body.route-activities .tl-role {
+  font-size: 17px;
+}
+
+body.route-activities .activity-gallery {
+  gap: 10px;
+  margin-block: 15px 8px;
+}
+
+body.route-activities .activity-gallery img:not([src*="certificate"], .certificate-figure img) {
+  height: 110px;
+}
+
+body.route-activities .activity-photo {
+  max-width: 265px;
+}
+
+body.route-activities .activity-photo img {
+  max-height: 190px;
+}
+
+body.route-activities .activity-gallery .certificate-figure {
+  max-width: 380px;
+}
+
+body.route-projects .studio-focus-inner {
+  padding-block: clamp(26px, 3.3vw, 40px) clamp(28px, 3.3vw, 40px);
+}
+
+body.route-projects .studio-focus-head {
+  margin-bottom: 19px;
+}
+
+body.route-projects .studio-focus-head h2 {
+  font-size: clamp(30px, 3.6vw, 46px);
+}
+
+body.route-projects .studio-focus-meta {
+  padding: 17px;
+}
+
+body.route-projects .studio-focus-meta h3 {
+  font-size: clamp(23px, 2.2vw, 29px);
+}
+
+body.route-projects .studio-focus-link {
+  margin-top: 17px;
+}
+
+body.route-projects .studio-focus-controls {
+  padding-top: 17px;
+}
+
+body.route-projects .studio-image-viewport {
+  min-height: 218px;
+}
+
+body.route-projects .studio-image-viewport img {
+  max-height: 280px;
+}
+
+body.route-projects .studio-tab {
+  min-height: 49px;
+}
+
+body.route-projects .project-card {
+  padding: clamp(15px, 1.8vw, 21px);
+}
+
+body.route-projects .project-title {
+  font-size: clamp(19px, 2.05vw, 26px);
+}
+
+body.route-projects .project-thumb {
+  max-width: 425px;
+  height: 172px;
+}
+
+body.route-projects :is(.myschool-screen, .physics-showcase) {
+  max-width: 620px;
+}
+
+body.route-projects .physics-showcase img {
+  max-height: 302px;
+}
+
+body.route-projects .physics-admin-feature img {
+  max-height: 268px;
+}
+
+body.route-projects .myschool-screen img {
+  max-height: 215px;
+}
+
+/* Match the specificity of the showcase's existing height override. */
+body.route-projects .scamgraph-showcase img {
+  max-height: 270px !important;
+}
+
+body.route-skills .route-skill-grid {
+  gap: 12px;
+}
+
+body.route-skills .route-skill-grid .skill-cat {
+  margin-top: 16px;
+}
+
+body.route-certifications .route-certifications > .card {
+  gap: 13px;
+}
+
+body.route-certifications .route-certifications .card-head {
+  margin-bottom: 0;
+}
+
+body.route-certifications .route-certifications .certificate-block {
+  padding: 12px;
+}
+
+body.route-certifications .route-certifications .certificate-img {
+  height: clamp(150px, 20vw, 215px);
+}
+
+body.route-papers .papers-grid {
+  gap: 13px;
+}
+
+body.route-papers .paper-card {
+  padding: 15px;
+}
+
+body.route-papers .paper-cover {
+  width: min(100%, 143px);
+}
+
+body.route-papers .paper-card h3 {
+  margin-top: 15px;
+}
+
+body.route-contact .route-content {
+  padding-block: clamp(36px, 4.7vw, 61px) clamp(56px, 6.4vw, 82px);
+}
+
+body.route-contact .contact-split {
+  gap: clamp(26px, 3.8vw, 54px);
+}
+
+body.route-contact .contact-copy :is(h1, h2) {
+  font-size: clamp(34px, 3.9vw, 49px);
+}
+
+body.route-contact .contact-copy > p {
+  margin-block: 17px 21px;
+}
+
+body.route-contact .contact-form-panel {
+  padding: clamp(18px, 2.2vw, 27px);
+}
+
+body.route-contact .contact-form-panel h2 {
+  font-size: 22px;
+}
+
+body.route-contact .contact-form-panel > p {
+  margin-bottom: 18px;
+}
+
+body.route-contact #contact-form {
+  gap: 14px;
+}
+
+body.route-contact #contact-form textarea {
+  min-height: 128px;
+}
+
+body.route-contact #contact-form button[type="submit"] {
+  min-height: 46px;
+}
+
+@media (max-width: 900px) {
+  body.route-projects .studio-focus-controls {
+    padding-top: 10px;
+  }
+}
+
+@media (max-width: 680px) {
+  body.multipage-route :is(.route-hero, .route-content) {
+    width: min(100% - 32px, 990px);
+  }
+
+  body.multipage-route .route-hero h1 {
+    font-size: clamp(32px, 8.4vw, 47px);
+  }
+
+  body.multipage-route .route-content {
+    gap: 17px;
+    padding-bottom: 54px;
+  }
+
+  body.route-activities .activity-gallery img:not([src*="certificate"], .certificate-figure img) {
+    height: 98px;
+  }
+
+  body.route-projects .studio-focus-head > p {
+    margin-top: 14px;
+  }
+
+  body.route-projects .studio-image-viewport {
+    min-height: 164px;
+  }
+
+  body.route-projects .studio-image-viewport img {
+    max-height: 225px;
+  }
+
+  body.route-projects .studio-tab {
+    min-height: 46px;
+  }
+
+  body.route-certifications .route-certifications .certificate-img {
+    height: auto;
+    max-height: 215px;
+  }
+
+  body.route-contact .route-content {
+    padding-top: 28px;
+  }
+
+  body.route-contact .contact-copy :is(h1, h2) {
+    font-size: clamp(30px, 8vw, 40px);
+  }
+}
