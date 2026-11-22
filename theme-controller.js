@@ -111,6 +111,13 @@
   }
 
   applyTheme(root.dataset.theme === 'light' ? 'light' : 'dark');
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return;
+    try {
+      const theme = sessionStorage.getItem('kc-engineer-session-theme');
+      if ((theme === 'light' || theme === 'dark') && root.dataset.theme !== theme) applyTheme(theme);
+    } catch (_) {}
+  });
   themeToggle.addEventListener('click', switchTheme);
   for (const eventName of ['pointerenter', 'focus']) {
     themeToggle.addEventListener(eventName, () => {
