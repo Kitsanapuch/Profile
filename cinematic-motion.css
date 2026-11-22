@@ -6,6 +6,7 @@ body.motion-preview.multipage-route:not(.route-home)::before {
   background: url('assets/cinematic-clouds.jpg') center 92% / cover no-repeat;
   filter: grayscale(1) sepia(.62) hue-rotate(174deg) saturate(.84) brightness(.94);
   mix-blend-mode: screen;
+  mask-image: var(--cloud-mask);
 }
 
 body.motion-preview .cinema-landscape {
@@ -13,7 +14,7 @@ body.motion-preview .cinema-landscape {
   height: min(590px, 84%);
   z-index: 0;
   opacity: .59;
-  mask-image: radial-gradient(ellipse 65% 77% at 79% 50%, #000 16%, transparent 89%);
+  --cloud-mask: radial-gradient(ellipse 65% 77% at 79% 50%, #000 16%, transparent 89%);
 }
 
 body.motion-preview.multipage-route:not(.route-home) { isolation: isolate; }
@@ -24,13 +25,21 @@ body.motion-preview.multipage-route:not(.route-home)::before {
   height: clamp(295px, 32vw, 450px);
   z-index: -1;
   opacity: .47;
-  mask-image: radial-gradient(ellipse 73% 68% at 87% 48%, #000 14%, transparent 91%);
+  --cloud-mask: radial-gradient(ellipse 73% 68% at 87% 48%, #000 14%, transparent 91%);
 }
 
 html[data-theme="light"] body.motion-preview.multipage-route:not(.route-home)::before {
   filter: grayscale(1) brightness(1.5);
   mix-blend-mode: multiply;
   opacity: .15;
+}
+
+@supports (mask-composite: intersect) {
+  body.motion-preview .cinema-landscape,
+  body.motion-preview.multipage-route:not(.route-home)::before {
+    mask-image: var(--cloud-mask), linear-gradient(#000 68%, transparent);
+    mask-composite: intersect;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -48,7 +57,7 @@ html[data-theme="light"] body.motion-preview.multipage-route:not(.route-home)::b
     height: min(590px, 78%);
     opacity: .48;
     background-position: 62% 100%;
-    mask-image: radial-gradient(ellipse 88% 60% at 76% 62%, #000 10%, transparent 87%);
+    --cloud-mask: radial-gradient(ellipse 88% 60% at 76% 62%, #000 10%, transparent 87%);
   }
 
   body.motion-preview.multipage-route:not(.route-home)::before {
