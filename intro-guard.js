@@ -11,7 +11,5 @@
   if (skip || navigation?.type === 'back_forward' ||
       window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('intro-skip');
-  } else {
-    document.documentElement.classList.add('atelier-opening');
   }
 })();

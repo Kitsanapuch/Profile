@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<script src="../intro-guard.js?v=2"></script>
+<script src="../intro-guard.js"></script>
 <meta name="referrer" content="no-referrer">
 <title>กิตษณภัช ช่วยบำรุง | วิศวกรรมซอฟต์แวร์ · AI</title>
 <meta name="description" content="กิตษณภัช ช่วยบำรุง กำลังศึกษาวิศวกรรมซอฟต์แวร์ที่มหาวิทยาลัยธรรมศาสตร์ สนใจ AI และ Machine Learning พร้อมผลงานแอปพลิเคชัน Computer Vision และ IoT">
@@ -16,7 +16,7 @@
 
 
 
-<link rel="icon" type="image/svg+xml" href="../brand-mark.svg"><meta name="theme-color" content="#1b1916"><link rel="stylesheet" href="../styles.css?v=physics-admin-20261109">
+<link rel="icon" type="image/svg+xml" href="../brand-mark.svg"><meta name="theme-color" content="#090e1a"><link rel="stylesheet" href="../styles.css?v=physics-admin-20261109">
 
 <link rel="canonical" href="https://kitsanapuch.vercel.app/th/">
 <meta name="robots" content="index, follow, max-image-preview:large">
@@ -58,16 +58,33 @@
 <link rel="alternate" hreflang="th" href="https://kitsanapuch.vercel.app/th/">
 <link rel="alternate" hreflang="x-default" href="https://kitsanapuch.vercel.app/">
 <link rel="stylesheet" href="../motion-theme.css?v=7">
+<link rel="stylesheet" href="../motion-effects.css?v=6">
 <link rel="stylesheet" href="../portfolio-polish.css?v=7">
+<link rel="stylesheet" href="../intro-sequence.css?v=9">
 <link rel="stylesheet" href="../multipage.css?v=6">
 <link rel="stylesheet" href="../route-motion.css?v=3">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../atelier.css?v=1">
-<link rel="stylesheet" href="../atelier-home.css?v=1">
+<link rel="stylesheet" href="../cinematic-motion.css?v=1">
 </head>
-<body id="top" class="motion-preview multipage-route route-home">
-<div class="atelier-intro" aria-hidden="true">
-  <div class="atelier-intro-content"><span class="atelier-intro-mark">K</span><span class="atelier-intro-filename">developer.ts</span><code>render.portfolio()</code></div>
+<body id="top" class="motion-preview multipage-route route-home"><canvas id="motion-particles" aria-hidden="true"></canvas>
+<div class="intro-loader" aria-hidden="true">
+  <div class="intro-ambient intro-ambient-one"></div><div class="intro-ambient intro-ambient-two"></div>
+  <div class="intro-blueprint intro-blueprint-left"><span></span><span></span></div>
+  <div class="intro-blueprint intro-blueprint-right"><span></span><span></span></div>
+  <div class="intro-sequence">
+    <div class="intro-sequence-top"><span class="intro-sequence-identity">K / PORTFOLIO</span><span>INITIALIZING / 2026</span></div>
+    <div class="intro-window">
+      <div class="intro-window-head"><span class="intro-window-dots"><i></i><i></i><i></i></span><strong>developer.ts</strong><span class="intro-window-command">~/kitsanapuch</span></div>
+      <div class="intro-window-body">
+        <div class="intro-code-line intro-code-line-one"><span class="intro-line-number">01</span><code><span class="intro-code-purple">const</span> engineer <span class="intro-code-blue">=</span> &#123;</code></div>
+        <div class="intro-code-line intro-code-line-two"><span class="intro-line-number">02</span><code>&nbsp;&nbsp;focus: [<span class="intro-code-green">"AI"</span>, <span class="intro-code-green">"Software"</span>],</code></div>
+        <div class="intro-code-line intro-code-line-three"><span class="intro-line-number">03</span><code>&nbsp;&nbsp;mission: <span class="intro-code-green">"build for people"</span></code></div>
+        <div class="intro-code-line intro-code-line-four"><span class="intro-line-number">04</span><code>&#125;; <span class="intro-code-caret">▌</span></code></div>
+      </div>
+      <div class="intro-window-foot"><span>กำลังเตรียมผลงาน</span><span class="intro-window-ready">พร้อมแล้ว</span></div>
+      <div class="intro-progress-track"><span></span></div>
+    </div>
+    <div class="intro-sequence-bottom"><span>DESIGN</span><span class="intro-sequence-cross">✳</span><span>BUILD</span><span class="intro-sequence-cross">✳</span><span>TEST</span></div>
+  </div>
 </div>
 <div class="scroll-progress" aria-hidden="true"></div>
 
@@ -91,79 +108,47 @@
   </div>
 </nav>
 <div class="mobile-menu" id="mobileMenu"><a href="../th/" aria-current="page">หน้าแรก</a><a href="../th/experience/">ประสบการณ์</a><a href="../th/activities/">กิจกรรม</a><a href="../th/projects/">โปรเจกต์</a><a href="../th/skills/">ทักษะ</a><a href="../th/certifications/">เกียรติบัตร</a><a href="../th/papers/">บทความ</a><a href="../th/contact/">ติดต่อ</a></div>
-<header class="atelier-hero" id="home">
-  <div class="atelier-hero-media" aria-hidden="true">
-    <img class="atelier-hero-sky" src="../atelier/cloud-horizon.jpg" width="1600" height="900" alt="" decoding="async">
-    <img class="atelier-hero-processor" src="../atelier/processor-horizon.jpg" width="1600" height="900" alt="" fetchpriority="high" decoding="async">
-  </div>
-  <div class="atelier-hero-inner">
-    <div class="atelier-hero-name">
-      <span class="atelier-kicker">วิศวกรรมซอฟต์แวร์และ AI</span>
-      <h1><span>กิตษณภัช</span><span>ช่วยบำรุง</span></h1>
-      <a class="atelier-link" href="../th/projects/">ดูผลงาน<span aria-hidden="true">↗</span></a>
-    </div>
-    <div class="atelier-hero-info">
-      <p>ผมเรียนวิศวกรรมซอฟต์แวร์ที่มหาวิทยาลัยธรรมศาสตร์ พัฒนาเว็บ แอปมือถือ และต้นแบบที่ใช้ AI</p>
-      <a class="atelier-link" href="../resume.pdf" download="Kitsanapuch-Resume.pdf">ดาวน์โหลดเรซูเม่<span aria-hidden="true">↓</span></a>
-    </div>
-    <div class="atelier-hero-footer">
-      <a class="atelier-scroll" href="#engineering"><span aria-hidden="true">↓</span>เลื่อนเพื่อสำรวจ</a>
-      <a class="atelier-link" href="../th/contact/">ติดต่อ<span aria-hidden="true">↗</span></a>
-    </div>
-  </div>
-</header>
-<main id="main-content">
-<section class="atelier-engineering" id="engineering" aria-labelledby="engineering-title">
-  <div class="atelier-stage">
-    <div class="atelier-stage-inner">
-      <div class="atelier-chapters">
-      <div class="atelier-chapter is-active" data-chapter="0">
-        <span class="atelier-kicker">งานวิศวกรรม</span>
-        <h2 id="engineering-title">จากแนวคิด<br>สู่ระบบจริง</h2>
-        <p>ผมพัฒนาซอฟต์แวร์ตั้งแต่หน้าที่ผู้ใช้เห็น ไปจนถึง API และการประมวลผลเบื้องหลัง</p>
-
+<section class="hero motion-hero" id="home" aria-labelledby="motion-name">
+  <svg class="motion-ribbon" viewBox="0 0 1000 760" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="motion-ribbon-gradient" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#28e7dc"/><stop offset="35%" stop-color="#5874ff"/><stop offset="68%" stop-color="#bd6dff"/><stop offset="100%" stop-color="#ffba79"/></linearGradient>
+    </defs>
+    <path class="motion-ribbon-base" d="M -90 610 C 140 650 230 520 390 520 C 560 520 585 215 777 202 C 1000 188 1050 455 936 540 C 810 632 601 467 665 339 C 731 206 949 281 1100 77"/>
+    <path class="motion-ribbon-flow" d="M -90 610 C 140 650 230 520 390 520 C 560 520 585 215 777 202 C 1000 188 1050 455 936 540 C 810 632 601 467 665 339 C 731 206 949 281 1100 77"/>
+  </svg>
+  <div class="motion-hero-inner">
+    <div class="motion-hero-top"><span class="motion-issue">SOFTWARE / AI / PEOPLE</span><span class="motion-availability"><i aria-hidden="true"></i>กำลังศึกษาที่มหาวิทยาลัยธรรมศาสตร์</span></div>
+    <div class="motion-hero-grid">
+      <div class="motion-hero-copy">
+        <p class="motion-eyebrow">วิศวกรรมซอฟต์แวร์ / AI / MACHINE LEARNING</p>
+        <h1 id="motion-name"><span>กิตษณภัช</span><span class="motion-gradient-text">ช่วยบำรุง</span></h1>
+        <p class="motion-headline">พัฒนาเว็บ แอป และระบบที่ประยุกต์ใช้ AI</p>
+        <p class="motion-summary">ผมกำลังศึกษาวิศวกรรมซอฟต์แวร์ที่มหาวิทยาลัยธรรมศาสตร์ ผลงานล่าสุดประกอบด้วยระบบร้านสอนพิเศษ Physics Plus ต้นแบบ ScamGraph AI ที่พัฒนาร่วมกับทีม และแอป MySchool</p>
+        <div class="motion-actions">
+          <a class="motion-action motion-action-primary" href="../th/projects/">ดูผลงาน<span aria-hidden="true">↗</span></a>
+          <a class="motion-action motion-action-secondary" href="../resume.pdf" download="Kitsanapuch-Resume.pdf">ดาวน์โหลดเรซูเม่<span aria-hidden="true">↓</span></a>
+          <a class="motion-text-link" href="../th/contact/">ติดต่อผม<span aria-hidden="true">↗</span></a>
+        </div>
       </div>
-      <div class="atelier-chapter" data-chapter="1">
-        <span class="atelier-kicker">โครงสร้าง</span>
-        <h3>เปิดดู<br>แต่ละชั้น</h3>
-        <p>การเลื่อนหน้าจะแยกชิ้นส่วนของโมเดล เพื่อให้เห็นว่าชั้นของระบบทำงานร่วมกันอย่างไร</p>
-
-      </div>
-      <div class="atelier-chapter" data-chapter="2">
-        <span class="atelier-kicker">การประยุกต์</span>
-        <h3>ประกอบเป็น<br>ซอฟต์แวร์</h3>
-        <p>ดูวิธีที่ผมใช้แนวทางนี้ใน Physics Plus, ScamGraph AI และ MySchool</p>
-        <a class="atelier-link" href="../th/projects/">ดูผลงาน<span aria-hidden="true">↗</span></a>
-      </div>
-      </div>
-      <div class="atelier-model" aria-hidden="true">
-        <div class="atelier-model-fallback"></div>
-        <canvas class="atelier-model-canvas"></canvas>
-        <svg class="atelier-leaders" aria-hidden="true">
-          <g><line></line><circle r="3"></circle></g>
-          <g><line></line><circle r="3"></circle></g>
-          <g><line></line><circle r="3"></circle></g>
-        </svg>
-        <span class="atelier-callout" data-anchor="0">ส่วนติดต่อผู้ใช้</span>
-        <span class="atelier-callout" data-anchor="1">การประมวลผล AI</span>
-        <span class="atelier-callout" data-anchor="2">บริการและข้อมูล</span>
-      </div>
-      <div class="atelier-stage-footer">
-        <span class="atelier-kicker atelier-stage-cue">เลื่อนเพื่อแยกชิ้นส่วน</span>
-        <span class="atelier-stage-progress" aria-hidden="true"><i></i></span>
-        <a class="atelier-link" href="#about">ไปที่ประวัติ<span aria-hidden="true">↓</span></a>
+      <figure class="motion-portrait">
+        <div class="motion-portrait-frame"><img class="zoomable" tabindex="0" role="button" src="../profile-clear.png" alt="ภาพโปรไฟล์ กิตษณภัช ช่วยบำรุง" width="1065" height="1477"><span class="motion-image-corner" aria-hidden="true">K / 01</span></div>
+        <figcaption><span>นักศึกษาวิศวกรรมซอฟต์แวร์</span><strong>ออกแบบระบบ<br><em>สร้างผลลัพธ์</em></strong></figcaption>
+      </figure>
+      <div class="motion-terminal" aria-label="developer.ts">
+        <div class="motion-terminal-top"><span class="motion-terminal-dots" aria-hidden="true"><i></i><i></i><i></i></span><strong>developer.ts</strong><span>typescript</span></div>
+        <div class="motion-terminal-body">
+          <code><span class="motion-code-purple">const</span> developer = &#123;<br>&nbsp;&nbsp;<span class="motion-code-blue">focus</span>: [<span class="motion-code-green">"AI"</span>, <span class="motion-code-green">"Software"</span>],<br>&nbsp;&nbsp;<span class="motion-code-blue">university</span>: <span class="motion-code-green">"Thammasat"</span>,<br>&nbsp;&nbsp;<span class="motion-code-blue">mindset</span>: <span class="motion-code-green">"build for people"</span><br>&#125;; <span class="motion-code-cursor" aria-hidden="true">▌</span></code>
+          <div class="motion-terminal-note"><span>แนวทางที่กำลังทำ</span><strong>พัฒนาระบบตั้งแต่ UI และ API ถึงการประยุกต์ใช้ AI</strong><small>ออกแบบ · พัฒนา · ทดสอบ</small></div>
+        </div>
       </div>
     </div>
+    <div class="motion-hero-bottom"><span>01 — ระบบที่ผมสร้าง</span><a href="#main-content">เลื่อนเพื่อดูต่อ<span aria-hidden="true">↓</span></a><span>THAILAND / 13.75° N</span></div>
   </div>
 </section>
-<div class="home-summary atelier-profile">
+<main id="main-content" class="home-summary">
 <section class="home-about-complete" aria-labelledby="home-about-heading">
   <div class="home-summary-head reveal"><span class="route-eyebrow">เกี่ยวกับผม</span><h2 id="home-about-heading">รู้จักผมเพิ่มเติม</h2></div>
   <div class="home-about-stack">
-    <figure class="atelier-portrait" data-scene>
-      <img class="zoomable" tabindex="0" role="button" src="../profile-clear.png" alt="ภาพกิตษณภัช ช่วยบำรุง" width="1065" height="1477" loading="lazy">
-      <figcaption>นักศึกษาวิศวกรรมซอฟต์แวร์ · มหาวิทยาลัยธรรมศาสตร์</figcaption>
-    </figure>
 <section class="home-about-intro" data-scene><div class="card reveal" id="about">
         <div class="card-head">
           <span class="card-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4.5 20c1.3-4.4 4.4-6.6 7.5-6.6s6.2 2.2 7.5 6.6"/></svg></span>
@@ -266,7 +251,6 @@
       <a class="route-summary-link" href="../th/contact/">เปิดฟอร์มติดต่อ <span aria-hidden="true">↗</span></a>
     </article>
   </div>
-</div>
 </main>
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="หน้าต่างดูภาพขนาดเต็ม">
   <button class="lightbox-close" id="lightboxClose" aria-label="ปิดภาพขนาดเต็ม">
@@ -284,13 +268,14 @@
 
 
 
+<script src="../intro-sequence.js?v=8"></script>
 <script src="../script.js"></script>
 <script src="../studio.js?v=7"></script>
+<script src="../motion-effects.js?v=7"></script>
 <script src="../route-motion.js?v=2"></script>
 <script src="../multipage-nav.js?v=2"></script>
 <dialog class="paper-reader" aria-labelledby="paper-reader-title"><div class="paper-reader-bar"><h2 id="paper-reader-title">Paper</h2><a class="paper-open" target="_blank" rel="noopener noreferrer">เปิดแท็บใหม่ ↗</a><button class="paper-close" type="button" aria-label="ปิดเอกสาร">✕</button></div><p class="paper-reader-hint">เลื่อนในเอกสารเพื่ออ่านหน้าถัดไป หากไม่แสดงผลให้เลือกเปิดแท็บใหม่</p><div class="paper-pages" tabindex="0" role="region" aria-label="Paper pages"></div></dialog><script src="../papers.js?v=13"></script>
 <dialog class="share-dialog" aria-labelledby="share-title"><button class="share-close icon-btn" type="button" aria-label="ปิด">✕</button><h2 id="share-title">แชร์โปรไฟล์</h2><p>สแกน QR Code หรือคัดลอกลิงก์เพื่อแชร์โปรไฟล์</p><img class="share-qr" src="../profile-share-qr.svg?v=2" width="200" height="200" alt="QR Code: https://kitsanapuch.vercel.app/"><strong>Kitsanapuch Chuaibamrung</strong><div class="share-link-row"><input aria-label="ลิงก์โปรไฟล์" readonly value="https://kitsanapuch.vercel.app/"><button type="button" class="share-copy">คัดลอก</button></div><p class="share-status" role="status" aria-live="polite"></p></dialog><script src="../share.js?v=1"></script>
-<script src="../atelier-model.js?v=1"></script>
-<script src="../atelier-scene.js?v=1"></script>
+<script src="../cinematic-motion.js?v=1"></script>
 </body>
 </html>

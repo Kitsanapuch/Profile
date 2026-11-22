@@ -214,8 +214,9 @@ body.motion-preview .intro-layout-cursor {
   50%, 100% { opacity: 1; transform: none; }
 }
 @keyframes intro-cover {
-  0%, 84% { opacity: 1; visibility: visible; }
-  100% { opacity: 0; visibility: hidden; }
+  0%, 76% { opacity: 1; visibility: visible; clip-path: inset(0 round 0); }
+  90% { opacity: .92; clip-path: inset(0 0 0 0 round 6px); }
+  100% { opacity: 0; visibility: hidden; clip-path: inset(48% 0 round 22px); }
 }
 @keyframes intro-content-enter {
   from { opacity: 0; transform: translateY(10px); filter: blur(2px); }
