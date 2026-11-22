@@ -21,12 +21,13 @@
       (navStrip.clientWidth - activeTab.clientWidth) / 2);
   }
 
-  const hero = document.querySelector('.route-hero');
+  const hero = document.querySelector('.route-hero, .contact-copy');
   if (hero && !reduced.matches) {
     let frame = 0;
     const updateDepth = () => {
       frame = 0;
-      hero.style.setProperty('--route-scroll', String(Math.min(1, Math.max(0, window.scrollY / Math.max(1, hero.offsetHeight)))));
+      const progress = Math.min(1, Math.max(0, window.scrollY / Math.max(1, hero.offsetHeight)));
+      document.body.style.setProperty('--route-scroll', String(progress));
     };
     window.addEventListener('scroll', () => {
       if (!frame) frame = requestAnimationFrame(updateDepth);

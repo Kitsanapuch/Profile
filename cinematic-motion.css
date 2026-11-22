@@ -1,18 +1,19 @@
-/* A neutral landscape blended into the original navy background. */
+/* Lift the cloud bank into the first screen and keep it strongest away from text. */
 body.motion-preview .cinema-landscape,
 body.motion-preview.multipage-route:not(.route-home)::before {
   position: absolute;
   pointer-events: none;
-  background: url('assets/cinematic-clouds.jpg') center / cover no-repeat;
-  filter: grayscale(1) contrast(1.16);
+  background: url('assets/cinematic-clouds.jpg') center 92% / cover no-repeat;
+  filter: grayscale(1) sepia(.62) hue-rotate(174deg) saturate(.84) brightness(.94);
+  mix-blend-mode: screen;
 }
 
 body.motion-preview .cinema-landscape {
-  inset: 24% -1% -24%;
+  inset: 0 0 auto;
+  height: min(590px, 84%);
   z-index: 0;
-  opacity: .29;
-  mix-blend-mode: screen;
-  mask-image: radial-gradient(ellipse 83% 55% at 70% 61%, #000 27%, transparent 84%);
+  opacity: .59;
+  mask-image: radial-gradient(ellipse 65% 77% at 79% 50%, #000 16%, transparent 89%);
 }
 
 body.motion-preview.multipage-route:not(.route-home) { isolation: isolate; }
@@ -20,34 +21,39 @@ body.motion-preview.multipage-route:not(.route-home) { isolation: isolate; }
 body.motion-preview.multipage-route:not(.route-home)::before {
   content: '';
   inset: 0 0 auto;
-  height: min(64vw, 570px);
+  height: clamp(295px, 32vw, 450px);
   z-index: -1;
-  opacity: .18;
-  mix-blend-mode: screen;
-  mask-image: radial-gradient(ellipse 84% 66% at 85% 64%, #000 0%, transparent 87%);
+  opacity: .47;
+  mask-image: radial-gradient(ellipse 73% 68% at 87% 48%, #000 14%, transparent 91%);
 }
 
 html[data-theme="light"] body.motion-preview.multipage-route:not(.route-home)::before {
-  filter: grayscale(1);
+  filter: grayscale(1) brightness(1.5);
   mix-blend-mode: multiply;
-  opacity: .11;
+  opacity: .15;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   body.motion-preview .motion-hero.cinema-ready .cinema-landscape {
     transform: translateY(var(--cinema-atmosphere-y, 0px)) scale(var(--cinema-atmosphere-scale, 1));
   }
+
+  body.motion-preview.multipage-route:not(.route-home)::before {
+    transform: translateY(calc(var(--route-scroll, 0) * -26px));
+  }
 }
 
 @media (max-width: 640px) {
   body.motion-preview .cinema-landscape {
-    inset: 16% -2% -7%;
-    opacity: .25;
-    background-position: 58% center;
+    height: min(590px, 78%);
+    opacity: .48;
+    background-position: 62% 100%;
+    mask-image: radial-gradient(ellipse 88% 60% at 76% 62%, #000 10%, transparent 87%);
   }
 
   body.motion-preview.multipage-route:not(.route-home)::before {
-    height: 370px;
+    background-position: 61% 100%;
+    opacity: .38;
   }
 }
 

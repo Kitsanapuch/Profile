@@ -24,7 +24,7 @@
     const itemBoxes = items.map(item => item.getBoundingClientRect());
     const dotBoxes = dots.map(dot => dot.getBoundingClientRect());
     const navBottom = nav?.getBoundingClientRect().bottom ?? 0;
-    const cursor = Math.max(navBottom + 30, innerHeight * .51);
+    const cursor = Math.max(navBottom + 30, innerHeight * .62);
     const dotCenters = dotBoxes.map(dot => dot.top + dot.height / 2);
     const first = dotCenters[0];
     const distance = Math.max(1, dotCenters.at(-1) - first);
