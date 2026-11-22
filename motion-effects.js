@@ -54,6 +54,11 @@
       svg.insertBefore(halo, base);
     }
     const length = base.getTotalLength();
+    const trailLength = Math.min(115, length * .06);
+    // A moving dash uses one path lookup per frame instead of rebuilding the
+    // trail from nine sampled points on every frame.
+    flow.setAttribute('d', base.getAttribute('d'));
+    flow.setAttribute('stroke-dasharray', `${trailLength} ${length + trailLength}`);
     if (!svg.querySelector('.motion-ribbon-nodes')) {
       const nodes = document.createElementNS(ns, 'g');
       nodes.setAttribute('class', 'motion-ribbon-nodes');
@@ -91,26 +96,23 @@
       svg.appendChild(runner);
     }
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const saveData = Boolean(navigator.connection?.saveData);
     let raf = 0;
     let lastFrame = 0;
     let visible = true;
+    let introOpen = Boolean(document.querySelector('.intro-loader'));
     function render(time) {
-      const progress = reduced.matches ? .62 : (time % 11000) / 11000;
+      const progress = reduced.matches || saveData ? .62 : (time % 11000) / 11000;
       const distance = length * progress;
       const point = base.getPointAtLength(distance);
-      const trailStart = Math.max(0, distance - Math.min(115, length * .06));
-      const trail = Array.from({ length: 9 }, (_, index) => {
-        const sample = base.getPointAtLength(trailStart + (distance - trailStart) * index / 8);
-        return `${index ? 'L' : 'M'} ${sample.x.toFixed(1)} ${sample.y.toFixed(1)}`;
-      });
-      flow.setAttribute('d', trail.join(' '));
+      flow.setAttribute('stroke-dashoffset', String(trailLength - distance));
       runner.setAttribute('cx', point.x);
       runner.setAttribute('cy', point.y);
       runnerGlow.setAttribute('cx', point.x);
       runnerGlow.setAttribute('cy', point.y);
     }
     function frame(time) {
-      if (document.hidden || reduced.matches || !visible) return;
+      if (document.hidden || introOpen || reduced.matches || saveData || !visible) return;
       raf = requestAnimationFrame(frame);
       if (time - lastFrame < 30) return;
       lastFrame = time;
@@ -118,9 +120,14 @@
     }
     function sync() {
       cancelAnimationFrame(raf);
+      if (document.hidden || introOpen) return;
       render(performance.now());
-      if (!document.hidden && !reduced.matches && visible) raf = requestAnimationFrame(frame);
+      if (!reduced.matches && !saveData && visible) raf = requestAnimationFrame(frame);
     }
+    if (introOpen) document.addEventListener('portfolio:intro-end', () => {
+      introOpen = false;
+      sync();
+    }, { once: true });
     document.addEventListener('visibilitychange', sync);
     if (reduced.addEventListener) reduced.addEventListener('change', sync);
     if ('IntersectionObserver' in window) {
@@ -165,6 +172,7 @@
     let raf = 0;
     let lastFrame = 0;
     let scrollY = window.scrollY || 0;
+    let introOpen = Boolean(document.querySelector('.intro-loader'));
 
     function random(seed) {
       const value = Math.sin(seed * 78.233 + 27.861) * 43758.5453;
@@ -192,7 +200,7 @@
         depth: .02 + random(index + 629) * .08,
         signal: random(index + 757) > .9
       }));
-      if (!isLightTheme() && (reduceMotion.matches || saveData)) draw(0);
+      if (!document.hidden && !introOpen && !isLightTheme() && (reduceMotion.matches || saveData)) draw(0);
     }
 
     function draw(time) {
@@ -229,7 +237,7 @@
     const isLightTheme = () => document.documentElement.dataset.theme === 'light';
 
     function tick(time) {
-      if (document.hidden || reduceMotion.matches || saveData || isLightTheme()) return;
+      if (document.hidden || introOpen || reduceMotion.matches || saveData || isLightTheme()) return;
       raf = requestAnimationFrame(tick);
       if (time - lastFrame < 30) return; // Cap at roughly 30 fps.
       lastFrame = time;
@@ -238,15 +246,22 @@
 
     function syncAnimation() {
       cancelAnimationFrame(raf);
-      if (isLightTheme()) return;
+      if (document.hidden || introOpen || isLightTheme()) return;
       draw(performance.now());
-      if (!document.hidden && !reduceMotion.matches && !saveData) raf = requestAnimationFrame(tick);
+      if (!reduceMotion.matches && !saveData) raf = requestAnimationFrame(tick);
     }
 
     window.addEventListener('resize', () => { configure(); syncAnimation(); }, { passive: true });
-    window.addEventListener('scroll', () => { scrollY = window.scrollY || 0; if (!isLightTheme() && (reduceMotion.matches || saveData)) draw(0); }, { passive: true });
+    window.addEventListener('scroll', () => {
+      scrollY = window.scrollY || 0;
+      if (!document.hidden && !introOpen && !isLightTheme() && (reduceMotion.matches || saveData)) draw(0);
+    }, { passive: true });
     document.addEventListener('visibilitychange', syncAnimation);
     document.addEventListener('portfolio:theme-change', syncAnimation);
+    if (introOpen) document.addEventListener('portfolio:intro-end', () => {
+      introOpen = false;
+      syncAnimation();
+    }, { once: true });
     if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', () => { configure(); syncAnimation(); });
     configure();
     syncAnimation();

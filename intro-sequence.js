@@ -43,7 +43,10 @@
     document.dispatchEvent(new Event('portfolio:intro-end'));
   }
 
-  const fallback = window.setTimeout(finish, 2400);
+  // The CSS animation normally finishes the intro. Keep the safety timer in sync with it.
+  const duration = window.getComputedStyle(loader).animationDuration;
+  const durationMs = Number.parseFloat(duration) * (duration.endsWith('ms') ? 1 : 1000);
+  const fallback = window.setTimeout(finish, Number.isFinite(durationMs) ? durationMs + 100 : 1440);
   loader.addEventListener('animationend', (event) => {
     if (event.target === loader && event.animationName === 'intro-cover') finish();
   });

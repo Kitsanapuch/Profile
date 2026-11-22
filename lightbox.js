@@ -38,7 +38,7 @@
   function render() {
     const current = images[currentIndex];
     const description = current.alt || (isThai ? 'ภาพ' : 'Photo');
-    image.src = current.currentSrc || current.src;
+    image.src = current.dataset.fullSrc || current.currentSrc || current.src;
     image.alt = current.alt;
     caption.textContent = `${currentIndex + 1} / ${images.length} — ${description}`;
     previousButton.hidden = nextButton.hidden = images.length < 2;

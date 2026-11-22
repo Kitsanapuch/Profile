@@ -1,68 +1,19 @@
-/* Native cross-document snapshots let the navigation stay anchored. */
+/* Move the new section's introduction without capturing the viewport or moving the nav. */
 @media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
-
-  html:not(.theme-switching) body.motion-preview .nav {
-    view-transition-name: portfolio-nav;
+  html.intro-skip body.motion-preview :is(.motion-hero-inner, .route-hero, .contact-copy) {
+    animation: section-arrive .28s cubic-bezier(.18, .68, .31, 1);
   }
 
-  html:not(.theme-switching)::view-transition {
-    pointer-events: none;
-  }
-
-  html:not(.theme-switching)::view-transition-group(root) {
-    animation-duration: .46s;
-  }
-
-  html:not(.theme-switching)::view-transition-old(root) {
-    animation: section-slide-out .38s cubic-bezier(.26,.64,.35,1) both;
-  }
-
-  html:not(.theme-switching)::view-transition-new(root) {
-    animation: section-slide-in .46s cubic-bezier(.22,.74,.25,1) both;
-  }
-
-  html:not(.theme-switching)::view-transition-group(portfolio-nav) {
-    z-index: 1;
+  /* The section entrance already moves the title and its description together. */
+  html.intro-skip body.motion-preview .route-heading-in > :is(h1, p) {
     animation: none;
   }
 
-  html:not(.theme-switching)::view-transition-old(portfolio-nav) {
-    animation: none;
-    opacity: 0;
-  }
-
-  html:not(.theme-switching)::view-transition-new(portfolio-nav) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
-
-  /* Embedded and older browsers can still move the arriving content. */
-  html.section-arriving body.motion-preview > :is(.motion-hero, .route-hero, main) {
-    animation: section-fallback-in .58s cubic-bezier(.2,.73,.24,1);
-  }
-
-  @keyframes section-fallback-in {
+  @keyframes section-arrive {
     from {
-      opacity: .32;
-      translate: calc(var(--section-direction, 1) * clamp(25px, 5vw, 52px)) 7px;
+      opacity: .82;
+      translate: calc(var(--section-direction, 1) * clamp(16px, 2.5vw, 30px)) 0;
     }
     to { opacity: 1; translate: none; }
-  }
-
-  @keyframes section-slide-out {
-    from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-    to {
-      opacity: 0;
-      transform: translate3d(calc(var(--section-direction, 1) * -21px), 0, 0) scale(.99);
-    }
-  }
-
-  @keyframes section-slide-in {
-    from {
-      opacity: 0;
-      transform: translate3d(calc(var(--section-direction, 1) * clamp(19px, 4vw, 42px)), 0, 0) scale(1.012);
-    }
-    to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
   }
 }
