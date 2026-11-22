@@ -1,0 +1,146 @@
+/* The two shutters share one sunrise image aligned to the whole viewport. */
+html[data-theme="light"] body.motion-preview .intro-loader {
+  color: #412817;
+  --intro-grid-line: #78522312;
+  --intro-horizon: #fff0c47d;
+  --intro-sky-width: max(100vw, (100dvh + 68px) * 1.7778);
+  --intro-sky-height: max(100dvh + 68px, 56.25vw);
+}
+
+html[data-theme="light"] body.motion-preview .intro-loader::before,
+html[data-theme="light"] body.motion-preview .intro-loader::after {
+  background-color: #fff1d7;
+  background-image:
+    linear-gradient(var(--intro-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--intro-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, #f4f9fa91, var(--intro-horizon)),
+    url("assets/sunrise-clouds.jpg");
+  background-size: 44px 44px, 44px 44px, auto, var(--intro-sky-width) var(--intro-sky-height);
+  background-position: center bottom, center bottom, center, var(--dawn-image-x) calc((100dvh - var(--intro-sky-height)) / 2);
+  background-repeat: repeat, repeat, no-repeat, no-repeat;
+  box-shadow: 0 1px 0 #b7783540;
+}
+
+html[data-theme="light"] body.motion-preview .intro-loader::after {
+  background-image:
+    linear-gradient(var(--intro-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--intro-grid-line) 1px, transparent 1px),
+    linear-gradient(180deg, var(--intro-horizon), #fff5e882),
+    url("assets/sunrise-clouds.jpg");
+  background-position: center top, center top, center, var(--dawn-image-x) calc(var(--intro-sky-height) / -2);
+  box-shadow: 0 -1px 0 #b7783540;
+}
+
+html[data-theme="light"] .intro-loader .intro-seam {
+  height: 2px;
+  background: linear-gradient(90deg, transparent 8%, #cc8b4ca6, #fffdf4 54%, #e2a75cbf, transparent 92%);
+  box-shadow: 0 0 16px #f4ab3d80;
+}
+
+html[data-theme="light"] .intro-loader :is(.intro-sequence-top, .intro-sequence-bottom, .intro-window-head, .intro-window-foot) {
+  color: #6b492e;
+}
+
+html[data-theme="light"] .intro-loader :is(.intro-sequence-identity, .intro-sequence-cross, .intro-command-prompt, .intro-window-ready) {
+  color: #824816;
+}
+
+html[data-theme="light"] .intro-loader .intro-window {
+  position: relative;
+  isolation: isolate;
+  border-color: #b2794199;
+  background: linear-gradient(142deg, #fffdf5, #fff3dd 72%);
+  box-shadow: 0 21px 56px #89511b29, 0 0 0 1px #fffaf1cb, inset 0 1px 0 #fff;
+}
+
+html[data-theme="light"] .intro-loader .intro-window-head {
+  border-bottom-color: #ad773a42;
+  background: #fff9efc4;
+}
+
+html[data-theme="light"] .intro-loader .intro-window-foot { border-top-color: #ad773a42; }
+
+html[data-theme="light"] .intro-loader :is(.intro-window-head strong, .intro-typed-line, .intro-command-text) {
+  color: #3d2718;
+}
+
+html[data-theme="light"] .intro-loader :is(.intro-window-command, .intro-line-number) {
+  color: #7c5a3e;
+}
+
+html[data-theme="light"] .intro-loader .intro-window-dots i { background: #c29751; }
+html[data-theme="light"] .intro-loader .intro-window-dots i:first-child { background: #af6346; }
+html[data-theme="light"] .intro-loader .intro-window-dots i:nth-child(2) { background: #d4963e; }
+html[data-theme="light"] .intro-loader .intro-command-caret { background: #ac6120; }
+
+html[data-theme="light"] .intro-loader .intro-progress-track { background: #c28f4a3d; }
+html[data-theme="light"] .intro-loader .intro-progress-track span {
+  background: linear-gradient(90deg, #a95f25, #e6a33e 71%, #ffd77c);
+  box-shadow: 0 0 10px #efa6458c;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The outlines converge on the editor as its solid surface seats into place. */
+  html[data-theme="light"] .intro-loader .intro-sequence::before,
+  html[data-theme="light"] .intro-loader .intro-sequence::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 16% 0 15%;
+    border: 1px solid #b27a3d9e;
+    border-radius: 13px;
+    background:
+      linear-gradient(#ad723623 1px, transparent 1px) center / 16px 16px,
+      linear-gradient(90deg, #ad723623 1px, transparent 1px) center / 16px 16px;
+    box-shadow: inset 0 0 0 4px #fffaf08a, 0 0 14px #ffc97530;
+    animation: intro-sunrise-wireframe .62s cubic-bezier(.19,.74,.28,1) both;
+    --intro-wire-x: -19px;
+    --intro-wire-y: 15px;
+    --intro-wire-angle: -13deg;
+  }
+
+  html[data-theme="light"] .intro-loader .intro-sequence::after {
+    border-color: #ba7f4184;
+    animation-delay: 50ms;
+    --intro-wire-x: 19px;
+    --intro-wire-y: -13px;
+    --intro-wire-angle: 12deg;
+  }
+
+  html[data-theme="light"] .intro-loader .intro-window {
+    animation: intro-sunrise-settle .52s cubic-bezier(.19,.74,.28,1) both;
+  }
+
+  html[data-theme="light"] .intro-loader .intro-window::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 37%, #fffaf299 48%, #fff8d642 52%, transparent 63%);
+    animation: intro-sunrise-sheen .58s .62s cubic-bezier(.3,.65,.3,1) both;
+  }
+
+  @keyframes intro-sunrise-wireframe {
+    0% {
+      opacity: 0;
+      transform: perspective(700px) translate3d(var(--intro-wire-x), var(--intro-wire-y), -38px)
+        rotateY(var(--intro-wire-angle)) scale(.96);
+    }
+    34% { opacity: .85; }
+    100% {
+      opacity: 0;
+      transform: perspective(700px) translate3d(0, 1px, 0) rotateY(0);
+    }
+  }
+
+  @keyframes intro-sunrise-settle {
+    from { opacity: .24; transform: perspective(800px) rotateX(10deg) translateY(10px) scale(.981); }
+    to { opacity: 1; transform: perspective(800px) rotateX(0) translateY(0) scale(1); }
+  }
+
+  @keyframes intro-sunrise-sheen {
+    from { opacity: 0; transform: translateX(-72%); }
+    38% { opacity: .68; }
+    to { opacity: 0; transform: translateX(72%); }
+  }
+}

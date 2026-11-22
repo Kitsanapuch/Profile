@@ -1,0 +1,343 @@
+/* Warm surfaces and interface accents for the Sunrise light theme. */
+html[data-theme="light"] {
+  --dawn-route-shadow: 0 15px 38px #77502817, inset 0 1px #fff9;
+  --dawn-route-raised-shadow: 0 20px 44px #77502824, inset 0 1px #fff;
+  --dawn-rule: linear-gradient(90deg, #9e591e, #d69c48 36%, #efcb8c 72%, transparent);
+  --contact-accent: #875017;
+  --contact-button-text: #fffaf0;
+  --contact-field: #fffaf3;
+}
+
+html[data-theme="light"] body.motion-preview .route-hero::before {
+  border-color: #aa762a32;
+  box-shadow: 0 0 0 70px #e6b45b0d, 0 0 0 160px #f9cd7610;
+}
+
+html[data-theme="light"] body.motion-preview .route-hero-rule {
+  background: var(--dawn-rule);
+}
+
+html[data-theme="light"] body.motion-preview .route-heading-in .route-hero-rule::after {
+  background: linear-gradient(90deg, transparent, #ffd481, #a96225, transparent);
+  box-shadow: 0 0 13px #e29c4e66;
+}
+
+html[data-theme="light"] body.motion-preview .route-content .card {
+  border-color: var(--dawn-border);
+  background: linear-gradient(145deg, #fffcf3ed, #fff3d9e8);
+  box-shadow: var(--dawn-route-shadow);
+}
+
+html[data-theme="light"] body.motion-preview .card-icon {
+  background: var(--dawn-soft);
+  border-color: var(--dawn-border);
+  color: var(--dawn-accent);
+  box-shadow: inset 0 1px #fffc, 0 3px 0 #83521817;
+}
+
+html[data-theme="light"] body.motion-preview .card-head::after {
+  background: linear-gradient(90deg, var(--dawn-border), transparent);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  html[data-theme="light"] body.motion-preview .route-content .card:hover {
+    border-color: #bd89498a;
+    box-shadow: var(--dawn-route-raised-shadow);
+  }
+}
+
+/* Keep the timeline itself legible against the sunrise. */
+html[data-theme="light"] body.motion-preview .timeline > .tl-item {
+  background: linear-gradient(145deg, #fffcf5ed, #fff4e0df);
+  border-color: var(--dawn-border);
+  box-shadow: inset 0 1px #fff9, 0 3px 0 #86552213;
+}
+
+html[data-theme="light"] body.motion-preview .timeline > .tl-item:hover {
+  border-color: #a46527a3;
+}
+
+html[data-theme="light"] body.motion-preview .tl-dot {
+  background: #b27638;
+  border-color: #fff6e6;
+  box-shadow: 0 0 0 3px #c3864936;
+}
+
+html[data-theme="light"] body.motion-preview .activity-gallery img {
+  box-shadow: 0 4px 0 #8f591728;
+}
+
+html[data-theme="light"] body.motion-preview :is(.activity-gallery img, .activity-photo img) {
+  background: #fff9ef;
+}
+
+html[data-theme="light"] body.motion-preview :is(.certificate-img, .activity-gallery .certificate-figure img) {
+  background: #fff;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme="light"] .experience-motion .timeline::after {
+    background: linear-gradient(180deg, #b87935 0%, #b7642e 57%, #eebd63 100%);
+    box-shadow: 0 0 9px #e2a64e76;
+  }
+
+  html[data-theme="light"] body.motion-preview .experience-motion .tl-item.experience-current {
+    border-color: #aa682dc9;
+    background: linear-gradient(145deg, #fffdf6, #fff0d2);
+    box-shadow: inset 0 0 0 1px #cf9b4e26, 0 6px 24px #aa70251b;
+  }
+
+  html[data-theme="light"] body.motion-preview .experience-motion .experience-current .tl-dot {
+    background: #8e4f19;
+    border-color: #ffeabf;
+    box-shadow: 0 0 0 1px #a96d2c, 0 0 0 5px #e4a75249, 0 0 12px #d39845a6;
+  }
+}
+
+/* Projects keep their original screenshots, with a warm studio frame around them. */
+html[data-theme="light"] body.motion-preview .studio-focus {
+  color: var(--dawn-ink);
+  border-bottom-color: var(--dawn-border);
+  background:
+    radial-gradient(ellipse at 81% 14%, #ffdc8d64, transparent 53%),
+    linear-gradient(164deg, #fffaf1c2, #fff7eae0 55%, #f4e9d8d0);
+}
+
+html[data-theme="light"] body.motion-preview .studio-focus::before {
+  border-color: #b57e3534;
+  box-shadow: 0 0 0 100px #e2b37512, 0 0 0 220px #f0bb6e0a;
+}
+
+html[data-theme="light"] body.motion-preview :is(.studio-overline, .studio-focus-category, .studio-focus-link, .studio-tab-num, .studio-tab-arrow) {
+  color: var(--dawn-accent);
+}
+
+html[data-theme="light"] body.motion-preview :is(.studio-focus-head h2, .studio-focus-meta h3) {
+  color: var(--dawn-ink);
+}
+
+html[data-theme="light"] body.motion-preview .studio-focus-head h2 em {
+  background-image: linear-gradient(105deg, #71451e, #965b24 62%, #8b4a20);
+}
+
+html[data-theme="light"] body.motion-preview :is(.studio-focus-head > p, .studio-focus-meta p, .studio-focus-count, .studio-visual-note) {
+  color: var(--dawn-muted);
+}
+
+html[data-theme="light"] body.motion-preview .studio-focus-link:hover {
+  color: #633a16;
+}
+
+html[data-theme="light"] body.motion-preview .studio-focus-board {
+  background: #fffaf0;
+  border-color: #b68147aa;
+  box-shadow: 0 5px 0 #b27b4527, 0 21px 48px #81502623;
+}
+
+html[data-theme="light"] body.motion-preview .studio-focus-meta {
+  background: linear-gradient(145deg, #fff9ed, #fff4de);
+  border-color: var(--dawn-border);
+}
+
+html[data-theme="light"] body.motion-preview .studio-focus-visual {
+  background: radial-gradient(ellipse at 64% 6%, #ffdfa590, transparent 70%), #f7ecdc;
+}
+
+html[data-theme="light"] body.motion-preview .studio-focus-window {
+  background: #fffbf5;
+  border-color: #b28b5d;
+  box-shadow: 0 5px 0 #8b5b3226, 0 14px 29px #69411830;
+}
+
+html[data-theme="light"] body.motion-preview .studio-in-focus .studio-focus-window {
+  border-color: #a56726;
+  box-shadow: 0 6px 0 #a4774738, 0 16px 34px #764c262d, 0 0 0 1px #ffe2a4;
+}
+
+html[data-theme="light"] body.motion-preview .studio-window-bar {
+  background: #f4e1c4;
+  border-bottom-color: #b4885657;
+  color: #624327;
+}
+
+html[data-theme="light"] body.motion-preview .studio-window-bar span:last-child {
+  color: var(--dawn-accent);
+}
+
+html[data-theme="light"] body.motion-preview .studio-image-viewport {
+  background: #fffbf5;
+}
+
+html[data-theme="light"] body.motion-preview :is(.studio-focus-controls button, .studio-tab) {
+  background: #fffbf3e8;
+  border-color: #aa783b6b;
+  color: var(--dawn-ink);
+}
+
+html[data-theme="light"] body.motion-preview :is(.studio-focus-controls button:hover:not(:disabled), .studio-focus-controls button[aria-pressed="true"], .studio-tab:hover) {
+  background: var(--dawn-soft);
+  border-color: #a36629;
+  color: var(--dawn-ink);
+}
+
+html[data-theme="light"] body.motion-preview .studio-focus-controls button:disabled {
+  background: #fffbf3e8;
+  border-color: #aa783b6b;
+}
+
+html[data-theme="light"] body.motion-preview .studio-tab[aria-selected="true"] {
+  background: linear-gradient(120deg, #fff1d1, #ffead6);
+  border-color: #ab6f30;
+  color: var(--dawn-ink);
+  box-shadow: inset 3px 0 #b87b37, 0 4px 0 #b27b4521, 0 10px 24px #865a3717;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme="light"] .studio-focus-visual.cinema-ready .cinema-rear-plane {
+    border-color: #ab702caf;
+    background:
+      linear-gradient(90deg, #aa73234d 1px, transparent 1px) center / 19px 19px,
+      linear-gradient(#aa73234d 1px, transparent 1px) center / 19px 19px,
+      linear-gradient(145deg, #ffe3a22c, #edc28050);
+    box-shadow: 0 0 16px #e8a03b33;
+  }
+
+  html[data-theme="light"] .cinema-callouts line {
+    stroke: #95612c;
+    filter: drop-shadow(0 1px 0 #fff9);
+  }
+
+  html[data-theme="light"] .cinema-callouts circle {
+    fill: #fff3d3;
+    stroke: #976025;
+  }
+
+  html[data-theme="light"] .cinema-callout {
+    background: #fff7e6f5;
+    color: #693b16;
+    border-color: #ae773e92;
+    box-shadow: 0 4px 14px #79532b26;
+  }
+}
+
+html[data-theme="light"] body.motion-preview .project-card {
+  background: var(--dawn-surface);
+  border-color: var(--dawn-border);
+  box-shadow: var(--dawn-route-shadow);
+}
+
+html[data-theme="light"] body.motion-preview .project-card:hover {
+  border-color: #bd89498a;
+  box-shadow: var(--dawn-route-raised-shadow);
+}
+
+html[data-theme="light"] body.motion-preview :is(.project-thumb, .myschool-screen, .physics-showcase, .shot-gallery) {
+  background: #fff9ee;
+  box-shadow: 0 4px 0 #865a2920, 0 10px 24px #75502c14;
+}
+
+html[data-theme="light"] body.motion-preview :is(.myschool-screen figcaption, .shot figcaption, .physics-showcase figcaption, .physics-screen-grid figcaption) {
+  color: var(--dawn-muted);
+}
+
+html[data-theme="light"] body.motion-preview :is(.physics-screen-list, .physics-admin-feature) {
+  background: #fff8e9;
+  border-color: var(--dawn-border);
+}
+
+html[data-theme="light"] .physics-admin-kicker {
+  color: var(--dawn-accent);
+}
+
+/* Document and certificate frames retain an untinted surface behind each image. */
+html[data-theme="light"] body.motion-preview :is(.certificate-block, .paper-card) {
+  background: linear-gradient(145deg, #fffcf3f5, #fff4e0e8);
+  border-color: var(--dawn-border);
+}
+
+html[data-theme="light"] body.motion-preview .paper-cover {
+  border-color: #bd936969;
+  box-shadow: 3px 4px 0 #aa77392b;
+}
+
+html[data-theme="light"] body.motion-preview .paper-cover:hover {
+  border-color: var(--dawn-accent);
+}
+
+html[data-theme="light"] body.route-contact .contact-form-panel {
+  background: linear-gradient(150deg, #fffdf7f5 0%, #fff4ddf5 100%);
+  border-color: var(--dawn-border);
+  box-shadow: var(--dawn-route-shadow);
+}
+
+html[data-theme="light"] body.route-contact .contact-form-panel::before {
+  background: var(--dawn-rule);
+}
+
+html[data-theme="light"] body.route-contact .contact-direct .contact-link-icon {
+  background: #fff8ebd6;
+}
+
+html[data-theme="light"] body.route-contact #form-status[data-state="error"] {
+  color: #a33925;
+}
+
+html[data-theme="light"] body.route-contact #contact-form :is(input, textarea)::placeholder {
+  color: #795d44;
+}
+
+/* Warm controls for the shared viewer and profile dialogs. */
+html[data-theme="light"] :is(.share-dialog, .paper-reader) {
+  background: #fff9ee;
+  border-color: #b4814885;
+  box-shadow: 0 24px 72px #4d301955;
+}
+
+html[data-theme="light"] :is(.share-dialog, .paper-reader)::backdrop {
+  background: #251a11b8;
+}
+
+html[data-theme="light"] .paper-pages {
+  background: #ecdbc5;
+}
+
+html[data-theme="light"] :is(.paper-cover, .paper-pages, .share-link-row input, .share-copy):focus-visible {
+  outline-color: var(--dawn-accent);
+}
+
+html[data-theme="light"] .share-link-row input {
+  background: #fffdf8;
+}
+
+html[data-theme="light"] .share-copy {
+  background: #875017;
+  color: #fffaf0;
+}
+
+html[data-theme="light"] :is(.share-close, .paper-close) {
+  background: #fff0d4;
+  color: var(--dawn-ink);
+  border-color: var(--dawn-border);
+}
+
+html[data-theme="light"] .lightbox {
+  background: #23170fed;
+}
+
+html[data-theme="light"] :is(.gallery-arrow, .lightbox-close) {
+  color: #fff6e6;
+  background: #412b1c;
+  border-color: #ffe0ac68;
+}
+
+html[data-theme="light"] :is(.gallery-arrow, .lightbox-close):hover {
+  background: #654227;
+}
+
+html[data-theme="light"] body.motion-preview :is(.gallery-arrow, .lightbox-close):focus-visible {
+  outline-color: #ffcf84;
+}
+
+html[data-theme="light"] .gallery-caption {
+  color: #ffead0;
+}

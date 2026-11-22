@@ -5,14 +5,23 @@ const isThai = document.documentElement.lang === 'th';
   const themeIcon = document.getElementById('themeIcon');
   const moonPath = '<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/>';
   const sunPath = '<circle cx="12" cy="12" r="4.5"/><path d="M12 2.5v2M12 19.5v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2.5 12h2M19.5 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/>';
-  function applyTheme(t){
-    root.setAttribute('data-theme', t);
-    themeIcon.innerHTML = t === 'dark' ? moonPath : sunPath;
-    try { localStorage.setItem('kc-engineer-theme', t); } catch (_) {}
+  function applyTheme(theme) {
+    const isLight = theme === 'light';
+    root.dataset.theme = theme;
+    themeIcon.innerHTML = isLight ? sunPath : moonPath;
+    const toggleLabel = isThai
+      ? (isLight ? 'เปลี่ยนเป็นโหมดมืด' : 'เปลี่ยนเป็นโหมดสว่าง')
+      : (isLight ? 'Switch to dark mode' : 'Switch to light mode');
+    themeToggle.setAttribute('aria-label', toggleLabel);
+    themeToggle.title = toggleLabel;
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', isLight ? '#fff3dd' : '#090e1a');
+    try { localStorage.setItem('kc-engineer-theme', theme); } catch (_) {}
+    document.dispatchEvent(new Event('portfolio:theme-change'));
   }
-  let savedTheme='dark'; try { savedTheme=localStorage.getItem('kc-engineer-theme') || 'dark'; } catch (_) {} applyTheme(savedTheme);
+
+  applyTheme(root.dataset.theme === 'light' ? 'light' : 'dark');
   themeToggle.addEventListener('click', () => {
-    applyTheme(root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    applyTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
   });
 
   const burger = document.getElementById('burger');

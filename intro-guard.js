@@ -1,5 +1,15 @@
 (() => {
   'use strict';
+  const root = document.documentElement;
+  try {
+    if (localStorage.getItem('kc-engineer-theme') === 'light') {
+      root.dataset.theme = 'light';
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#fff3dd');
+    }
+  } catch (_) {
+    // The default theme still works if storage is unavailable.
+  }
+
   let skip = false;
   try {
     skip = sessionStorage.getItem('kitsanapuch-skip-intro-once') === '1';
@@ -10,6 +20,6 @@
   const navigation = performance.getEntriesByType('navigation')[0];
   if (skip || navigation?.type === 'back_forward' ||
       window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    document.documentElement.classList.add('intro-skip');
+    root.classList.add('intro-skip');
   }
 })();

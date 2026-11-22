@@ -22,18 +22,50 @@
   }
 
   const hero = document.querySelector('.route-hero, .contact-copy');
-  if (hero && !reduced.matches) {
-    let frame = 0;
-    const updateDepth = () => {
-      frame = 0;
+  const root = document.documentElement;
+  let depthFrame = 0;
+  let dawnDepth = null;
+
+  function scheduleDepth() {
+    if (!depthFrame && !reduced.matches && (hero || root.dataset.theme === 'light')) {
+      depthFrame = requestAnimationFrame(updateDepth);
+    }
+  }
+
+  function updateDepth() {
+    depthFrame = 0;
+    if (reduced.matches) return;
+
+    if (hero) {
       const progress = Math.min(1, Math.max(0, window.scrollY / Math.max(1, hero.offsetHeight)));
       document.body.style.setProperty('--route-scroll', String(progress));
-    };
-    window.addEventListener('scroll', () => {
-      if (!frame) frame = requestAnimationFrame(updateDepth);
-    }, { passive: true });
-    updateDepth();
+    }
+
+    if (root.dataset.theme !== 'light') return;
+    const rawDepth = Math.min(1, Math.max(0, window.scrollY / Math.max(1, window.innerHeight)));
+    const target = rawDepth * rawDepth * (3 - 2 * rawDepth);
+    const gap = target - (dawnDepth ?? target);
+    dawnDepth = Math.abs(gap) < .002 ? target : dawnDepth + gap * .18;
+    document.body.style.setProperty('--dawn-depth', dawnDepth.toFixed(4));
+    if (dawnDepth !== target) scheduleDepth();
   }
+
+  window.addEventListener('scroll', scheduleDepth, { passive: true });
+  window.addEventListener('resize', scheduleDepth, { passive: true });
+  document.addEventListener('portfolio:theme-change', () => {
+    dawnDepth = null;
+    scheduleDepth();
+  });
+  reduced.addEventListener('change', () => {
+    dawnDepth = null;
+    if (reduced.matches) {
+      document.body.style.removeProperty('--dawn-depth');
+      document.body.style.removeProperty('--route-scroll');
+    } else {
+      scheduleDepth();
+    }
+  });
+  updateDepth();
 
   if (reduced.matches || !('IntersectionObserver' in window)) return;
 
