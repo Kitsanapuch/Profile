@@ -192,7 +192,7 @@
         depth: .02 + random(index + 629) * .08,
         signal: random(index + 757) > .9
       }));
-      if (reduceMotion.matches || saveData) draw(0);
+      if (!isLightTheme() && (reduceMotion.matches || saveData)) draw(0);
     }
 
     function draw(time) {
@@ -226,8 +226,10 @@
       context.globalAlpha = 1;
     }
 
+    const isLightTheme = () => document.documentElement.dataset.theme === 'light';
+
     function tick(time) {
-      if (document.hidden || reduceMotion.matches || saveData) return;
+      if (document.hidden || reduceMotion.matches || saveData || isLightTheme()) return;
       raf = requestAnimationFrame(tick);
       if (time - lastFrame < 30) return; // Cap at roughly 30 fps.
       lastFrame = time;
@@ -236,13 +238,15 @@
 
     function syncAnimation() {
       cancelAnimationFrame(raf);
+      if (isLightTheme()) return;
       draw(performance.now());
       if (!document.hidden && !reduceMotion.matches && !saveData) raf = requestAnimationFrame(tick);
     }
 
     window.addEventListener('resize', () => { configure(); syncAnimation(); }, { passive: true });
-    window.addEventListener('scroll', () => { scrollY = window.scrollY || 0; if (reduceMotion.matches || saveData) draw(0); }, { passive: true });
+    window.addEventListener('scroll', () => { scrollY = window.scrollY || 0; if (!isLightTheme() && (reduceMotion.matches || saveData)) draw(0); }, { passive: true });
     document.addEventListener('visibilitychange', syncAnimation);
+    document.addEventListener('portfolio:theme-change', syncAnimation);
     if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', () => { configure(); syncAnimation(); });
     configure();
     syncAnimation();
