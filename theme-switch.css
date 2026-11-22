@@ -1,0 +1,97 @@
+@property --theme-reveal-radius {
+  syntax: '<length>';
+  inherits: false;
+  initial-value: 0px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html.theme-switching {
+    --theme-feather: 76px;
+    --theme-arrival-tone: brightness(1.11) saturate(1.08);
+  }
+
+  html.theme-switching[data-theme-target="dark"] {
+    --theme-arrival-tone: brightness(.91) saturate(.88);
+  }
+
+  html.theme-switching::view-transition {
+    pointer-events: none;
+  }
+
+  html.theme-switching::view-transition-group(root),
+  html.theme-switching::view-transition-old(root) {
+    animation: none;
+  }
+
+  html.theme-switching::view-transition-image-pair(root) { isolation: isolate; }
+
+  html.theme-switching::view-transition-old(root),
+  html.theme-switching::view-transition-new(root) {
+    mix-blend-mode: normal;
+    pointer-events: none;
+  }
+
+  html.theme-switching::view-transition-old(root) { z-index: 1; }
+
+  html.theme-switching::view-transition-new(root) {
+    z-index: 2;
+    transform-origin: var(--theme-center-x, 74%) var(--theme-center-y, 66%);
+    animation: theme-switch-iris .74s cubic-bezier(.24,.67,.29,1) both;
+  }
+
+  @keyframes theme-switch-iris {
+    from {
+      clip-path: circle(0 at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
+      transform: scale(1.024);
+      filter: var(--theme-arrival-tone);
+    }
+    65% { filter: none; }
+    to {
+      clip-path: circle(var(--theme-reveal-limit, 150vmax) at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
+      transform: none;
+      filter: none;
+    }
+  }
+
+  @supports (mask-image: radial-gradient(circle, #000, transparent)) {
+    html.theme-switching.theme-switch-feathered::view-transition-new(root) {
+      mask-image: radial-gradient(
+        circle at var(--theme-center-x, 74%) var(--theme-center-y, 66%),
+        #000 max(0px, calc(var(--theme-reveal-radius) - var(--theme-feather))),
+        transparent var(--theme-reveal-radius)
+      );
+      animation-name: theme-switch-feathered-iris;
+    }
+
+    @keyframes theme-switch-feathered-iris {
+      from {
+        --theme-reveal-radius: 0px;
+        transform: scale(1.024);
+        filter: var(--theme-arrival-tone);
+      }
+      65% { filter: none; }
+      to {
+        --theme-reveal-radius: var(--theme-reveal-limit, 150vmax);
+        transform: none;
+        filter: none;
+      }
+    }
+  }
+
+  .theme-switch-glow {
+    position: fixed;
+    z-index: 2100;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at var(--theme-center-x, 74%) var(--theme-center-y, 66%), #fff6da, transparent 61%),
+      linear-gradient(160deg, #f4eadc, #e6b876);
+  }
+
+  .theme-switch-glow--dark {
+    background:
+      radial-gradient(ellipse at var(--theme-center-x, 26%) var(--theme-center-y, 34%), #394357, transparent 64%),
+      linear-gradient(160deg, #242b44, #111422);
+  }
+}

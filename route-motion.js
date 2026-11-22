@@ -54,7 +54,8 @@
   window.addEventListener('resize', scheduleDepth, { passive: true });
   document.addEventListener('portfolio:theme-change', () => {
     dawnDepth = null;
-    scheduleDepth();
+    cancelAnimationFrame(depthFrame);
+    updateDepth();
   });
   reduced.addEventListener('change', () => {
     dawnDepth = null;
