@@ -30,19 +30,42 @@
     }
   }
   let activeIndex = Math.max(0, tabs.findIndex(tab => tab.getAttribute('aria-selected') === 'true'));
+  let displayedIndex = activeIndex;
   let exitTimer = 0;
   let arrivalTimer = 0;
   let panFrame = 0;
   let pointerX = 50;
   let pointerY = 50;
   let zoomed = false;
+  let activation = 0;
+  const fallbackSource = localImage(image.getAttribute('src'));
+  const sources = tabs.map(tab => localImage(tab.dataset.src) || fallbackSource);
+  const warmed = new Map();
 
-  const preloadedImages = [];
-  tabs.forEach(tab => {
+  // The first screenshot is already in the HTML. Fetch the other screenshots
+  // only when a visitor selects or approaches their tabs.
+  function readyImage(index) {
+    const source = sources[index];
+    if (!source) return Promise.resolve(null);
+    if (image.src === source && image.complete && image.naturalWidth) return Promise.resolve(source);
+    if (warmed.has(source)) return warmed.get(source).ready;
+
     const preload = new Image();
-    preload.src = localImage(tab.dataset.src) || localImage(image.getAttribute('src'));
-    preloadedImages.push(preload);
-  });
+    const ready = new Promise(resolve => {
+      preload.onload = () => {
+        if (typeof preload.decode === 'function') {
+          preload.decode().catch(() => {}).then(() => resolve(source));
+        } else resolve(source);
+      };
+      preload.onerror = () => {
+        warmed.delete(source);
+        resolve(null);
+      };
+    });
+    warmed.set(source, { image: preload, ready });
+    preload.src = source;
+    return ready;
+  }
 
   function setZoom(value) {
     zoomed = value;
@@ -59,9 +82,10 @@
     }
   }
 
-  function updateContent(index) {
+  function updateContent(index, source) {
     const tab = tabs[index];
-    image.src = preloadedImages[index].src;
+    displayedIndex = index;
+    image.src = source;
     image.alt = tab.dataset.alt || tab.dataset.title;
     name.textContent = tab.dataset.title;
     description.textContent = tab.dataset.desc;
@@ -73,41 +97,65 @@
     if (windowLabel) windowLabel.textContent = `SELECTED WORK / ${String(index + 1).padStart(2, '0')}`;
   }
 
-  function activate(index, focus = false) {
-    if (index < 0 || index >= tabs.length) return;
-    if (focus) tabs[index].focus();
-    if (index === activeIndex) return;
-
+  function selectTab(index) {
     activeIndex = index;
     tabs.forEach((tab, i) => {
       tab.setAttribute('aria-selected', String(i === index));
       tab.tabIndex = i === index ? 0 : -1;
     });
+  }
+
+  function activate(index, focus = false) {
+    if (index < 0 || index >= tabs.length) return;
+    if (focus) tabs[index].focus();
+    if (index === activeIndex) return;
+
+    selectTab(index);
+    const currentActivation = ++activation;
     panel.setAttribute('aria-busy', 'true');
     setZoom(false);
     window.clearTimeout(exitTimer);
     window.clearTimeout(arrivalTimer);
     image.classList.remove('studio-changing', 'studio-arriving');
 
-    if (reducedMotion.matches) {
-      updateContent(index);
-      panel.removeAttribute('aria-busy');
-      return;
-    }
+    readyImage(index).then(source => {
+      if (currentActivation !== activation) return;
+      if (!source) {
+        selectTab(displayedIndex);
+        if (document.activeElement === tabs[index]) tabs[displayedIndex].focus();
+        panel.removeAttribute('aria-busy');
+        return;
+      }
 
-    // A short wipe creates a readable scene change without pinning the page.
-    image.classList.add('studio-changing');
-    exitTimer = window.setTimeout(() => {
-      updateContent(index);
-      image.classList.remove('studio-changing');
-      image.classList.add('studio-arriving');
-      panel.removeAttribute('aria-busy');
-      arrivalTimer = window.setTimeout(() => image.classList.remove('studio-arriving'), 350);
-    }, 170);
+      if (reducedMotion.matches) {
+        updateContent(index, source);
+        panel.removeAttribute('aria-busy');
+        return;
+      }
+
+      // Keep the current screenshot visible until its replacement is decoded.
+      image.classList.add('studio-changing');
+      exitTimer = window.setTimeout(() => {
+        if (currentActivation !== activation) return;
+        updateContent(index, source);
+        image.classList.remove('studio-changing');
+        image.classList.add('studio-arriving');
+        panel.removeAttribute('aria-busy');
+        arrivalTimer = window.setTimeout(() => image.classList.remove('studio-arriving'), 350);
+      }, 170);
+    });
   }
 
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => activate(index));
+    if (!navigator.connection?.saveData) {
+      tab.addEventListener('pointerenter', event => {
+        if (index !== activeIndex && event.pointerType !== 'touch') readyImage(index);
+      }, { passive: true });
+      tab.addEventListener('focus', () => {
+        if (index !== activeIndex) readyImage(index);
+      });
+    }
     tab.addEventListener('keydown', event => {
       let next;
       if (event.key === 'ArrowRight') next = (index + 1) % tabs.length;
@@ -146,10 +194,18 @@
   // section passes. It never pins the page or changes document flow.
   const scrollMotion = window.matchMedia('(min-width: 961px) and (prefers-reduced-motion: no-preference)');
   let scrollFrame = 0;
+  let nearSection = true;
+  let introOpen = Boolean(document.querySelector('.intro-loader'));
   function renderScrollScale() {
     scrollFrame = 0;
+    if (document.hidden || introOpen) return;
     if (!scrollMotion.matches) {
       section.style.setProperty('--studio-focus-scale', '1');
+      section.classList.remove('studio-in-focus');
+      return;
+    }
+    if (!nearSection) {
+      section.style.setProperty('--studio-focus-scale', '0.94');
       section.classList.remove('studio-in-focus');
       return;
     }
@@ -163,10 +219,23 @@
     section.classList.toggle('studio-in-focus', eased > 0.62);
   }
   function queueScrollScale() {
-    if (!scrollFrame) scrollFrame = requestAnimationFrame(renderScrollScale);
+    if (!document.hidden && !introOpen && !scrollFrame) scrollFrame = requestAnimationFrame(renderScrollScale);
   }
-  window.addEventListener('scroll', queueScrollScale, { passive: true });
+  if (introOpen) document.addEventListener('portfolio:intro-end', () => {
+    introOpen = false;
+    queueScrollScale();
+  }, { once: true });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      nearSection = entries[0].isIntersecting;
+      queueScrollScale();
+    }, { rootMargin: '100% 0px' }).observe(section);
+  }
+  window.addEventListener('scroll', () => {
+    if (nearSection) queueScrollScale();
+  }, { passive: true });
   window.addEventListener('resize', queueScrollScale);
+  document.addEventListener('visibilitychange', queueScrollScale);
   scrollMotion.addEventListener('change', queueScrollScale);
   queueScrollScale();
 })();

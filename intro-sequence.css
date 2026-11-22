@@ -1,7 +1,8 @@
 /* The opening runs on every document load, including reloads. */
 :root {
-  --intro-reveal: 1.28s;
-  --intro-duration: 2.1s;
+  --intro-reveal: .74s;
+  --intro-duration: 1.34s;
+  --intro-editor-life: .94s;
 }
 body.motion-preview .intro-loader {
   position: fixed;
@@ -47,13 +48,13 @@ body.motion-preview .intro-seam {
   height: 1px;
   background: linear-gradient(90deg, transparent 8%, #6da6f38c, #c8f5ff, #b99fff8c, transparent 92%);
   box-shadow: 0 0 17px #9ad7ff65;
-  animation: intro-seam .64s 1s cubic-bezier(.2,.64,.26,1) both;
+  animation: intro-seam .46s .58s cubic-bezier(.2,.64,.26,1) both;
 }
 body.motion-preview .intro-sequence {
   position: relative;
   z-index: 3;
   width: min(430px, calc(100vw - 36px));
-  animation: intro-terminal-life 1.47s cubic-bezier(.24,.7,.23,1) both;
+  animation: intro-terminal-life var(--intro-editor-life) cubic-bezier(.24,.7,.23,1) both;
 }
 body.motion-preview .intro-sequence-top,
 body.motion-preview .intro-sequence-bottom {
@@ -128,7 +129,7 @@ body.motion-preview .intro-command-text {
   overflow: hidden;
   white-space: nowrap;
   color: #f0f6ff;
-  animation: intro-type .77s .18s steps(20, end) forwards;
+  animation: intro-type .5s .09s steps(20, end) forwards;
 }
 body.motion-preview .intro-command-caret {
   display: inline-block;
@@ -147,7 +148,7 @@ body.motion-preview .intro-window-foot {
 body.motion-preview .intro-window-ready {
   color: #82e6dc;
   opacity: 0;
-  animation: intro-ready .14s .98s both;
+  animation: intro-ready .09s .58s both;
 }
 body.motion-preview .intro-progress-track { height: 2px; background: #a4c7ed21; }
 body.motion-preview .intro-progress-track span {
@@ -157,7 +158,7 @@ body.motion-preview .intro-progress-track span {
   transform-origin: left;
   background: #9fecef;
   box-shadow: 0 0 14px #9fecef;
-  animation: intro-progress .87s .16s cubic-bezier(.24,.68,.18,1) both;
+  animation: intro-progress .53s .09s cubic-bezier(.24,.68,.18,1) both;
 }
 
 @keyframes intro-type { to { width: 20ch; } }
@@ -166,7 +167,7 @@ body.motion-preview .intro-progress-track span {
 @keyframes intro-progress { to { transform: scaleX(1); } }
 @keyframes intro-terminal-life {
   0% { opacity: 0; transform: translate3d(0, 10px, 0) scale(.97); }
-  16%, 72% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+  16%, 79% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
   100% { opacity: 0; transform: translate3d(0, -12px, 0) scale(.985); }
 }
 @keyframes intro-seam {
@@ -174,9 +175,11 @@ body.motion-preview .intro-progress-track span {
   38% { opacity: .82; }
   100% { opacity: 0; transform: scaleX(1); }
 }
+/* Keep the shutter edge solid at first, then blend into the scene beneath it. */
 @keyframes intro-panel-away {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(0, var(--intro-panel-end), 0); }
+  from { transform: translate3d(0, 0, 0); opacity: 1; }
+  44% { opacity: 1; }
+  to { transform: translate3d(0, var(--intro-panel-end), 0); opacity: 0; }
 }
 @keyframes intro-cover {
   from { visibility: visible; }
@@ -194,7 +197,7 @@ body.motion-preview .motion-summary,
 body.motion-preview .motion-actions,
 body.motion-preview .motion-portrait-frame,
 body.motion-preview .motion-terminal {
-  animation: intro-content-enter .55s var(--intro-reveal) cubic-bezier(.2,.75,.2,1) both;
+  animation: intro-content-enter .42s var(--intro-reveal) cubic-bezier(.2,.75,.2,1) both;
 }
 body.motion-preview .motion-hero h1 > span:last-child { animation-delay: calc(var(--intro-reveal) + 80ms); }
 body.motion-preview .motion-portrait-frame { animation-delay: calc(var(--intro-reveal) + 140ms); }
@@ -214,29 +217,44 @@ html.intro-skip body.motion-preview .motion-terminal {
   filter: none;
 }
 /* A cool horizon and layered editor give dark startup one continuous reveal. */
-html[data-theme="dark"] {
-  --intro-reveal: 1.18s;
-  --intro-duration: 2.02s;
+html[data-theme="dark"] body.motion-preview .intro-loader {
+  --intro-night-image-x: 50%;
+  --intro-night-image-width: max(100vw, 177.78dvh);
+  --intro-night-image-height: max(100dvh, 56.25vw);
 }
 
 html[data-theme="dark"] body.motion-preview .intro-loader::before,
 html[data-theme="dark"] body.motion-preview .intro-loader::after {
-  background-color: #091120;
+  background-color: #142a47;
   background-image:
-    linear-gradient(#94c9f20c 1px, transparent 1px),
-    linear-gradient(90deg, #94c9f20c 1px, transparent 1px),
-    radial-gradient(ellipse 67% 106% at 50% var(--intro-night-horizon),
-      #1f3b5c 0%, #13233b 38%, #0a1324 75%, #070e1b 100%);
-  background-size: 54px 54px, 54px 54px, auto;
-  background-position: center var(--intro-night-horizon), center var(--intro-night-horizon), center;
+    linear-gradient(#94c9f211 1px, transparent 1px),
+    linear-gradient(90deg, #94c9f211 1px, transparent 1px),
+    var(--intro-night-veil),
+    url("assets/cinematic-clouds.jpg");
+  background-size: 54px 54px, 54px 54px, auto, var(--intro-night-image-width) var(--intro-night-image-height);
+  background-position:
+    center var(--intro-night-grid-y),
+    center var(--intro-night-grid-y),
+    center,
+    var(--intro-night-image-x) calc(100dvh - var(--intro-night-image-height) - var(--intro-night-panel-top));
+  background-repeat: repeat, repeat, no-repeat, no-repeat;
+  background-blend-mode: normal, normal, normal, luminosity;
   box-shadow: 0 var(--intro-night-edge) 0 #8acbff39;
-  --intro-night-horizon: 100%;
+  --intro-night-panel-top: 0px;
+  --intro-night-grid-y: 100%;
   --intro-night-edge: 1px;
+  --intro-night-veil: linear-gradient(180deg, #080f20df, #101f35b8 58%, #152944a6);
 }
 
 html[data-theme="dark"] body.motion-preview .intro-loader::after {
-  --intro-night-horizon: 0%;
+  --intro-night-panel-top: 50dvh;
+  --intro-night-grid-y: 0%;
   --intro-night-edge: -1px;
+  --intro-night-veil: linear-gradient(180deg, #152944a6, #0d1b30b8 64%, #07111fcc);
+}
+
+@media (max-width: 640px) {
+  html[data-theme="dark"] body.motion-preview .intro-loader { --intro-night-image-x: 61%; }
 }
 
 html[data-theme="dark"] .intro-loader .intro-window {
@@ -259,7 +277,7 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
   }
 
   html[data-theme="dark"] .intro-loader .intro-sequence {
-    animation: intro-night-sequence 1.4s cubic-bezier(.24,.7,.24,1) both;
+    animation: intro-night-sequence var(--intro-editor-life) cubic-bezier(.24,.7,.24,1) both;
   }
 
   html[data-theme="dark"] .intro-loader .intro-sequence::before,
@@ -274,7 +292,7 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
       linear-gradient(#9bd9ff20 1px, transparent 1px) center / 16px 16px,
       linear-gradient(90deg, #9bd9ff20 1px, transparent 1px) center / 16px 16px;
     box-shadow: inset 0 0 0 4px #8ac4f211, 0 0 14px #87cbff20;
-    animation: intro-night-wireframe .6s cubic-bezier(.19,.74,.28,1) both;
+    animation: intro-night-wireframe .39s cubic-bezier(.19,.74,.28,1) both;
     --intro-night-wire-x: -19px;
     --intro-night-wire-y: 15px;
     --intro-night-wire-angle: -13deg;
@@ -282,14 +300,14 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
 
   html[data-theme="dark"] .intro-loader .intro-sequence::after {
     border-color: #a999f56b;
-    animation-delay: 45ms;
+    animation-delay: 30ms;
     --intro-night-wire-x: 19px;
     --intro-night-wire-y: -13px;
     --intro-night-wire-angle: 13deg;
   }
 
   html[data-theme="dark"] .intro-loader .intro-window {
-    animation: intro-night-editor .49s .08s cubic-bezier(.18,.73,.25,1) both;
+    animation: intro-night-editor .34s .04s cubic-bezier(.18,.73,.25,1) both;
   }
 
   html[data-theme="dark"] .intro-loader .intro-window::after {
@@ -298,15 +316,7 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
     inset: 0;
     pointer-events: none;
     background: linear-gradient(108deg, transparent 38%, #b6e5ff29 50%, transparent 59%);
-    animation: intro-night-glint .5s .57s cubic-bezier(.24,.65,.26,1) both;
-  }
-
-  html[data-theme="dark"] .intro-loader .intro-command-text {
-    animation-duration: .7s;
-  }
-
-  html[data-theme="dark"] .intro-loader .intro-window-ready {
-    animation-delay: .92s;
+    animation: intro-night-glint .36s .38s cubic-bezier(.24,.65,.26,1) both;
   }
 
   html[data-theme="dark"] .intro-loader .intro-seam {
@@ -330,7 +340,7 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
     border: 1px solid #92d6ff65;
     border-radius: 50%;
     box-shadow: 0 0 12px #73b0f044, inset 0 0 12px #73b0f02b;
-    animation: intro-night-aperture .61s .85s cubic-bezier(.22,.7,.3,1) both;
+    animation: intro-night-aperture .43s .52s cubic-bezier(.22,.7,.3,1) both;
   }
 
   html[data-theme="dark"] .intro-loader .intro-seam::after {
@@ -338,12 +348,12 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
     background: linear-gradient(90deg, transparent 10%, #609fe77a 33%,
       #d4f6ff 50%, #9eaff38c 65%, transparent 90%);
     box-shadow: 0 0 13px #81d4ff61;
-    animation: intro-night-horizon .57s .97s cubic-bezier(.22,.7,.3,1) both;
+    animation: intro-night-horizon .47s .63s cubic-bezier(.22,.7,.3,1) both;
   }
 
   @keyframes intro-night-sequence {
     0% { opacity: 0; transform: translate3d(0, 5px, 0) scale(.987); }
-    11%, 72% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    11%, 79% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
     100% { opacity: 0; transform: translate3d(0, -11px, 0) scale(.985); }
   }
 
