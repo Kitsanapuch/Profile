@@ -1,0 +1,111 @@
+@media (prefers-reduced-motion: no-preference) {
+  /* Each entry animates on its own so the surrounding card stays sharp. */
+  body.motion-preview :is(#experience, #activities).experience-motion.scene-target,
+  html.motion-ready body.motion-preview :is(#experience, #activities).experience-motion > .card.reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+
+  .experience-motion .timeline,
+  .experience-motion .tl-item {
+    position: relative;
+  }
+
+  .experience-motion .timeline::before,
+  .experience-motion .timeline::after {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    top: var(--experience-rail-top);
+    left: var(--experience-rail-left);
+    width: 2px;
+    height: var(--experience-rail-height);
+    background: color-mix(in srgb, var(--accent) 24%, transparent);
+    border-radius: 2px;
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+
+  .experience-motion .timeline::after {
+    background: linear-gradient(180deg, #a895ff, #8ce6f2 72%, #f1fcff);
+    box-shadow: 0 0 7px #72caff88;
+    transform: translateX(-50%) scaleY(var(--experience-progress, 0));
+    transform-origin: top;
+  }
+
+  html[data-theme="light"] .experience-motion .timeline::after {
+    background: linear-gradient(180deg, #7965d4, #3c62c4);
+    box-shadow: none;
+  }
+
+  body.motion-preview .experience-motion .tl-item {
+    transition: border-color .28s ease, box-shadow .28s ease, transform .25s ease;
+  }
+
+  body.motion-preview .experience-motion .tl-item.experience-current {
+    border-color: color-mix(in srgb, var(--accent) 64%, var(--border));
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 12%, transparent),
+      0 5px 22px color-mix(in srgb, var(--accent) 9%, transparent);
+  }
+
+  body.motion-preview .experience-motion .tl-dot {
+    position: relative;
+    z-index: 2;
+    transition: border-color .25s ease, background-color .25s ease, box-shadow .25s ease;
+  }
+
+  body.motion-preview .experience-motion .experience-current .tl-dot {
+    background: var(--accent-dark);
+    border-color: var(--accent-soft);
+    box-shadow: 0 0 0 1px var(--accent-dark),
+      0 0 0 5px color-mix(in srgb, var(--accent) 21%, transparent),
+      0 0 16px color-mix(in srgb, var(--accent) 65%, transparent);
+  }
+
+  .experience-motion .experience-current .tl-dot::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border: 1px solid var(--accent-text);
+    border-radius: 50%;
+    animation: experience-point .56s cubic-bezier(.18, .65, .3, 1) both;
+    pointer-events: none;
+  }
+
+  .experience-motion .experience-arriving .tl-content {
+    animation: experience-entry .53s cubic-bezier(.16, .8, .3, 1) both;
+  }
+
+  .experience-motion .experience-arriving .tl-date-col {
+    animation: experience-date .43s cubic-bezier(.16, .8, .3, 1) both;
+  }
+
+  @keyframes experience-point {
+    from { scale: 1; opacity: .95; }
+    to { scale: 2.8; opacity: 0; }
+  }
+
+  @keyframes experience-entry {
+    from { opacity: .66; translate: 0 12px; }
+    to { opacity: 1; translate: none; }
+  }
+
+  @keyframes experience-date {
+    from { opacity: .62; translate: -6px 0; }
+    to { opacity: 1; translate: none; }
+  }
+
+  @media (max-width: 680px) {
+    body.motion-preview .experience-motion .timeline > .tl-item .tl-rail {
+      position: absolute;
+      top: 15px;
+      left: -6px;
+      display: flex;
+    }
+
+    .experience-motion .experience-arriving .tl-date-col {
+      animation-name: experience-entry;
+    }
+  }
+}

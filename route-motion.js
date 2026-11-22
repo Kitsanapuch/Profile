@@ -34,24 +34,49 @@
     updateDepth();
   }
 
-  const targets = [...document.querySelectorAll('[data-scene]')];
-  if (!targets.length) return;
-  if (reduced.matches || !('IntersectionObserver' in window)) {
-    targets.forEach(node => node.classList.add('scene-visible'));
-    return;
+  if (reduced.matches || !('IntersectionObserver' in window)) return;
+
+  const sectionTargets = document.querySelectorAll('[data-scene]');
+  const detailTargets = document.querySelectorAll([
+    '.certificate-block', '.paper-card', '.project-card',
+    '.route-skill-grid > .card', '.contact-form-panel',
+    '.home-about-stack .mindset-step',
+  ].join(', '));
+
+  function startScenes() {
+    if (reduced.matches) return;
+    const sections = new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        entry.target.classList.add('scene-visible');
+        sections.unobserve(entry.target);
+      }
+    }, { rootMargin: '0px 0px -22px 0px' });
+
+    sectionTargets.forEach((section) => {
+      section.classList.add('scene-target');
+      sections.observe(section);
+    });
+
+    const details = new IntersectionObserver((entries) => {
+      const entering = entries.filter(({ isIntersecting }) => isIntersecting);
+      entering.forEach(({ target }, index) => {
+        target.style.setProperty('--route-item-delay', `${Math.min(index, 3) * 55}ms`);
+        target.classList.add('route-item-in');
+        details.unobserve(target);
+      });
+    }, { rootMargin: '0px 0px -12% 0px' });
+
+    detailTargets.forEach((target) => details.observe(target));
   }
 
-  const observer = new IntersectionObserver((entries) => {
-    for (const entry of entries) {
-      if (!entry.isIntersecting) continue;
-      entry.target.classList.add('scene-visible');
-      observer.unobserve(entry.target);
-    }
-  }, { rootMargin: '0px 0px -30px 0px', threshold: .08 });
-
-  targets.forEach((node, index) => {
-    node.classList.add('scene-target');
-    if (node.classList.contains('route-summary-card')) node.style.setProperty('--scene-delay', `${Math.min(index, 3) * 70}ms`);
-    observer.observe(node);
-  });
+  const loader = document.querySelector('.intro-loader');
+  const pageHeading = document.querySelector('.route-hero, .contact-copy');
+  pageHeading?.classList.toggle('route-heading-delayed', Boolean(loader));
+  pageHeading?.classList.add('route-heading-in');
+  if (loader) {
+    document.addEventListener('portfolio:intro-end', startScenes, { once: true });
+  } else {
+    startScenes();
+  }
 })();

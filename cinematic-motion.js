@@ -15,14 +15,16 @@
     const viewport = visual.querySelector('.studio-image-viewport');
     const overlay = document.createElement('div');
     const diagram = svg('svg');
-    const plane = document.createElement('span');
     const thai = document.documentElement.lang === 'th';
     const texts = thai ? ['มุมมองแอป', 'พื้นที่ทำงาน'] : ['App preview', 'Workspace'];
 
     viewport.style.position = 'relative';
-    plane.className = 'cinema-rear-plane';
-    plane.setAttribute('aria-hidden', 'true');
-    visual.prepend(plane);
+    for (const className of ['cinema-rear-plane--far', 'cinema-rear-plane--near']) {
+      const plane = document.createElement('span');
+      plane.classList.add('cinema-rear-plane', className);
+      plane.setAttribute('aria-hidden', 'true');
+      visual.prepend(plane);
+    }
     overlay.className = 'cinema-callouts';
     overlay.setAttribute('aria-hidden', 'true');
     overlay.append(diagram);
@@ -36,6 +38,7 @@
       anchor.setAttribute('aria-hidden', 'true');
       label.className = 'cinema-callout';
       label.textContent = text;
+      line.setAttribute('pathLength', '1');
       dot.setAttribute('r', '3');
       viewport.append(anchor);
       diagram.append(line, dot);
@@ -63,14 +66,15 @@
   function updateHero() {
     const box = hero.getBoundingClientRect();
     const navHeight = document.querySelector('.nav')?.offsetHeight ?? 0;
-    const t = ease(interpolate(heroValues, clamp((navHeight - box.top) / Math.max(box.height * .80, 1))));
+    const t = ease(interpolate(heroValues, clamp((navHeight - box.top) / Math.max(box.height * .63, 1))));
     const compact = matchMedia('(max-width: 640px)').matches;
-    hero.style.setProperty('--cinema-portrait-y', `${t * (compact ? 9 : 34)}px`);
-    hero.style.setProperty('--cinema-portrait-angle', `${-t * (compact ? 3 : 9)}deg`);
-    hero.style.setProperty('--cinema-portrait-scale', 1 + t * .063);
-    hero.style.setProperty('--cinema-terminal-y', `${-t * (compact ? 5 : 17)}px`);
+    hero.style.setProperty('--cinema-portrait-y', `${t * (compact ? 17 : 38)}px`);
+    hero.style.setProperty('--cinema-portrait-angle', `${-t * (compact ? 5 : 11)}deg`);
+    hero.style.setProperty('--cinema-portrait-scale', 1 + t * .085);
+    hero.style.setProperty('--cinema-terminal-y', `${-t * (compact ? 11 : 22)}px`);
     hero.style.setProperty('--cinema-note-y', `${t * 6}px`);
-    hero.style.setProperty('--cinema-atmosphere-y', `${t * -22}px`);
+    hero.style.setProperty('--cinema-atmosphere-y', `${t * -34}px`);
+    hero.style.setProperty('--cinema-atmosphere-scale', 1 + t * .09);
   }
 
   function alignProjectCallouts(box) {
@@ -100,14 +104,14 @@
     const target = clamp((innerHeight * .95 - box.top) / span);
     const progress = interpolate(boardValues, target);
     const separation = Math.sin(Math.PI * progress);
-    const swing = 1 - ease(progress) * 2;
+    const swing = Math.cos(Math.PI * progress);
     const inspecting = project.viewport.classList.contains('is-zoomed');
     visual.classList.toggle('cinema-inspecting', inspecting);
     visual.style.setProperty('--cinema-depth', separation);
     visual.style.setProperty('--cinema-turn', swing * separation);
-    visual.style.setProperty('--cinema-window-scale', .92 + .088 * separation);
+    visual.style.setProperty('--cinema-window-scale', .91 + .10 * separation);
 
-    const showLabels = progress > .24 && progress < .76 && !inspecting;
+    const showLabels = progress > .20 && progress < .81 && !inspecting;
     project.overlay.classList.toggle('is-visible', showLabels);
     if (showLabels) alignProjectCallouts(box);
   }
