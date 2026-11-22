@@ -1,3 +1,56 @@
+/* A neutral landscape blended into the original navy background. */
+body.motion-preview .cinema-landscape,
+body.motion-preview.multipage-route:not(.route-home)::before {
+  position: absolute;
+  pointer-events: none;
+  background: url('assets/cinematic-clouds.jpg') center / cover no-repeat;
+  filter: grayscale(1) contrast(1.16);
+}
+
+body.motion-preview .cinema-landscape {
+  inset: 24% -1% -24%;
+  z-index: 0;
+  opacity: .29;
+  mix-blend-mode: screen;
+  mask-image: radial-gradient(ellipse 83% 55% at 70% 61%, #000 27%, transparent 84%);
+}
+
+body.motion-preview.multipage-route:not(.route-home) { isolation: isolate; }
+
+body.motion-preview.multipage-route:not(.route-home)::before {
+  content: '';
+  inset: 0 0 auto;
+  height: min(64vw, 570px);
+  z-index: -1;
+  opacity: .18;
+  mix-blend-mode: screen;
+  mask-image: radial-gradient(ellipse 84% 66% at 85% 64%, #000 0%, transparent 87%);
+}
+
+html[data-theme="light"] body.motion-preview.multipage-route:not(.route-home)::before {
+  filter: grayscale(1);
+  mix-blend-mode: multiply;
+  opacity: .11;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  body.motion-preview .motion-hero.cinema-ready .cinema-landscape {
+    transform: translateY(var(--cinema-atmosphere-y, 0px));
+  }
+}
+
+@media (max-width: 640px) {
+  body.motion-preview .cinema-landscape {
+    inset: 16% -2% -7%;
+    opacity: .25;
+    background-position: 58% center;
+  }
+
+  body.motion-preview.multipage-route:not(.route-home)::before {
+    height: 370px;
+  }
+}
+
 .cinema-anchor, .cinema-rear-plane { display: none; }
 .cinema-ready .cinema-anchor, .cinema-ready .cinema-rear-plane { display: block; }
 
