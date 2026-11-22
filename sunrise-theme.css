@@ -285,7 +285,7 @@ html[data-theme="light"] body.motion-preview .route-summary-card { box-shadow: v
   }
 
   html[data-theme="light"]:not(.intro-skip):not(.intro-finished) {
-    --dawn-scan-delay: calc(var(--intro-reveal) + 100ms);
+    --dawn-scan-delay: calc(var(--intro-reveal) + 145ms);
   }
 
   html[data-theme="light"] body.motion-preview .motion-portrait-frame::before,
@@ -304,23 +304,23 @@ html[data-theme="light"] body.motion-preview .route-summary-card { box-shadow: v
       repeating-linear-gradient(0deg, #9b6a3448 0 1px, transparent 1px 16px),
       repeating-linear-gradient(90deg, #9b6a343b 0 1px, transparent 1px 16px),
       linear-gradient(135deg, #fff3cbf2, #ffe2a9a1 60%, #fff7e0c0);
-    animation: dawn-wireframe .64s var(--dawn-scan-delay, 0s) cubic-bezier(.19,.71,.26,1) both;
+    animation: dawn-wireframe .55s var(--dawn-scan-delay, 0s) var(--portfolio-ease-out) both;
   }
 
   html[data-theme="light"] body.motion-preview .motion-terminal::after {
     background: linear-gradient(108deg, transparent 36%, #f7cc7170 48%, #fffdf0a6 52%, transparent 64%);
-    animation: dawn-scan .69s var(--dawn-scan-delay, 0s) cubic-bezier(.2,.65,.26,1) both;
+    animation: dawn-scan .60s var(--dawn-scan-delay, 0s) var(--portfolio-ease-out) both;
   }
 
   @keyframes dawn-wireframe {
-    0% { opacity: .84; clip-path: inset(0); }
-    22% { opacity: .84; }
+    0% { opacity: .48; clip-path: inset(0); }
+    22% { opacity: .48; }
     100% { opacity: 0; clip-path: inset(0 0 0 100%); }
   }
 
   @keyframes dawn-scan {
     0% { opacity: 0; transform: translate3d(-60%,0,0); }
-    25%, 62% { opacity: .86; }
+    25%, 62% { opacity: .52; }
     100% { opacity: 0; transform: translate3d(60%,0,0); }
   }
 }

@@ -28,7 +28,7 @@
     light: 'assets/sunrise-clouds.jpg',
     dark: 'assets/cinematic-clouds.jpg',
   };
-  const backdropLoads = new Map();
+  const warmedBackdrops = new Set();
   const reducedThemeMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let switchingTheme = false;
 
@@ -37,34 +37,29 @@
   }
 
   function warmBackdrop(theme) {
-    if (!backdropLoads.has(theme)) {
-      const image = new Image();
-      image.src = new URL(themeBackgrounds[theme], themeDirectory).href;
-      backdropLoads.set(theme, typeof image.decode === 'function' ? image.decode().catch(() => {}) : Promise.resolve());
-    }
-    return backdropLoads.get(theme);
+    if (warmedBackdrops.has(theme) || navigator.connection?.saveData) return;
+    warmedBackdrops.add(theme);
+
+    const image = new Image();
+    image.addEventListener('error', () => warmedBackdrops.delete(theme), { once: true });
+    image.src = new URL(themeBackgrounds[theme], themeDirectory).href;
+    image.decode?.().catch(() => warmedBackdrops.delete(theme));
   }
 
   async function revealWithGlow(theme) {
-    if (typeof themeToggle.animate !== 'function') {
-      applyTheme(theme);
-      return;
-    }
-
+    applyTheme(theme);
     const glow = document.createElement('span');
+    if (typeof glow.animate !== 'function') return;
+
     glow.className = `theme-switch-glow theme-switch-glow--${theme}`;
     glow.setAttribute('aria-hidden', 'true');
     document.body.appendChild(glow);
     try {
-      await glow.animate([{ opacity: 0 }, { opacity: .94 }], {
-        duration: 135,
-        easing: 'ease-out',
-        fill: 'both',
-      }).finished;
-      applyTheme(theme);
-      await glow.animate([{ opacity: .94 }, { opacity: 0 }], {
-        duration: 320,
-        easing: 'cubic-bezier(.23,.7,.26,1)',
+      const easing = window.getComputedStyle(root).getPropertyValue('--portfolio-ease-out').trim()
+        || 'cubic-bezier(.22,.7,.26,1)';
+      await glow.animate([{ opacity: .28 }, { opacity: 0 }], {
+        duration: 340,
+        easing,
         fill: 'both',
       }).finished;
     } finally {
@@ -75,7 +70,7 @@
   async function switchTheme() {
     if (switchingTheme) return;
     const theme = otherTheme();
-    if (reducedThemeMotion.matches) {
+    if (reducedThemeMotion.matches || document.querySelector('.intro-loader')) {
       applyTheme(theme);
       return;
     }
@@ -83,28 +78,19 @@
     switchingTheme = true;
     themeToggle.setAttribute('aria-busy', 'true');
     try {
-      await Promise.race([
-        warmBackdrop(theme),
-        new Promise(resolve => window.setTimeout(resolve, 150)),
-      ]);
-      if (reducedThemeMotion.matches) {
-        applyTheme(theme);
-        return;
-      }
+      warmBackdrop(theme);
 
       const width = window.innerWidth;
       const height = window.innerHeight;
       const x = width * (theme === 'light' ? .74 : .25);
       const y = height * (theme === 'light' ? .66 : .28);
-      const outer = Math.hypot(Math.max(x, width - x), Math.max(y, height - y)) + 90;
+      const outer = Math.hypot(Math.max(x, width - x), Math.max(y, height - y)) + 2;
       root.style.setProperty('--theme-center-x', `${x}px`);
       root.style.setProperty('--theme-center-y', `${y}px`);
       root.style.setProperty('--theme-reveal-limit', `${outer}px`);
-      root.dataset.themeTarget = theme;
 
       if (typeof document.startViewTransition === 'function') {
         root.classList.add('theme-switching');
-        root.classList.toggle('theme-switch-feathered', typeof window.CSS?.registerProperty === 'function');
         const transition = document.startViewTransition(() => applyTheme(theme));
         // A hidden or resizing page can skip the snapshot animation.
         transition.ready.catch(() => {});
@@ -115,8 +101,7 @@
     } catch (_) {
       if (root.dataset.theme !== theme) applyTheme(theme);
     } finally {
-      delete root.dataset.themeTarget;
-      root.classList.remove('theme-switching', 'theme-switch-feathered');
+      root.classList.remove('theme-switching');
       for (const variable of ['--theme-center-x', '--theme-center-y', '--theme-reveal-limit']) {
         root.style.removeProperty(variable);
       }
@@ -129,7 +114,7 @@
   themeToggle.addEventListener('click', switchTheme);
   for (const eventName of ['pointerenter', 'focus']) {
     themeToggle.addEventListener(eventName, () => {
-      if (!reducedThemeMotion.matches && !navigator.connection?.saveData) warmBackdrop(otherTheme());
+      if (!reducedThemeMotion.matches && !document.querySelector('.intro-loader')) warmBackdrop(otherTheme());
     });
   }
 

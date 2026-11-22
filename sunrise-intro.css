@@ -1,39 +1,19 @@
-/* Both shutters keep the same crop as the sunrise backdrop underneath. */
+/* Match the overdraw and crop of the sunrise backdrop underneath. */
 html[data-theme="light"] body.motion-preview .intro-loader {
   color: #412817;
-  --intro-grid-line: #78522310;
-  --intro-horizon: #ffeac76a;
-  --intro-sky-width: max(100vw, (100dvh + 68px) * 1.7778);
-  --intro-sky-height: max(100dvh + 68px, 56.25vw);
+  --intro-grid-color: #78522310;
+  --intro-grid-size: 44px;
 }
 
-html[data-theme="light"] body.motion-preview .intro-loader::before,
-html[data-theme="light"] body.motion-preview .intro-loader::after {
+html[data-theme="light"] body.motion-preview .intro-loader::before {
+  inset: -34px 0;
   background-color: #fff1d7;
   background-image:
-    linear-gradient(var(--intro-grid-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--intro-grid-line) 1px, transparent 1px),
-    var(--intro-sky-veil),
+    linear-gradient(180deg, #f4f9fa79, #ffeac752 55%, #fff5e8a3),
     url("assets/sunrise-clouds.jpg");
-  background-size: 44px 44px, 44px 44px, auto, var(--intro-sky-width) var(--intro-sky-height);
-  background-position:
-    center var(--intro-sky-grid-y),
-    center var(--intro-sky-grid-y),
-    center,
-    var(--dawn-image-x, 58%) calc((100dvh - var(--intro-sky-height)) / 2 - var(--intro-sky-panel-top));
-  background-repeat: repeat, repeat, no-repeat, no-repeat;
-  box-shadow: 0 var(--intro-sky-edge) 0 #b7783540;
-  --intro-sky-panel-top: 0px;
-  --intro-sky-grid-y: 100%;
-  --intro-sky-edge: 1px;
-  --intro-sky-veil: linear-gradient(180deg, #f4f9fa79, var(--intro-horizon));
-}
-
-html[data-theme="light"] body.motion-preview .intro-loader::after {
-  --intro-sky-panel-top: 50dvh;
-  --intro-sky-grid-y: 0%;
-  --intro-sky-edge: -1px;
-  --intro-sky-veil: linear-gradient(180deg, var(--intro-horizon), #fff5e8a3);
+  background-size: auto, cover;
+  background-position: center, var(--dawn-image-x, 58%) center;
+  background-repeat: no-repeat;
 }
 
 html[data-theme="light"] .intro-loader .intro-seam {
@@ -98,7 +78,7 @@ html[data-theme="light"] .intro-loader .intro-progress-track span {
       linear-gradient(#ad723623 1px, transparent 1px) center / 16px 16px,
       linear-gradient(90deg, #ad723623 1px, transparent 1px) center / 16px 16px;
     box-shadow: inset 0 0 0 4px #fffaf08a, 0 0 14px #ffc97530;
-    animation: intro-sunrise-wireframe .39s cubic-bezier(.19,.74,.28,1) both;
+    animation: intro-sunrise-wireframe .50s var(--portfolio-ease-out) both;
     --intro-wire-x: -19px;
     --intro-wire-y: 15px;
     --intro-wire-angle: -13deg;
@@ -113,7 +93,7 @@ html[data-theme="light"] .intro-loader .intro-progress-track span {
   }
 
   html[data-theme="light"] .intro-loader .intro-window {
-    animation: intro-sunrise-settle .36s cubic-bezier(.19,.74,.28,1) both;
+    animation: intro-sunrise-settle .46s var(--portfolio-ease-out) both;
   }
 
   html[data-theme="light"] .intro-loader .intro-window::after {
@@ -122,7 +102,7 @@ html[data-theme="light"] .intro-loader .intro-progress-track span {
     inset: 0;
     pointer-events: none;
     background: linear-gradient(105deg, transparent 37%, #fffaf299 48%, #fff8d642 52%, transparent 63%);
-    animation: intro-sunrise-sheen .37s .39s cubic-bezier(.3,.65,.3,1) both;
+    animation: intro-sunrise-sheen .55s .37s var(--portfolio-ease-out) both;
   }
 
   @keyframes intro-sunrise-wireframe {
@@ -131,7 +111,7 @@ html[data-theme="light"] .intro-loader .intro-progress-track span {
       transform: perspective(700px) translate3d(var(--intro-wire-x), var(--intro-wire-y), -38px)
         rotateY(var(--intro-wire-angle)) scale(.96);
     }
-    34% { opacity: .85; }
+    32% { opacity: .55; }
     100% {
       opacity: 0;
       transform: perspective(700px) translate3d(0, 1px, 0) rotateY(0);
@@ -139,13 +119,13 @@ html[data-theme="light"] .intro-loader .intro-progress-track span {
   }
 
   @keyframes intro-sunrise-settle {
-    from { opacity: .24; transform: perspective(800px) rotateX(10deg) translateY(10px) scale(.981); }
-    to { opacity: 1; transform: perspective(800px) rotateX(0) translateY(0) scale(1); }
+    from { transform: perspective(800px) translateY(5px) rotateX(6deg) scale(.991); }
+    to { transform: perspective(800px) translateY(0) rotateX(0) scale(1); }
   }
 
   @keyframes intro-sunrise-sheen {
     from { opacity: 0; transform: translateX(-72%); }
-    38% { opacity: .68; }
+    42% { opacity: .46; }
     to { opacity: 0; transform: translateX(72%); }
   }
 }
