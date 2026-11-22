@@ -1,8 +1,11 @@
-/* The opening runs on every document load, including reloads. */
+/* Shared pacing for the opening and the smaller page transitions. */
 :root {
-  --intro-reveal: .74s;
-  --intro-duration: 1.34s;
-  --intro-editor-life: .94s;
+  --portfolio-ease-out: cubic-bezier(.22, .7, .26, 1);
+  --intro-reveal: 1.14s;
+  --intro-duration: 2.04s;
+  --intro-typing-delay: .17s;
+  --intro-typing-duration: .66s;
+  --intro-typed: calc(var(--intro-typing-delay) + var(--intro-typing-duration));
 }
 body.motion-preview .intro-loader {
   position: fixed;
@@ -20,26 +23,24 @@ body.motion-preview .intro-loader::before,
 body.motion-preview .intro-loader::after {
   content: '';
   position: absolute;
-  z-index: 1;
-  inset: 0 0 calc(50% - 1px);
-  background:
-    linear-gradient(#a0cfff09 1px, transparent 1px) 50% 100% / 62px 62px,
-    linear-gradient(90deg, #a0cfff09 1px, transparent 1px) 50% 100% / 62px 62px,
-    radial-gradient(ellipse at 50% 100%, #152642, #080d1a 64%);
-  box-shadow: 0 1px #9bd7ff22;
-  animation: intro-panel-away calc(var(--intro-duration) - var(--intro-reveal))
-    var(--intro-reveal) cubic-bezier(.65,.04,.22,1) both;
-  --intro-panel-end: -101%;
+  inset: 0;
+  animation: intro-backdrop-out calc(var(--intro-duration) - var(--intro-reveal))
+    var(--intro-reveal) cubic-bezier(.36, 0, .25, 1) both;
 }
+/* Keep the horizon fixed while the intro dissolves into the page's backdrop. */
+body.motion-preview .intro-loader::before {
+  background: radial-gradient(ellipse at 50% 58%, #152642, #080d1a 70%);
+}
+
 body.motion-preview .intro-loader::after {
-  inset: 50% 0 0;
-  background-position: 50% 0;
+  z-index: 1;
   background-image:
-    linear-gradient(#a0cfff09 1px, transparent 1px),
-    linear-gradient(90deg, #a0cfff09 1px, transparent 1px),
-    radial-gradient(ellipse at 50% 0%, #152642, #080d1a 64%);
-  box-shadow: 0 -1px #9bd7ff22;
-  --intro-panel-end: 101%;
+    linear-gradient(var(--intro-grid-color, #a0cfff0e) 1px, transparent 1px),
+    linear-gradient(90deg, var(--intro-grid-color, #a0cfff0e) 1px, transparent 1px);
+  background-size: var(--intro-grid-size, 54px) var(--intro-grid-size, 54px);
+  background-position: center;
+  animation-duration: .73s;
+  animation-delay: calc(var(--intro-reveal) - .08s);
 }
 body.motion-preview .intro-seam {
   position: absolute;
@@ -48,13 +49,15 @@ body.motion-preview .intro-seam {
   height: 1px;
   background: linear-gradient(90deg, transparent 8%, #6da6f38c, #c8f5ff, #b99fff8c, transparent 92%);
   box-shadow: 0 0 17px #9ad7ff65;
-  animation: intro-seam .46s .58s cubic-bezier(.2,.64,.26,1) both;
+  animation: intro-seam .82s calc(var(--intro-reveal) - .24s) var(--portfolio-ease-out) both;
 }
 body.motion-preview .intro-sequence {
   position: relative;
   z-index: 3;
   width: min(430px, calc(100vw - 36px));
-  animation: intro-terminal-life var(--intro-editor-life) cubic-bezier(.24,.7,.23,1) both;
+  animation:
+    intro-terminal-in .38s var(--portfolio-ease-out) both,
+    intro-terminal-out .52s calc(var(--intro-reveal) - .05s) var(--portfolio-ease-out) forwards;
 }
 body.motion-preview .intro-sequence-top,
 body.motion-preview .intro-sequence-bottom {
@@ -129,7 +132,7 @@ body.motion-preview .intro-command-text {
   overflow: hidden;
   white-space: nowrap;
   color: #f0f6ff;
-  animation: intro-type .5s .09s steps(20, end) forwards;
+  animation: intro-type var(--intro-typing-duration) var(--intro-typing-delay) steps(20, end) forwards;
 }
 body.motion-preview .intro-command-caret {
   display: inline-block;
@@ -148,7 +151,7 @@ body.motion-preview .intro-window-foot {
 body.motion-preview .intro-window-ready {
   color: #82e6dc;
   opacity: 0;
-  animation: intro-ready .09s .58s both;
+  animation: intro-ready .18s var(--intro-typed) var(--portfolio-ease-out) both;
 }
 body.motion-preview .intro-progress-track { height: 2px; background: #a4c7ed21; }
 body.motion-preview .intro-progress-track span {
@@ -158,35 +161,37 @@ body.motion-preview .intro-progress-track span {
   transform-origin: left;
   background: #9fecef;
   box-shadow: 0 0 14px #9fecef;
-  animation: intro-progress .53s .09s cubic-bezier(.24,.68,.18,1) both;
+  animation: intro-progress calc(var(--intro-typing-duration) + .13s)
+    var(--intro-typing-delay) var(--portfolio-ease-out) both;
 }
 
 @keyframes intro-type { to { width: 20ch; } }
 @keyframes intro-caret { 50% { opacity: 0; } }
 @keyframes intro-ready { to { opacity: 1; } }
 @keyframes intro-progress { to { transform: scaleX(1); } }
-@keyframes intro-terminal-life {
-  0% { opacity: 0; transform: translate3d(0, 10px, 0) scale(.97); }
-  16%, 79% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-  100% { opacity: 0; transform: translate3d(0, -12px, 0) scale(.985); }
+@keyframes intro-terminal-in {
+  from { opacity: 0; transform: translateY(9px) scale(.987); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes intro-terminal-out {
+  from { opacity: 1; transform: none; }
+  to { opacity: 0; transform: translateY(-9px) scale(.989); }
 }
 @keyframes intro-seam {
-  0% { opacity: 0; transform: scaleX(.14); }
-  38% { opacity: .82; }
+  0% { opacity: 0; transform: scaleX(.36); }
+  35% { opacity: .62; }
   100% { opacity: 0; transform: scaleX(1); }
 }
-/* Keep the shutter edge solid at first, then blend into the scene beneath it. */
-@keyframes intro-panel-away {
-  from { transform: translate3d(0, 0, 0); opacity: 1; }
-  44% { opacity: 1; }
-  to { transform: translate3d(0, var(--intro-panel-end), 0); opacity: 0; }
+@keyframes intro-backdrop-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 @keyframes intro-cover {
   from { visibility: visible; }
   to { visibility: hidden; }
 }
 @keyframes intro-content-enter {
-  from { opacity: 0; transform: translateY(15px); }
+  from { opacity: .32; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
 body.motion-preview .motion-hero-top,
@@ -197,11 +202,11 @@ body.motion-preview .motion-summary,
 body.motion-preview .motion-actions,
 body.motion-preview .motion-portrait-frame,
 body.motion-preview .motion-terminal {
-  animation: intro-content-enter .42s var(--intro-reveal) cubic-bezier(.2,.75,.2,1) both;
+  animation: intro-content-enter .68s var(--intro-reveal) var(--portfolio-ease-out) both;
 }
-body.motion-preview .motion-hero h1 > span:last-child { animation-delay: calc(var(--intro-reveal) + 80ms); }
-body.motion-preview .motion-portrait-frame { animation-delay: calc(var(--intro-reveal) + 140ms); }
-body.motion-preview .motion-terminal { animation-delay: calc(var(--intro-reveal) + 210ms); }
+body.motion-preview .motion-hero h1 > span:last-child { animation-delay: calc(var(--intro-reveal) + 45ms); }
+body.motion-preview .motion-portrait-frame { animation-delay: calc(var(--intro-reveal) + 85ms); }
+body.motion-preview .motion-terminal { animation-delay: calc(var(--intro-reveal) + 125ms); }
 html.intro-skip body.motion-preview .intro-loader { display: none; }
 html.intro-skip body.motion-preview .motion-hero-top,
 html.intro-skip body.motion-preview .motion-eyebrow,
@@ -218,39 +223,18 @@ html.intro-skip body.motion-preview .motion-terminal {
 }
 /* A cool horizon and layered editor give dark startup one continuous reveal. */
 html[data-theme="dark"] body.motion-preview .intro-loader {
-  --intro-night-image-x: 50%;
-  --intro-night-image-width: max(100vw, 177.78dvh);
-  --intro-night-image-height: max(100dvh, 56.25vw);
+  --intro-night-image-x: center;
 }
 
-html[data-theme="dark"] body.motion-preview .intro-loader::before,
-html[data-theme="dark"] body.motion-preview .intro-loader::after {
+html[data-theme="dark"] body.motion-preview .intro-loader::before {
   background-color: #142a47;
   background-image:
-    linear-gradient(#94c9f211 1px, transparent 1px),
-    linear-gradient(90deg, #94c9f211 1px, transparent 1px),
-    var(--intro-night-veil),
+    linear-gradient(180deg, #080f20df, #1426448c 55%, #07111fc2),
     url("assets/cinematic-clouds.jpg");
-  background-size: 54px 54px, 54px 54px, auto, var(--intro-night-image-width) var(--intro-night-image-height);
-  background-position:
-    center var(--intro-night-grid-y),
-    center var(--intro-night-grid-y),
-    center,
-    var(--intro-night-image-x) calc(100dvh - var(--intro-night-image-height) - var(--intro-night-panel-top));
-  background-repeat: repeat, repeat, no-repeat, no-repeat;
-  background-blend-mode: normal, normal, normal, luminosity;
-  box-shadow: 0 var(--intro-night-edge) 0 #8acbff39;
-  --intro-night-panel-top: 0px;
-  --intro-night-grid-y: 100%;
-  --intro-night-edge: 1px;
-  --intro-night-veil: linear-gradient(180deg, #080f20df, #101f35b8 58%, #152944a6);
-}
-
-html[data-theme="dark"] body.motion-preview .intro-loader::after {
-  --intro-night-panel-top: 50dvh;
-  --intro-night-grid-y: 0%;
-  --intro-night-edge: -1px;
-  --intro-night-veil: linear-gradient(180deg, #152944a6, #0d1b30b8 64%, #07111fcc);
+  background-size: auto, cover;
+  background-position: center, var(--intro-night-image-x) bottom;
+  background-repeat: no-repeat;
+  background-blend-mode: normal, luminosity;
 }
 
 @media (max-width: 640px) {
@@ -271,15 +255,6 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  html[data-theme="dark"] body.motion-preview .intro-loader::before,
-  html[data-theme="dark"] body.motion-preview .intro-loader::after {
-    animation-timing-function: cubic-bezier(.57,.02,.22,1);
-  }
-
-  html[data-theme="dark"] .intro-loader .intro-sequence {
-    animation: intro-night-sequence var(--intro-editor-life) cubic-bezier(.24,.7,.24,1) both;
-  }
-
   html[data-theme="dark"] .intro-loader .intro-sequence::before,
   html[data-theme="dark"] .intro-loader .intro-sequence::after {
     content: '';
@@ -292,7 +267,7 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
       linear-gradient(#9bd9ff20 1px, transparent 1px) center / 16px 16px,
       linear-gradient(90deg, #9bd9ff20 1px, transparent 1px) center / 16px 16px;
     box-shadow: inset 0 0 0 4px #8ac4f211, 0 0 14px #87cbff20;
-    animation: intro-night-wireframe .39s cubic-bezier(.19,.74,.28,1) both;
+    animation: intro-night-wireframe .50s var(--portfolio-ease-out) both;
     --intro-night-wire-x: -19px;
     --intro-night-wire-y: 15px;
     --intro-night-wire-angle: -13deg;
@@ -307,7 +282,7 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
   }
 
   html[data-theme="dark"] .intro-loader .intro-window {
-    animation: intro-night-editor .34s .04s cubic-bezier(.18,.73,.25,1) both;
+    animation: intro-night-editor .46s var(--portfolio-ease-out) both;
   }
 
   html[data-theme="dark"] .intro-loader .intro-window::after {
@@ -316,45 +291,7 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
     inset: 0;
     pointer-events: none;
     background: linear-gradient(108deg, transparent 38%, #b6e5ff29 50%, transparent 59%);
-    animation: intro-night-glint .36s .38s cubic-bezier(.24,.65,.26,1) both;
-  }
-
-  html[data-theme="dark"] .intro-loader .intro-seam {
-    background: transparent;
-    box-shadow: none;
-    animation: none;
-  }
-
-  html[data-theme="dark"] .intro-loader .intro-seam::before,
-  html[data-theme="dark"] .intro-loader .intro-seam::after {
-    content: '';
-    position: absolute;
-    pointer-events: none;
-  }
-
-  html[data-theme="dark"] .intro-loader .intro-seam::before {
-    top: 0;
-    left: 50%;
-    width: min(80vw, 730px);
-    height: clamp(36px, 8vw, 88px);
-    border: 1px solid #92d6ff65;
-    border-radius: 50%;
-    box-shadow: 0 0 12px #73b0f044, inset 0 0 12px #73b0f02b;
-    animation: intro-night-aperture .43s .52s cubic-bezier(.22,.7,.3,1) both;
-  }
-
-  html[data-theme="dark"] .intro-loader .intro-seam::after {
-    inset: 0 0 -1px;
-    background: linear-gradient(90deg, transparent 10%, #609fe77a 33%,
-      #d4f6ff 50%, #9eaff38c 65%, transparent 90%);
-    box-shadow: 0 0 13px #81d4ff61;
-    animation: intro-night-horizon .47s .63s cubic-bezier(.22,.7,.3,1) both;
-  }
-
-  @keyframes intro-night-sequence {
-    0% { opacity: 0; transform: translate3d(0, 5px, 0) scale(.987); }
-    11%, 79% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
-    100% { opacity: 0; transform: translate3d(0, -11px, 0) scale(.985); }
+    animation: intro-night-glint .55s .37s var(--portfolio-ease-out) both;
   }
 
   @keyframes intro-night-wireframe {
@@ -364,7 +301,7 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
         translate3d(var(--intro-night-wire-x), var(--intro-night-wire-y), -32px)
         rotateY(var(--intro-night-wire-angle)) scale(.96);
     }
-    30% { opacity: .82; }
+    32% { opacity: .55; }
     to {
       opacity: 0;
       transform: perspective(760px) translate3d(0, 1px, 0) rotateY(0) scale(1);
@@ -372,27 +309,16 @@ html[data-theme="dark"] .intro-loader .intro-progress-track span {
   }
 
   @keyframes intro-night-editor {
-    from { opacity: .18; transform: perspective(860px) translateY(8px) rotateX(10deg) scale(.98); }
-    to { opacity: 1; transform: perspective(860px) translateY(0) rotateX(0) scale(1); }
+    from { transform: perspective(860px) translateY(5px) rotateX(6deg) scale(.991); }
+    to { transform: perspective(860px) translateY(0) rotateX(0) scale(1); }
   }
 
   @keyframes intro-night-glint {
     from { opacity: 0; transform: translateX(-64%); }
-    42% { opacity: .68; }
+    42% { opacity: .46; }
     to { opacity: 0; transform: translateX(64%); }
   }
 
-  @keyframes intro-night-aperture {
-    from { opacity: 0; transform: translate(-50%, -50%) scale(.43, .18); }
-    46% { opacity: .72; }
-    to { opacity: 0; transform: translate(-50%, -50%) scale(1.1, 1.08); }
-  }
-
-  @keyframes intro-night-horizon {
-    from { opacity: 0; transform: scaleX(.18); }
-    54% { opacity: .86; }
-    to { opacity: 0; transform: scaleX(1); }
-  }
 }
 
 @media (max-width: 650px) {

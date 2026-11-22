@@ -17,11 +17,6 @@ html[data-theme="light"] body.motion-preview .route-hero-rule {
   background: var(--dawn-rule);
 }
 
-html[data-theme="light"] body.motion-preview .route-heading-in .route-hero-rule::after {
-  background: linear-gradient(90deg, transparent, #ffd481, #a96225, transparent);
-  box-shadow: 0 0 13px #e29c4e66;
-}
-
 html[data-theme="light"] body.motion-preview .route-content .card {
   border-color: var(--dawn-border);
   background: linear-gradient(145deg, #fffcf3ed, #fff3d9e8);

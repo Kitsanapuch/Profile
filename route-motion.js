@@ -54,7 +54,6 @@
   const detailTargets = document.querySelectorAll([
     '.certificate-block', '.paper-card', '.project-card',
     '.route-skill-grid > .card', '.contact-form-panel',
-    '.home-about-stack .mindset-step',
   ].join(', '));
 
   function startScenes() {
@@ -85,9 +84,6 @@
   }
 
   const loader = document.querySelector('.intro-loader');
-  const pageHeading = document.querySelector('.route-hero, .contact-copy');
-  pageHeading?.classList.toggle('route-heading-delayed', Boolean(loader));
-  pageHeading?.classList.add('route-heading-in');
   if (loader) {
     document.addEventListener('portfolio:intro-end', startScenes, { once: true });
   } else {

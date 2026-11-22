@@ -115,65 +115,41 @@ body.motion-preview .route-summary-card:hover .route-summary-link span {
   transform: translate(4px, -4px);
 }
 
-/* Keep full sections readable while animating the individual elements. */
+/* Cold entries share the opening's reveal time. Internal entries move as a single block. */
 @media (prefers-reduced-motion: no-preference) {
+  html:not(.intro-skip) body.motion-preview :is(.route-hero, .contact-copy) > :is(h1, p) {
+    animation: route-detail-in .54s var(--intro-reveal, 1.14s)
+      var(--portfolio-ease-out, cubic-bezier(.22, .7, .26, 1)) both;
+  }
+
+  html:not(.intro-skip) body.motion-preview :is(.route-hero, .contact-copy) > p {
+    animation-delay: calc(var(--intro-reveal, 1.14s) + 65ms);
+  }
+
+  html:not(.intro-skip) body.motion-preview .route-hero-rule {
+    transform-origin: left;
+    animation: route-rule-in .53s calc(var(--intro-reveal, 1.14s) + 90ms)
+      var(--portfolio-ease-out, cubic-bezier(.22, .7, .26, 1)) both;
+  }
+
   body.motion-preview .scene-visible > .card > .card-head,
   body.motion-preview .scene-visible > .section-heading {
-    animation: route-detail-in .52s cubic-bezier(.16,.84,.28,1) both;
-  }
-
-  body.motion-preview .route-heading-delayed {
-    --route-heading-delay: var(--intro-reveal);
-  }
-
-  body.motion-preview .route-heading-in h1 {
-    animation: route-title-in .62s var(--route-heading-delay, 0s) cubic-bezier(.17,.8,.23,1) both;
-  }
-
-  body.motion-preview .route-heading-in > p {
-    animation: route-detail-in .48s calc(var(--route-heading-delay, 0s) + 130ms) cubic-bezier(.16,.84,.28,1) both;
-  }
-
-  body.motion-preview .route-heading-in .route-hero-rule {
-    position: relative;
-    transform-origin: left;
-    animation: route-rule-in .74s calc(var(--route-heading-delay, 0s) + 130ms) cubic-bezier(.22,.77,.24,1) both;
-  }
-
-  body.motion-preview .route-heading-in .route-hero-rule::after {
-    content: '';
-    position: absolute;
-    inset: -1px auto -1px 0;
-    width: 12%;
-    background: linear-gradient(90deg, transparent, var(--accent-text), transparent);
-    box-shadow: 0 0 12px color-mix(in srgb, var(--accent-text) 55%, transparent);
-    animation: route-rule-sweep .8s calc(var(--route-heading-delay, 0s) + 220ms) cubic-bezier(.25,.7,.24,1) both;
-    pointer-events: none;
+    animation: route-detail-in .48s var(--portfolio-ease-out, cubic-bezier(.22, .7, .26, 1)) both;
   }
 
   body.motion-preview .route-item-in:not(:focus-within) {
-    animation: route-detail-in .48s var(--route-item-delay, 0ms) cubic-bezier(.16,.84,.28,1) both;
-  }
-
-  @keyframes route-title-in {
-    from { opacity: .25; translate: 0 16px; clip-path: inset(0 -.15em 64%); }
-    to { opacity: 1; translate: 0 0; clip-path: inset(-.2em -.15em -.2em); }
+    animation: route-detail-in .48s var(--route-item-delay, 0ms)
+      var(--portfolio-ease-out, cubic-bezier(.22, .7, .26, 1)) both;
   }
 
   @keyframes route-detail-in {
-    from { opacity: .54; translate: 0 16px; }
-    to { opacity: 1; translate: 0 0; }
+    from { opacity: .68; translate: 0 9px; }
+    to { opacity: 1; translate: none; }
   }
 
   @keyframes route-rule-in {
-    from { opacity: .35; transform: scaleX(.06); }
+    from { opacity: .58; transform: scaleX(.76); }
     to { opacity: 1; transform: scaleX(1); }
-  }
-
-  @keyframes route-rule-sweep {
-    0% { opacity: 0; translate: 0 0; }
-    28% { opacity: .9; }
-    100% { opacity: 0; translate: 720% 0; }
   }
 }
 body.motion-preview .scene-guide { display: none; }

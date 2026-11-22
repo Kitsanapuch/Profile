@@ -1,18 +1,13 @@
 /* Move the new section's introduction without capturing the viewport or moving the nav. */
 @media (prefers-reduced-motion: no-preference) {
   html.intro-skip body.motion-preview :is(.motion-hero-inner, .route-hero, .contact-copy) {
-    animation: section-arrive .28s cubic-bezier(.18, .68, .31, 1);
-  }
-
-  /* The section entrance already moves the title and its description together. */
-  html.intro-skip body.motion-preview .route-heading-in > :is(h1, p) {
-    animation: none;
+    animation: section-arrive .38s var(--portfolio-ease-out, cubic-bezier(.22, .7, .26, 1));
   }
 
   @keyframes section-arrive {
     from {
       opacity: .82;
-      translate: calc(var(--section-direction, 1) * clamp(16px, 2.5vw, 30px)) 0;
+      translate: calc(var(--section-direction, 1) * clamp(9px, 1.35vw, 17px)) 0;
     }
     to { opacity: 1; translate: none; }
   }
