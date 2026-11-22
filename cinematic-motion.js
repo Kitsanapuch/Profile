@@ -73,8 +73,6 @@
     hero.style.setProperty('--cinema-portrait-scale', 1 + t * .085);
     hero.style.setProperty('--cinema-terminal-y', `${-t * (compact ? 11 : 22)}px`);
     hero.style.setProperty('--cinema-note-y', `${t * 6}px`);
-    hero.style.setProperty('--cinema-atmosphere-y', `${t * -34}px`);
-    hero.style.setProperty('--cinema-atmosphere-scale', 1 + t * .09);
   }
 
   function alignProjectCallouts(box) {

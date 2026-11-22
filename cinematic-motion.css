@@ -1,68 +1,44 @@
-/* Lift the cloud bank into the first screen and keep it strongest away from text. */
-body.motion-preview .cinema-landscape,
-body.motion-preview.multipage-route:not(.route-home)::before {
-  position: absolute;
+/* A single cloud layer stays behind the content from the header to the footer. */
+body.motion-preview.multipage-route { isolation: isolate; }
+
+body.motion-preview.multipage-route::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
   pointer-events: none;
-  background: url('assets/cinematic-clouds.jpg') center 92% / cover no-repeat;
+  background: url('assets/cinematic-clouds.jpg') center bottom / cover no-repeat;
   filter: grayscale(1) sepia(.62) hue-rotate(174deg) saturate(.84) brightness(.94);
   mix-blend-mode: screen;
-  mask-image: var(--cloud-mask);
+  mask-image: linear-gradient(105deg, #0006 0%, #000b 48%, #000 81%);
+  opacity: .57;
 }
 
-body.motion-preview .cinema-landscape {
-  inset: 0 0 auto;
-  height: min(590px, 84%);
-  z-index: 0;
-  opacity: .59;
-  --cloud-mask: radial-gradient(ellipse 65% 77% at 79% 50%, #000 16%, transparent 89%);
+body.motion-preview.multipage-route .motion-hero {
+  background:
+    radial-gradient(ellipse at 80% 37%, #4c37874a, transparent 38%),
+    radial-gradient(ellipse at 17% 88%, #0a607831, transparent 43%),
+    linear-gradient(135deg, #090d1959, #0d132942 59%, #090c1d14);
 }
 
-body.motion-preview.multipage-route:not(.route-home) { isolation: isolate; }
-
-body.motion-preview.multipage-route:not(.route-home)::before {
-  content: '';
-  inset: 0 0 auto;
-  height: clamp(295px, 32vw, 450px);
-  z-index: -1;
-  opacity: .47;
-  --cloud-mask: radial-gradient(ellipse 73% 68% at 87% 48%, #000 14%, transparent 91%);
-}
-
-html[data-theme="light"] body.motion-preview.multipage-route:not(.route-home)::before {
-  filter: grayscale(1) brightness(1.5);
+html[data-theme="light"] body.motion-preview.multipage-route::before {
+  filter: grayscale(1) brightness(1.2);
   mix-blend-mode: multiply;
-  opacity: .15;
+  opacity: .2;
 }
 
-@supports (mask-composite: intersect) {
-  body.motion-preview .cinema-landscape,
-  body.motion-preview.multipage-route:not(.route-home)::before {
-    mask-image: var(--cloud-mask), linear-gradient(#000 68%, transparent);
-    mask-composite: intersect;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  body.motion-preview .motion-hero.cinema-ready .cinema-landscape {
-    transform: translateY(var(--cinema-atmosphere-y, 0px)) scale(var(--cinema-atmosphere-scale, 1));
-  }
-
-  body.motion-preview.multipage-route:not(.route-home)::before {
-    transform: translateY(calc(var(--route-scroll, 0) * -26px));
-  }
+/* The hero uses the dark palette in both themes. */
+html[data-theme="light"] body.motion-preview.multipage-route .motion-hero {
+  background:
+    radial-gradient(ellipse at 80% 37%, #4c378742, transparent 38%),
+    linear-gradient(135deg, #090d19f2, #0d1329ed 60%, #090c1ddc);
 }
 
 @media (max-width: 640px) {
-  body.motion-preview .cinema-landscape {
-    height: min(590px, 78%);
-    opacity: .48;
-    background-position: 62% 100%;
-    --cloud-mask: radial-gradient(ellipse 88% 60% at 76% 62%, #000 10%, transparent 87%);
-  }
-
-  body.motion-preview.multipage-route:not(.route-home)::before {
-    background-position: 61% 100%;
-    opacity: .38;
+  body.motion-preview.multipage-route::before {
+    background-position: 61% bottom;
+    mask-image: linear-gradient(115deg, #0009 0%, #000e 62%, #000);
+    opacity: .49;
   }
 }
 
