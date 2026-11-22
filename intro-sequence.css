@@ -213,6 +213,178 @@ html.intro-skip body.motion-preview .motion-terminal {
   transform: none;
   filter: none;
 }
+/* A cool horizon and layered editor give dark startup one continuous reveal. */
+html[data-theme="dark"] {
+  --intro-reveal: 1.18s;
+  --intro-duration: 2.02s;
+}
+
+html[data-theme="dark"] body.motion-preview .intro-loader::before,
+html[data-theme="dark"] body.motion-preview .intro-loader::after {
+  background-color: #091120;
+  background-image:
+    linear-gradient(#94c9f20c 1px, transparent 1px),
+    linear-gradient(90deg, #94c9f20c 1px, transparent 1px),
+    radial-gradient(ellipse 67% 106% at 50% var(--intro-night-horizon),
+      #1f3b5c 0%, #13233b 38%, #0a1324 75%, #070e1b 100%);
+  background-size: 54px 54px, 54px 54px, auto;
+  background-position: center var(--intro-night-horizon), center var(--intro-night-horizon), center;
+  box-shadow: 0 var(--intro-night-edge) 0 #8acbff39;
+  --intro-night-horizon: 100%;
+  --intro-night-edge: 1px;
+}
+
+html[data-theme="dark"] body.motion-preview .intro-loader::after {
+  --intro-night-horizon: 0%;
+  --intro-night-edge: -1px;
+}
+
+html[data-theme="dark"] .intro-loader .intro-window {
+  position: relative;
+  isolation: isolate;
+  border-color: #9bc9f17a;
+  background: linear-gradient(150deg, #131f34, #0b1425 70%);
+  box-shadow: 0 21px 66px #0208178f, 0 0 0 1px #e3f4ff12, inset 0 1px 0 #d1ebff25;
+}
+
+html[data-theme="dark"] .intro-loader .intro-progress-track span {
+  background: linear-gradient(90deg, #568fc9, #8fdcfa 74%, #e6faff);
+  box-shadow: 0 0 11px #8bdbf987;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-theme="dark"] body.motion-preview .intro-loader::before,
+  html[data-theme="dark"] body.motion-preview .intro-loader::after {
+    animation-timing-function: cubic-bezier(.57,.02,.22,1);
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-sequence {
+    animation: intro-night-sequence 1.4s cubic-bezier(.24,.7,.24,1) both;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-sequence::before,
+  html[data-theme="dark"] .intro-loader .intro-sequence::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 15% 0;
+    border: 1px solid #8cc9fa88;
+    border-radius: 13px;
+    background:
+      linear-gradient(#9bd9ff20 1px, transparent 1px) center / 16px 16px,
+      linear-gradient(90deg, #9bd9ff20 1px, transparent 1px) center / 16px 16px;
+    box-shadow: inset 0 0 0 4px #8ac4f211, 0 0 14px #87cbff20;
+    animation: intro-night-wireframe .6s cubic-bezier(.19,.74,.28,1) both;
+    --intro-night-wire-x: -19px;
+    --intro-night-wire-y: 15px;
+    --intro-night-wire-angle: -13deg;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-sequence::after {
+    border-color: #a999f56b;
+    animation-delay: 45ms;
+    --intro-night-wire-x: 19px;
+    --intro-night-wire-y: -13px;
+    --intro-night-wire-angle: 13deg;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-window {
+    animation: intro-night-editor .49s .08s cubic-bezier(.18,.73,.25,1) both;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-window::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(108deg, transparent 38%, #b6e5ff29 50%, transparent 59%);
+    animation: intro-night-glint .5s .57s cubic-bezier(.24,.65,.26,1) both;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-command-text {
+    animation-duration: .7s;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-window-ready {
+    animation-delay: .92s;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-seam {
+    background: transparent;
+    box-shadow: none;
+    animation: none;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-seam::before,
+  html[data-theme="dark"] .intro-loader .intro-seam::after {
+    content: '';
+    position: absolute;
+    pointer-events: none;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-seam::before {
+    top: 0;
+    left: 50%;
+    width: min(80vw, 730px);
+    height: clamp(36px, 8vw, 88px);
+    border: 1px solid #92d6ff65;
+    border-radius: 50%;
+    box-shadow: 0 0 12px #73b0f044, inset 0 0 12px #73b0f02b;
+    animation: intro-night-aperture .61s .85s cubic-bezier(.22,.7,.3,1) both;
+  }
+
+  html[data-theme="dark"] .intro-loader .intro-seam::after {
+    inset: 0 0 -1px;
+    background: linear-gradient(90deg, transparent 10%, #609fe77a 33%,
+      #d4f6ff 50%, #9eaff38c 65%, transparent 90%);
+    box-shadow: 0 0 13px #81d4ff61;
+    animation: intro-night-horizon .57s .97s cubic-bezier(.22,.7,.3,1) both;
+  }
+
+  @keyframes intro-night-sequence {
+    0% { opacity: 0; transform: translate3d(0, 5px, 0) scale(.987); }
+    11%, 72% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    100% { opacity: 0; transform: translate3d(0, -11px, 0) scale(.985); }
+  }
+
+  @keyframes intro-night-wireframe {
+    from {
+      opacity: 0;
+      transform: perspective(760px)
+        translate3d(var(--intro-night-wire-x), var(--intro-night-wire-y), -32px)
+        rotateY(var(--intro-night-wire-angle)) scale(.96);
+    }
+    30% { opacity: .82; }
+    to {
+      opacity: 0;
+      transform: perspective(760px) translate3d(0, 1px, 0) rotateY(0) scale(1);
+    }
+  }
+
+  @keyframes intro-night-editor {
+    from { opacity: .18; transform: perspective(860px) translateY(8px) rotateX(10deg) scale(.98); }
+    to { opacity: 1; transform: perspective(860px) translateY(0) rotateX(0) scale(1); }
+  }
+
+  @keyframes intro-night-glint {
+    from { opacity: 0; transform: translateX(-64%); }
+    42% { opacity: .68; }
+    to { opacity: 0; transform: translateX(64%); }
+  }
+
+  @keyframes intro-night-aperture {
+    from { opacity: 0; transform: translate(-50%, -50%) scale(.43, .18); }
+    46% { opacity: .72; }
+    to { opacity: 0; transform: translate(-50%, -50%) scale(1.1, 1.08); }
+  }
+
+  @keyframes intro-night-horizon {
+    from { opacity: 0; transform: scaleX(.18); }
+    54% { opacity: .86; }
+    to { opacity: 0; transform: scaleX(1); }
+  }
+}
+
 @media (max-width: 650px) {
   body.motion-preview .intro-sequence-top,
   body.motion-preview .intro-sequence-bottom { font-size: 8px; }
