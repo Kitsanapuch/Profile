@@ -93,6 +93,7 @@
         root.classList.add('theme-switching');
         const transition = document.startViewTransition(() => applyTheme(theme));
         // A hidden or resizing page can skip the snapshot animation.
+        transition.updateCallbackDone.catch(() => {});
         transition.ready.catch(() => {});
         await transition.finished;
       } else {

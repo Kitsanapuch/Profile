@@ -9,7 +9,7 @@ html[data-theme="light"] body.motion-preview .intro-loader::before {
   inset: -34px 0;
   background-color: #fff1d7;
   background-image:
-    linear-gradient(180deg, #f4f9fa79, #ffeac752 55%, #fff5e8a3),
+    linear-gradient(180deg, #edf2f486, #f4e4c96e 55%, #faf0dfa3),
     url("assets/sunrise-clouds.jpg");
   background-size: auto, cover;
   background-position: center, var(--dawn-image-x, 58%) center;

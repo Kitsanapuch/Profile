@@ -20,12 +20,16 @@
 
   html.theme-switching::view-transition-new(root) {
     z-index: 2;
-    animation: theme-switch-iris .64s var(--portfolio-ease-out, cubic-bezier(.22,.7,.26,1)) both;
+    animation: theme-switch-iris .56s var(--portfolio-ease-out, cubic-bezier(.22,.7,.26,1)) both;
   }
 
   @keyframes theme-switch-iris {
     from {
       clip-path: circle(0 at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
+      opacity: .68;
+    }
+    45% {
+      opacity: 1;
     }
     to {
       clip-path: circle(var(--theme-reveal-limit, 150vmax) at var(--theme-center-x, 74%) var(--theme-center-y, 66%));

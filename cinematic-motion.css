@@ -8,10 +8,9 @@ body.motion-preview.multipage-route::before {
   z-index: -1;
   pointer-events: none;
   background: url('assets/cinematic-clouds.jpg') center bottom / cover no-repeat;
-  filter: grayscale(1) sepia(.62) hue-rotate(174deg) saturate(.84) brightness(.94);
-  mix-blend-mode: screen;
-  mask-image: linear-gradient(105deg, #0006 0%, #000b 48%, #000 81%);
-  opacity: .57;
+  filter: grayscale(1) sepia(.55) hue-rotate(174deg) saturate(.9) contrast(1.07) brightness(.86);
+  mask-image: linear-gradient(105deg, #0005 0%, #000a 48%, #000 84%);
+  opacity: .65;
 }
 
 body.motion-preview.multipage-route .motion-hero {
@@ -21,116 +20,126 @@ body.motion-preview.multipage-route .motion-hero {
     linear-gradient(135deg, #090d1959, #0d132942 59%, #090c1d14);
 }
 
-html[data-theme="light"] body.motion-preview.multipage-route::before {
-  filter: grayscale(1) brightness(1.2);
-  mix-blend-mode: multiply;
-  opacity: .2;
-}
-
-/* The hero uses the dark palette in both themes. */
-html[data-theme="light"] body.motion-preview.multipage-route .motion-hero {
-  background:
-    radial-gradient(ellipse at 80% 37%, #4c378742, transparent 38%),
-    linear-gradient(135deg, #090d19f2, #0d1329ed 60%, #090c1ddc);
-}
-
 @media (max-width: 640px) {
   body.motion-preview.multipage-route::before {
     background-position: 61% bottom;
     mask-image: linear-gradient(115deg, #0009 0%, #000e 62%, #000);
-    opacity: .49;
+    opacity: .57;
   }
 }
 
-.cinema-anchor, .cinema-rear-plane { display: none; }
-.cinema-ready .cinema-anchor, .cinema-ready .cinema-rear-plane { display: block; }
+/* The page scroll remains native; only the foreground planes change depth. */
+.cinema-rear-plane { display: none; }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* Individual transforms preserve the existing hover and introduction animations. */
+  body.motion-preview .motion-hero.cinema-ready {
+    --cinema-portrait-travel: 31px;
+    --cinema-portrait-tilt: -6deg;
+    --cinema-portrait-growth: .05;
+    --cinema-terminal-travel: -20px;
+  }
+
+  /* Individual transforms compose with the existing hover and entrance effects. */
   body.motion-preview .motion-hero.cinema-ready .motion-portrait {
-    translate: 0 var(--cinema-portrait-y, 0px);
-    rotate: y var(--cinema-portrait-angle, 0deg);
-    scale: var(--cinema-portrait-scale, 1);
+    translate: 0 calc(var(--cinema-progress, 0) * var(--cinema-portrait-travel));
+    rotate: y calc(var(--cinema-progress, 0) * var(--cinema-portrait-tilt));
+    scale: calc(1 + var(--cinema-progress, 0) * var(--cinema-portrait-growth));
   }
 
   body.motion-preview .motion-hero.cinema-ready .motion-terminal {
-    translate: 0 var(--cinema-terminal-y, 0px);
+    translate: 0 calc(var(--cinema-progress, 0) * var(--cinema-terminal-travel));
   }
 
   body.motion-preview .motion-hero.cinema-ready .motion-terminal-note {
-    translate: 0 var(--cinema-note-y, 0px);
+    translate: 0 calc(var(--cinema-progress, 0) * 5px);
+  }
+
+  body.motion-preview .studio-focus.cinema-ready {
+    --cinema-distance: calc(1 - var(--cinema-progress, 0));
+  }
+
+  body.motion-preview .studio-focus.cinema-ready .studio-focus-head {
+    translate: 0 calc(var(--cinema-distance) * 9px);
   }
 
   body.motion-preview .studio-focus-visual.cinema-ready {
     position: relative;
     isolation: isolate;
-    perspective: 980px;
+    perspective: 1180px;
+    perspective-origin: 50% 48%;
+    --cinema-window-inset: .15;
+    --cinema-window-y: 14px;
+    --cinema-window-pitch: 3deg;
+    --cinema-window-yaw: -4deg;
   }
 
   .studio-focus-visual.cinema-ready .cinema-rear-plane {
     position: absolute;
+    display: block;
     z-index: -1;
     inset: 16px 16px 39px;
-    border: 1px solid color-mix(in srgb, var(--accent) 42%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 46%, transparent);
     border-radius: 11px;
-    background: linear-gradient(145deg, #233353, #121b31);
-    opacity: var(--cinema-depth, 0);
-    transform: translate3d(
-        calc(var(--cinema-depth, 0) * var(--plane-x)),
-        calc(var(--cinema-depth, 0) * var(--plane-y)),
-        calc(var(--cinema-depth, 0) * var(--plane-z)))
-      rotateY(calc(var(--cinema-turn, 0) * 10deg));
+    background:
+      linear-gradient(90deg, #88abf321 1px, transparent 1px) center / 22px 22px,
+      linear-gradient(#88abf321 1px, transparent 1px) center / 22px 22px,
+      linear-gradient(145deg, #223351, #121b31);
+    opacity: min(var(--plane-opacity), calc(var(--cinema-distance) * var(--plane-fade)));
+    transform:
+      translate3d(
+        calc(var(--cinema-distance) * var(--plane-x)),
+        calc(var(--cinema-distance) * var(--plane-y)),
+        calc(var(--cinema-distance) * var(--plane-z)))
+      scale(calc(1 - var(--cinema-distance) * var(--plane-inset)));
     pointer-events: none;
   }
 
   .cinema-rear-plane--near {
-    --plane-x: 12px;
-    --plane-y: -12px;
-    --plane-z: -26px;
+    --plane-x: 16px;
+    --plane-y: -18px;
+    --plane-z: -37px;
+    --plane-inset: .065;
+    --plane-opacity: .86;
+    --plane-fade: 1.9;
   }
 
   .cinema-rear-plane--far {
-    --plane-x: 20px;
-    --plane-y: -25px;
-    --plane-z: -54px;
+    --plane-x: 27px;
+    --plane-y: -33px;
+    --plane-z: -76px;
+    --plane-inset: .11;
+    --plane-opacity: .66;
+    --plane-fade: 1.24;
   }
 
   body.motion-preview .studio-focus-visual.cinema-ready .studio-focus-window {
-    transform: translate3d(0, calc(var(--cinema-depth, 0) * 10px), 0)
-      rotateX(calc(var(--cinema-depth, 0) * 7deg))
-      rotateY(calc(var(--cinema-turn, 0) * 20deg))
-      scale(calc(var(--studio-focus-scale, 1) * var(--cinema-window-scale, 1)));
+    transform:
+      translate3d(0, calc(var(--cinema-distance) * var(--cinema-window-y)), 0)
+      rotateX(calc(var(--cinema-distance) * var(--cinema-window-pitch)))
+      rotateY(calc(var(--cinema-distance) * var(--cinema-window-yaw)))
+      scale(calc(1 - var(--cinema-distance) * var(--cinema-window-inset)));
   }
 
   body.motion-preview .studio-focus-visual.cinema-ready:is(:focus-within, .cinema-inspecting) .studio-focus-window {
-    transform: scale(var(--studio-focus-scale, 1));
+    transform: none;
   }
 
-  .studio-focus-visual.cinema-ready:is(:focus-within, .cinema-inspecting) .cinema-rear-plane,
-  .studio-focus-visual.cinema-ready:is(:focus-within, .cinema-inspecting) .cinema-callouts {
+  .studio-focus-visual.cinema-ready:is(:focus-within, .cinema-inspecting) :is(.cinema-rear-plane, .cinema-callouts) {
     visibility: hidden;
   }
 
-  .cinema-anchor {
-    position: absolute;
-    width: 0;
-    height: 0;
-    pointer-events: none;
-  }
+  .studio-focus-visual.cinema-ready .studio-image-viewport { position: relative; }
 
-  .cinema-anchor:first-of-type { inset: 23% auto auto 74%; }
-  .cinema-anchor:nth-of-type(2) { inset: 68% auto auto 28%; }
-
-  .cinema-callouts {
+  .studio-focus-visual .cinema-callouts {
     position: absolute;
     z-index: 2;
     inset: 0;
     pointer-events: none;
     opacity: 0;
-    transition: opacity .3s ease;
+    transition: opacity .3s var(--portfolio-ease-out, ease-out);
   }
 
-  .cinema-callouts.is-visible { opacity: 1; }
+  .studio-focus-visual .cinema-callouts.is-visible { opacity: 1; }
 
   .cinema-callouts svg {
     position: absolute;
@@ -155,14 +164,14 @@ html[data-theme="light"] body.motion-preview.multipage-route .motion-hero {
   }
 
   @keyframes cinema-label-in {
-    from { opacity: 0; translate: 0 4px; }
-    to { opacity: 1; translate: 0 0; }
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: none; }
   }
   .cinema-callouts circle { fill: #e4f6ff; stroke: #1e3152; stroke-width: 1; }
 
   .cinema-callout {
     position: absolute;
-    inset: 0 auto auto 0;
+    translate: 0 -50%;
     padding: 5px 8px;
     border: 1px solid #a8d6f26e;
     border-radius: 6px;
@@ -173,15 +182,29 @@ html[data-theme="light"] body.motion-preview.multipage-route .motion-hero {
     box-shadow: 0 4px 14px #09112955;
   }
 
+  .cinema-callout--preview { inset: 15% 5% auto auto; }
+  .cinema-callout--workspace { inset: 77% auto auto 5%; }
+
   html[lang="th"] .cinema-callout { font-family: 'Noto Sans Thai', sans-serif; }
 
   @media (max-width: 640px) {
-    body.motion-preview .studio-focus-visual.cinema-ready .studio-focus-window {
-      transform: translateY(calc(var(--cinema-depth, 0) * 4px))
-        rotateY(calc(var(--cinema-turn, 0) * 7deg))
-        scale(calc(var(--studio-focus-scale, 1) * var(--cinema-window-scale, 1)));
+    body.motion-preview .motion-hero.cinema-ready {
+      --cinema-portrait-travel: 17px;
+      --cinema-portrait-tilt: -3deg;
+      --cinema-portrait-growth: .025;
+      --cinema-terminal-travel: -12px;
+    }
+
+    body.motion-preview .studio-focus-visual.cinema-ready {
+      --cinema-window-inset: .105;
+      --cinema-window-y: 8px;
+      --cinema-window-pitch: 1.4deg;
+      --cinema-window-yaw: -1.6deg;
     }
 
     .studio-focus-visual.cinema-ready .cinema-rear-plane { inset: 10px 10px 32px; }
+    .cinema-rear-plane--near { --plane-x: 8px; --plane-y: -10px; }
+    .cinema-rear-plane--far { --plane-x: 13px; --plane-y: -19px; }
+    .cinema-callout { padding: 4px 6px; font-size: 9px; }
   }
 }
