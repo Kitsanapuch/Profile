@@ -31,11 +31,10 @@
   }
   let activeIndex = Math.max(0, tabs.findIndex(tab => tab.getAttribute('aria-selected') === 'true'));
   let displayedIndex = activeIndex;
-  let exitTimer = 0;
-  let arrivalTimer = 0;
+  let scene = null;
   let panFrame = 0;
-  let pointerX = 50;
-  let pointerY = 50;
+  let pointerX = 0;
+  let pointerY = 0;
   let zoomed = false;
   let activation = 0;
   const fallbackSource = localImage(image.getAttribute('src'));
@@ -77,6 +76,8 @@
       : (zoomed ? 'Image zoomed' : 'Zoom project image'));
     reset.disabled = !zoomed;
     if (!zoomed) {
+      cancelAnimationFrame(panFrame);
+      panFrame = 0;
       viewport.style.setProperty('--studio-origin-x', '50%');
       viewport.style.setProperty('--studio-origin-y', '50%');
     }
@@ -105,45 +106,81 @@
     });
   }
 
-  function activate(index, focus = false) {
+  function finishScene() {
+    if (!scene) return;
+    const { layer, fade, push } = scene;
+    scene = null;
+    layer.remove();
+    fade?.cancel();
+    push?.cancel();
+  }
+
+  function previousPhoto() {
+    if (reducedMotion.matches || typeof image.animate !== 'function' || typeof image.decode !== 'function' ||
+        !image.complete || !image.naturalWidth) return null;
+    const photo = new Image();
+    photo.alt = '';
+    photo.src = image.currentSrc || image.src;
+    return photo.decode().then(() => photo, () => null);
+  }
+
+  function showProject(index, source, previous) {
+    let next;
+    if (previous && !reducedMotion.matches) {
+      const layer = document.createElement('div');
+      layer.className = 'studio-scene-layer';
+      layer.setAttribute('aria-hidden', 'true');
+      // Preserve the outgoing screenshot's exact framing, even if zoomed.
+      const current = getComputedStyle(image);
+      previous.style.transform = current.transform;
+      previous.style.transformOrigin = current.transformOrigin;
+      layer.append(previous);
+      viewport.append(layer);
+      next = { layer };
+      scene = next;
+    }
+    setZoom(false);
+    updateContent(index, source);
+    if (!next) return;
+
+    next.done = image.decode().then(() => {
+      if (scene !== next || reducedMotion.matches) return;
+      const timing = { duration: 380, easing: 'cubic-bezier(.22,.7,.26,1)' };
+      next.fade = next.layer.animate([{ opacity: 1 }, { opacity: 0 }], { ...timing, fill: 'forwards' });
+      next.push = image.animate([{ scale: '.962' }, { scale: '1' }], timing);
+      next.push.finished.catch(() => {});
+      return next.fade.finished;
+    }).catch(() => {}).finally(() => {
+      if (scene === next) finishScene();
+    });
+  }
+
+  async function activate(index, focus = false) {
     if (index < 0 || index >= tabs.length) return;
     if (focus) tabs[index].focus();
     if (index === activeIndex) return;
 
     selectTab(index);
     const currentActivation = ++activation;
+    if (index === displayedIndex) {
+      panel.removeAttribute('aria-busy');
+      return;
+    }
+
     panel.setAttribute('aria-busy', 'true');
-    setZoom(false);
-    window.clearTimeout(exitTimer);
-    window.clearTimeout(arrivalTimer);
-    image.classList.remove('studio-changing', 'studio-arriving');
-
-    readyImage(index).then(source => {
+    // Keep the current scene readable while its replacement loads. An ongoing
+    // dissolve can settle in parallel, after which only the latest request wins.
+    const [source] = await Promise.all([readyImage(index), scene?.done]);
+    if (currentActivation !== activation) return;
+    if (source) {
+      const previous = await previousPhoto();
       if (currentActivation !== activation) return;
-      if (!source) {
-        selectTab(displayedIndex);
-        if (document.activeElement === tabs[index]) tabs[displayedIndex].focus();
-        panel.removeAttribute('aria-busy');
-        return;
-      }
-
-      if (reducedMotion.matches) {
-        updateContent(index, source);
-        panel.removeAttribute('aria-busy');
-        return;
-      }
-
-      // Keep the current screenshot visible until its replacement is decoded.
-      image.classList.add('studio-changing');
-      exitTimer = window.setTimeout(() => {
-        if (currentActivation !== activation) return;
-        updateContent(index, source);
-        image.classList.remove('studio-changing');
-        image.classList.add('studio-arriving');
-        panel.removeAttribute('aria-busy');
-        arrivalTimer = window.setTimeout(() => image.classList.remove('studio-arriving'), 350);
-      }, 170);
-    });
+      showProject(index, source, previous);
+    } else {
+      selectTab(displayedIndex);
+      if (document.activeElement === tabs[index]) tabs[displayedIndex].focus();
+    }
+    panel.removeAttribute('aria-busy');
   }
 
   tabs.forEach((tab, index) => {
@@ -168,18 +205,29 @@
     });
   });
 
-  zoom.addEventListener('click', () => setZoom(true));
-  reset.addEventListener('click', () => setZoom(false));
+  zoom.addEventListener('click', () => {
+    finishScene();
+    setZoom(true);
+  });
+  reset.addEventListener('click', () => {
+    finishScene();
+    setZoom(false);
+  });
+  reducedMotion.addEventListener('change', () => {
+    if (reducedMotion.matches) finishScene();
+  });
   viewport.addEventListener('pointermove', event => {
     if (!zoomed || event.pointerType === 'touch') return;
-    const bounds = viewport.getBoundingClientRect();
-    pointerX = Math.min(90, Math.max(10, ((event.clientX - bounds.left) / bounds.width) * 100));
-    pointerY = Math.min(90, Math.max(10, ((event.clientY - bounds.top) / bounds.height) * 100));
+    pointerX = event.clientX;
+    pointerY = event.clientY;
     if (panFrame) return;
     panFrame = requestAnimationFrame(() => {
       panFrame = 0;
-      viewport.style.setProperty('--studio-origin-x', `${pointerX.toFixed(1)}%`);
-      viewport.style.setProperty('--studio-origin-y', `${pointerY.toFixed(1)}%`);
+      const bounds = viewport.getBoundingClientRect();
+      const x = Math.min(90, Math.max(10, ((pointerX - bounds.left) / bounds.width) * 100));
+      const y = Math.min(90, Math.max(10, ((pointerY - bounds.top) / bounds.height) * 100));
+      viewport.style.setProperty('--studio-origin-x', `${x.toFixed(1)}%`);
+      viewport.style.setProperty('--studio-origin-y', `${y.toFixed(1)}%`);
     });
   }, { passive: true });
   document.addEventListener('keydown', event => {
@@ -187,55 +235,6 @@
       setZoom(false);
       zoom.focus();
     }
-  });
+  }, true);
   setZoom(false);
-
-  // The case-study window briefly approaches the viewer, then recedes as the
-  // section passes. It never pins the page or changes document flow.
-  const scrollMotion = window.matchMedia('(min-width: 961px) and (prefers-reduced-motion: no-preference)');
-  let scrollFrame = 0;
-  let nearSection = true;
-  let introOpen = Boolean(document.querySelector('.intro-loader'));
-  function renderScrollScale() {
-    scrollFrame = 0;
-    if (document.hidden || introOpen) return;
-    if (!scrollMotion.matches) {
-      section.style.setProperty('--studio-focus-scale', '1');
-      section.classList.remove('studio-in-focus');
-      return;
-    }
-    if (!nearSection) {
-      section.style.setProperty('--studio-focus-scale', '0.94');
-      section.classList.remove('studio-in-focus');
-      return;
-    }
-    const rect = section.getBoundingClientRect();
-    const viewCenter = window.innerHeight / 2;
-    const sectionCenter = rect.top + rect.height / 2;
-    const travel = Math.max(1, (window.innerHeight + rect.height) / 2);
-    const proximity = Math.max(0, Math.min(1, 1 - Math.abs(sectionCenter - viewCenter) / travel));
-    const eased = proximity * proximity * (3 - 2 * proximity);
-    section.style.setProperty('--studio-focus-scale', (0.94 + 0.06 * eased).toFixed(3));
-    section.classList.toggle('studio-in-focus', eased > 0.62);
-  }
-  function queueScrollScale() {
-    if (!document.hidden && !introOpen && !scrollFrame) scrollFrame = requestAnimationFrame(renderScrollScale);
-  }
-  if (introOpen) document.addEventListener('portfolio:intro-end', () => {
-    introOpen = false;
-    queueScrollScale();
-  }, { once: true });
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(entries => {
-      nearSection = entries[0].isIntersecting;
-      queueScrollScale();
-    }, { rootMargin: '100% 0px' }).observe(section);
-  }
-  window.addEventListener('scroll', () => {
-    if (nearSection) queueScrollScale();
-  }, { passive: true });
-  window.addEventListener('resize', queueScrollScale);
-  document.addEventListener('visibilitychange', queueScrollScale);
-  scrollMotion.addEventListener('change', queueScrollScale);
-  queueScrollScale();
 })();
