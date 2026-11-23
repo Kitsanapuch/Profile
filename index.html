@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#090e1a">
-<script src="./intro-guard.js?v=7"></script>
+<style>@view-transition { navigation: auto; } @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }</style>
+<link rel="expect" href="#section-view-heading" blocking="render" media="(prefers-reduced-motion: no-preference)">
+<script src="./intro-guard.js?v=8"></script>
 <meta name="referrer" content="no-referrer">
 <title>Kitsanapuch Chuaibamrung | Software Engineering, AI &amp; ML</title>
 <meta name="description" content="Kitsanapuch Chuaibamrung is a Software Engineering student at Thammasat University. His projects include Physics Plus, ScamGraph AI, and MySchool.">
@@ -70,7 +72,7 @@
 <link rel="stylesheet" href="./sunrise-routes.css?v=2">
 <link rel="stylesheet" href="./sunrise-intro.css?v=3">
 <link rel="stylesheet" href="./theme-switch.css?v=3">
-<link rel="stylesheet" href="./section-transition.css?v=5">
+<link rel="stylesheet" href="./section-transition.css?v=6">
 </head>
 <body id="top" class="motion-preview multipage-route route-home"><canvas id="motion-particles" aria-hidden="true"></canvas>
 <div class="intro-loader" aria-hidden="true">
@@ -121,7 +123,7 @@
   <div class="motion-hero-inner">
     <div class="motion-hero-top"><span class="motion-issue">SOFTWARE / AI / PEOPLE</span><span class="motion-availability"><i aria-hidden="true"></i>STUDYING AT THAMMASAT UNIVERSITY</span></div>
     <div class="motion-hero-grid">
-      <div class="motion-hero-copy">
+      <div id="section-view-heading" class="motion-hero-copy">
         <p class="motion-eyebrow">SOFTWARE ENGINEERING / AI / MACHINE LEARNING</p>
         <h1 id="motion-name"><span>Kitsanapuch</span><span class="motion-gradient-text">Chuaibamrung.</span></h1>
         <p class="motion-headline">I build web, mobile, and AI-enabled software.</p>

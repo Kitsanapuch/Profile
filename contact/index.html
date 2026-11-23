@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#090e1a">
-<script src="../intro-guard.js?v=7"></script>
+<style>@view-transition { navigation: auto; } @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }</style>
+<link rel="expect" href="#section-view-heading" blocking="render" media="(prefers-reduced-motion: no-preference)">
+<script src="../intro-guard.js?v=8"></script>
 <meta name="referrer" content="no-referrer">
 <title>Contact | Kitsanapuch Chuaibamrung</title>
 <meta name="description" content="Contact me about software engineering roles, AI projects, or collaboration.">
@@ -72,7 +74,7 @@
 <link rel="stylesheet" href="../sunrise-routes.css?v=2">
 <link rel="stylesheet" href="../sunrise-intro.css?v=3">
 <link rel="stylesheet" href="../theme-switch.css?v=3">
-<link rel="stylesheet" href="../section-transition.css?v=5">
+<link rel="stylesheet" href="../section-transition.css?v=6">
 </head>
 <body id="top" class="motion-preview multipage-route route-contact"><canvas id="motion-particles" aria-hidden="true"></canvas>
 <div class="intro-loader" aria-hidden="true">
@@ -114,7 +116,7 @@
 <div class="mobile-menu" id="mobileMenu"><a href="../">Home</a><a href="../experience/">Experience</a><a href="../activities/">Activities</a><a href="../projects/">Projects</a><a href="../skills/">Skills</a><a href="../certifications/">Certifications</a><a href="../papers/">Papers</a><a href="../contact/" aria-current="page">Contact</a></div>
 <main id="main-content" class="route-content"><div class="page" id="contact">
   <div class="contact-split">
-    <section class="contact-copy" data-scene aria-labelledby="contact-intro-heading">
+    <section id="section-view-heading" class="contact-copy" data-scene aria-labelledby="contact-intro-heading">
       <span class="route-eyebrow">07 / 07 · CONTACT</span>
       <h1 id="contact-intro-heading">Let's talk about your project.</h1>
       <p>I am available to discuss software engineering work, AI prototypes, and collaborative projects. Please include the problem you are addressing, the expected scope, and the timeline.</p>

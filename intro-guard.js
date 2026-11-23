@@ -60,7 +60,7 @@
     root.classList.add('section-capture', incoming ? 'section-capture-to' : 'section-capture-from');
     if (incoming) root.classList.add('section-bridged');
 
-    const heading = document.querySelector('.motion-hero-copy, .route-hero, .contact-copy');
+    const heading = document.getElementById('section-view-heading');
     if (heading) {
       const box = heading.getBoundingClientRect();
       const navBottom = document.querySelector('.nav')?.getBoundingClientRect().bottom ?? 0;
