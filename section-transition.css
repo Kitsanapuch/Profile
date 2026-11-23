@@ -1,7 +1,5 @@
 /* Connect the section introductions while leaving the page shell interactive. */
 @media (prefers-reduced-motion: no-preference) {
-  @view-transition { navigation: auto; }
-
   html.section-capture:not(.theme-switching) {
     view-transition-name: none;
   }
