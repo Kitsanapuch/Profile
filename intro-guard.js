@@ -74,9 +74,10 @@
     transition.ready.catch(() => {
       if (incoming && activeCapture === transition) root.classList.remove('section-bridged');
     });
-    transition.finished.then(() => {
+    const finishCapture = () => {
       if (activeCapture === transition) clearCapture();
-    });
+    };
+    transition.finished.then(finishCapture, finishCapture);
   }
 
   if (skipIntro && !reducedMotion.matches) updateDirection(window.navigation?.activation);
@@ -85,11 +86,18 @@
     return !root.classList.contains('intro-skip') && document.querySelector('.intro-loader');
   }
 
+  function skipCapture(transition) {
+    if (!transition) return;
+    transition.ready.catch(() => {});
+    transition.finished.catch(() => {});
+    transition.skipTransition();
+  }
+
   window.addEventListener('pageswap', ({ viewTransition }) => {
     if (!viewTransition) return;
     if (reducedMotion.matches || root.classList.contains('theme-switching') ||
       openingIsVisible()) {
-      viewTransition.skipTransition();
+      skipCapture(viewTransition);
       return;
     }
     captureSection(viewTransition, false);
@@ -98,7 +106,7 @@
   window.addEventListener('pagereveal', ({ viewTransition }) => {
     if (!viewTransition || reducedMotion.matches || openingIsVisible()) {
       clearCapture();
-      viewTransition?.skipTransition();
+      skipCapture(viewTransition);
       return;
     }
     updateDirection(window.navigation?.activation);
