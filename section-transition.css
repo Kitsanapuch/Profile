@@ -1,93 +1,35 @@
-/* Connect the section introductions while leaving the page shell interactive. */
+/* Animate the destination heading after normal navigation. */
 @media (prefers-reduced-motion: no-preference) {
-  html.section-capture:not(.theme-switching) {
-    view-transition-name: none;
+  html.intro-skip body.motion-preview :is(.motion-hero-copy, .route-hero, .contact-copy) {
+    transform-origin: 50% 55%;
+    animation: section-arrival .46s var(--portfolio-ease-out) both;
   }
 
-  html.section-capture-from:not(.theme-switching) .section-snapshot {
-    view-transition-name: portfolio-outgoing;
-  }
-
-  html.section-capture-to:not(.theme-switching) .section-snapshot {
-    view-transition-name: portfolio-incoming;
-  }
-
-  html.section-capture:not(.theme-switching)::view-transition {
-    pointer-events: none;
-  }
-
-  html.section-capture::view-transition-group(portfolio-outgoing),
-  html.section-capture::view-transition-group(portfolio-incoming) {
-    animation: none;
-  }
-
-  html.section-capture::view-transition-group(portfolio-incoming) { z-index: 1; }
-
-  html.section-capture::view-transition-old(portfolio-outgoing),
-  html.section-capture::view-transition-new(portfolio-incoming) {
-    mix-blend-mode: normal;
-  }
-
-  html.section-capture::view-transition-old(portfolio-outgoing) {
-    animation: section-handoff-out .25s var(--portfolio-ease-out) both;
-  }
-
-  html.section-capture::view-transition-new(portfolio-incoming) {
-    animation:
-      section-handoff-in .49s var(--portfolio-ease-out) both,
-      section-ink-in .39s .10s var(--portfolio-ease-out) both;
-  }
-
-  html.intro-skip:not(.section-bridged) body.motion-preview :is(.motion-hero-copy, .route-hero, .contact-copy) {
-    animation:
-      section-handoff-in .43s var(--portfolio-ease-out) both,
-      section-fallback-ink .43s var(--portfolio-ease-out) both;
-  }
-
-  html.section-capture-to body.motion-preview .nav::after,
-  html.intro-skip:not(.section-bridged) body.motion-preview .nav::after {
+  html.intro-skip body.motion-preview .nav::after {
     content: '';
     position: absolute;
     inset: auto 26% -1px;
-    height: 2px;
+    height: 1px;
     pointer-events: none;
     background: linear-gradient(90deg, transparent, #8be8ef65 34%, #a5b9fa 50%, #bba8fa56 66%, transparent);
     animation: section-light-pass .50s var(--portfolio-ease-out) both;
   }
 
-  html[data-theme="light"] body.motion-preview .nav::after {
+  html[data-theme="light"].intro-skip body.motion-preview .nav::after {
     background: linear-gradient(90deg, transparent, #e7aa5b68 34%, #c68635 50%, #e4b57268 66%, transparent);
   }
 
-  @keyframes section-handoff-out {
-    from { opacity: 1; transform: none; }
-    50% { opacity: .19; }
-    to {
-      opacity: 0;
-      transform: translate3d(calc(var(--section-direction, 1) * clamp(-21px, -1.9vw, -12px)), -4px, 0) scale(1.018);
-    }
-  }
-
-  @keyframes section-handoff-in {
+  @keyframes section-arrival {
     from {
-      transform: translate3d(calc(var(--section-direction, 1) * clamp(12px, 1.9vw, 21px)), 6px, 0) scale(.983);
+      opacity: .65;
+      transform: translate3d(calc(var(--section-direction, 1) * clamp(10px, 1.5vw, 18px)), 5px, 0) scale(.989);
     }
-    to { transform: none; }
-  }
-
-  @keyframes section-ink-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  @keyframes section-fallback-ink {
-    from { opacity: .55; }
-    to { opacity: 1; }
+    to { opacity: 1; transform: none; }
   }
 
   @keyframes section-light-pass {
     0% { opacity: 0; transform: translateX(calc(var(--section-direction, 1) * -49%)) scaleX(.68); }
-    30% { opacity: .88; }
+    30% { opacity: .48; }
     100% { opacity: 0; transform: translateX(calc(var(--section-direction, 1) * 49%)) scaleX(.9); }
   }
 }

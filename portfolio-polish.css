@@ -6,9 +6,9 @@ body.motion-preview {
 }
 
 body.motion-preview .nav {
-  background: linear-gradient(180deg, #090d1cef, #0b1124e8);
-  border-bottom-color: #9cdcff35;
-  box-shadow: 0 1px 0 #dcecff0d, 0 14px 36px #0205144d;
+  background: linear-gradient(180deg, #0b1020, #10182b);
+  border-bottom-color: #32415b;
+  box-shadow: 0 6px 18px #02051432;
 }
 body.motion-preview .nav-links a.active {
   color: #c4f5ff;
@@ -118,12 +118,12 @@ body.motion-preview .motion-ribbon .motion-ribbon-halo {
 }
 body.motion-preview .motion-ribbon .motion-ribbon-base {
   stroke-width: 2.3;
-  opacity: .95;
-  filter: drop-shadow(0 0 2px #93a4ff80);
+  opacity: .8;
+  filter: drop-shadow(0 0 1.5px #93a4ff4d);
 }
 body.motion-preview .motion-ribbon .motion-ribbon-flow {
   stroke-width: 2.8;
-  filter: drop-shadow(0 0 2px #a8f0ff);
+  filter: drop-shadow(0 0 1.5px #a8f0ff66);
 }
 body.motion-preview .motion-ribbon .motion-ribbon-node-ring {
   stroke: #b2ecff;

@@ -10,7 +10,7 @@ html[data-theme="light"] {
 
 html[data-theme="light"] body.motion-preview .route-hero::before {
   border-color: #aa762a32;
-  box-shadow: 0 0 0 70px #e6b45b0d, 0 0 0 160px #f9cd7610;
+  box-shadow: 0 0 0 58px #e6b45b0d;
 }
 
 html[data-theme="light"] body.motion-preview .route-hero-rule {

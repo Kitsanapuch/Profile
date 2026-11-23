@@ -234,7 +234,7 @@ html[data-theme="dark"] body.motion-preview .intro-loader {
 html[data-theme="dark"] body.motion-preview .intro-loader::before {
   background-color: #142a47;
   background-image:
-    linear-gradient(180deg, #080f20df, #1426448c 55%, #07111fc2),
+    linear-gradient(180deg, #0a1121dd, #15253e99 55%, #0a1422ba),
     url("assets/cinematic-clouds.jpg");
   background-size: auto, cover;
   background-position: center, var(--intro-night-image-x) bottom;
