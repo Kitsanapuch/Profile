@@ -66,8 +66,6 @@
     themeToggle.title = toggleLabel;
     try { sessionStorage.setItem(intentKey, theme); } catch (_) {}
     if (isLight) loadSunrise('high');
-    document.dispatchEvent(new Event('portfolio:theme-intent'));
-
     if (!animate) {
       applyPalette(theme);
       return;

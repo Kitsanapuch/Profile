@@ -1,10 +1,11 @@
 (() => {
  const reader=document.querySelector('.paper-reader');if(!reader)return;
  const frame=reader.querySelector('.paper-pages');let trigger;
- const pageCounts=new Map([
-  ['sensor-ssl', 8],
-  ['scamgraph-ai', 14],
-  ['ai-training-intelligence', 10],
+ const pageHeight=1462;
+ const paperLayouts=new Map([
+  ['sensor-ssl', {count:8, width:1033}],
+  ['scamgraph-ai', {count:14, width:1034}],
+  ['ai-training-intelligence', {count:10, width:1034}],
  ]);
  function fitPages(){
   const style=getComputedStyle(frame);
@@ -14,17 +15,23 @@
  new ResizeObserver(fitPages).observe(frame);
  document.querySelectorAll('[data-paper]').forEach(button=>button.addEventListener('click',()=>{
   const match=/^(?:\.\.\/)+papers\/([a-z0-9-]+)\.pdf(?:\?v=[a-zA-Z0-9-]+)?$/.exec(button.dataset.paper||'');
-  const count=match && pageCounts.get(match[1]);
-  if(!count)return;
+  const layout=match && paperLayouts.get(match[1]);
+  if(!layout)return;
   const pdf=new URL(button.dataset.paper,document.baseURI);
   const directory=new URL(match[1]+'/',new URL('.',pdf));
   trigger=button;reader.querySelector('h2').textContent=button.dataset.title;
   reader.querySelector('.paper-open').href=pdf.href;
   frame.replaceChildren();
-  for(let page=1;page<=count;page++){
-   const img=document.createElement('img');img.src=new URL('page-'+String(page).padStart(2,'0')+'.jpg',directory).href;
+  frame.style.setProperty('--paper-page-ratio', String(layout.width/pageHeight));
+  for(let page=1;page<=layout.count;page++){
+   const img=document.createElement('img');
+   img.width=layout.width;
+   img.height=pageHeight;
    img.alt=button.dataset.title+' — '+(document.documentElement.lang==='th'?'หน้า ':'Page ')+page;
-   img.loading=page===1?'eager':'lazy';frame.append(img);
+   img.loading=page===1?'eager':'lazy';
+   img.decoding='async';
+   img.src=new URL('page-'+String(page).padStart(2,'0')+'.jpg',directory).href;
+   frame.append(img);
   }
   frame.scrollTop=0;
   reader.showModal();document.body.classList.add('paper-reading');fitPages();
