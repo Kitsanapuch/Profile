@@ -1,7 +1,46 @@
-/* Cross-fade the sky on a separate layer while the controls stay interactive. */
+/* The horizon, light, and decorative foreground travel on separate planes. */
 @media (prefers-reduced-motion: no-preference) {
+  html {
+    --theme-shift-ease: cubic-bezier(.24, .5, .34, 1);
+    --theme-horizon-travel: 15px;
+  }
+
   .theme-sunrise {
-    transition: opacity 340ms cubic-bezier(.22, .61, .36, 1);
+    inset: -16px 0;
+    transform: translate3d(0, var(--theme-horizon-travel), 0) scale(1.018);
+    transform-origin: 62% 58%;
+  }
+
+  html.theme-shifting .theme-sunrise {
+    transition: opacity 420ms var(--theme-shift-ease), transform 450ms var(--theme-shift-ease);
+  }
+
+  html:is([data-theme-sky="light"], [data-theme="light"]:not([data-theme-sky])) .theme-sunrise {
+    transform: none;
+  }
+
+  html.theme-shifting body.motion-preview.multipage-route::after {
+    content: '';
+    position: fixed;
+    z-index: -1;
+    inset: -8%;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse at 67% 54%, #536ea85e, transparent 57%),
+      radial-gradient(ellipse at 29% 78%, #3655784f, transparent 50%);
+    animation: night-atmosphere 450ms var(--theme-shift-ease) both;
+  }
+
+  html.theme-shifting[data-theme-sky="light"] body.motion-preview.multipage-route::after {
+    background:
+      radial-gradient(ellipse at 67% 54%, #f2cc8166, transparent 57%),
+      radial-gradient(ellipse at 29% 78%, #f4d7a457, transparent 50%);
+    animation-name: dawn-atmosphere;
+  }
+
+  html.theme-shifting body.motion-preview .route-hero::before,
+  html.theme-shifting body.motion-preview .motion-hero::after {
+    animation: theme-near-plane 450ms var(--theme-shift-ease) both;
   }
 
   .theme-sunrise > img {
@@ -10,5 +49,26 @@
 
   @keyframes sunrise-photo-in {
     from { opacity: 0; }
+  }
+
+  @keyframes dawn-atmosphere {
+    0% { opacity: 0; transform: translate3d(4%, 3%, 0) scale(.96); }
+    37% { opacity: .65; }
+    100% { opacity: 0; transform: translate3d(-3%, -2%, 0) scale(1.04); }
+  }
+
+  @keyframes night-atmosphere {
+    0% { opacity: 0; transform: translate3d(-3%, -2%, 0) scale(1.04); }
+    37% { opacity: .65; }
+    100% { opacity: 0; transform: translate3d(4%, 3%, 0) scale(.96); }
+  }
+
+  @keyframes theme-near-plane {
+    0%, 100% { opacity: 1; translate: none; }
+    38% { opacity: .64; translate: 0 -7px; }
+  }
+
+  @media (max-width: 640px) {
+    html { --theme-horizon-travel: 8px; }
   }
 }
