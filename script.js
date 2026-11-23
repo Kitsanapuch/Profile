@@ -47,21 +47,40 @@
     document.body.appendChild(backToTop);
 
     let frame = 0;
+    let scrollRange = 0;
+    let lastPosition = -1;
+    let topVisible = false;
     function updateScroll() {
       frame = 0;
-      const total = root.scrollHeight - window.innerHeight;
-      const position = total > 0 ? Math.max(0, Math.min(1, window.scrollY / total)) : 0;
-      progress.style.transform = `scaleX(${position})`;
-      backToTop.classList.toggle('show', window.scrollY > 600);
+      const y = window.scrollY;
+      const ratio = scrollRange > 0 ? Math.max(0, Math.min(1, y / scrollRange)) : 0;
+      const position = Math.round(ratio * 10000) / 10000;
+      if (position !== lastPosition) {
+        progress.style.transform = `scaleX(${position})`;
+        lastPosition = position;
+      }
+      const showTop = y > 600;
+      if (showTop !== topVisible) {
+        backToTop.classList.toggle('show', showTop);
+        topVisible = showTop;
+      }
     }
 
     function scheduleScrollUpdate() {
       if (!frame) frame = requestAnimationFrame(updateScroll);
     }
 
+    function measureScrollRange() {
+      scrollRange = Math.max(0, root.scrollHeight - window.innerHeight);
+      scheduleScrollUpdate();
+    }
+
     window.addEventListener('scroll', scheduleScrollUpdate, { passive: true });
-    window.addEventListener('resize', scheduleScrollUpdate, { passive: true });
-    updateScroll();
+    window.addEventListener('resize', measureScrollRange, { passive: true });
+    window.addEventListener('pageshow', measureScrollRange);
+    if ('ResizeObserver' in window) new ResizeObserver(measureScrollRange).observe(document.body);
+    else window.addEventListener('load', measureScrollRange, { once: true });
+    measureScrollRange();
   }
 
   function initCardHighlight() {

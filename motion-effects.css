@@ -15,7 +15,6 @@ body.motion-preview {
   pointer-events: none;
   z-index: 2;
   opacity: .48;
-  mix-blend-mode: screen;
 }
 
 body.motion-preview .motion-shell,
@@ -32,6 +31,10 @@ body.motion-preview .motion-gradient-text {
   -webkit-text-fill-color: transparent;
   color: transparent;
   animation: motion-type-flow 7s ease-in-out infinite alternate;
+}
+
+body.motion-preview.ambient-scroll .motion-hero .motion-gradient-text {
+  animation-play-state: running, paused;
 }
 
 body.motion-preview .motion-ribbon {
