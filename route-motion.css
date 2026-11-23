@@ -97,7 +97,6 @@ body.motion-preview .route-hero::before {
   border: 1px solid #b4a5ff2e;
   border-radius: 50%;
   box-shadow: 0 0 0 58px #8588f808;
-  transform: translateY(calc(var(--route-scroll, 0) * 54px));
   pointer-events: none;
 }
 body.motion-preview .route-hero-rule {

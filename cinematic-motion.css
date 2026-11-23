@@ -2,15 +2,22 @@
 body.motion-preview.multipage-route { isolation: isolate; }
 
 body.motion-preview.multipage-route::before {
+  --night-position: center bottom;
+  --night-veil: linear-gradient(105deg, #070a15aa 0%, #070a1555 48%, #070a1500 84%);
   content: '';
   position: fixed;
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: url('assets/cinematic-clouds.jpg') center bottom / cover no-repeat;
-  filter: grayscale(1) sepia(.55) hue-rotate(174deg) saturate(.9) contrast(1.07) brightness(.86);
-  mask-image: linear-gradient(105deg, #0005 0%, #000a 48%, #000 84%);
+  background:
+    var(--night-veil),
+    url('assets/cinematic-clouds-night.webp') var(--night-position) / cover no-repeat;
   opacity: .65;
+}
+
+/* Keep night available during the crossfade and until the daylight photo loads. */
+html[data-theme="light"]:not(.theme-shifting) body.motion-preview.multipage-route:has(> .theme-sunrise > img)::before {
+  visibility: hidden;
 }
 
 body.motion-preview.multipage-route .motion-hero {
@@ -22,8 +29,8 @@ body.motion-preview.multipage-route .motion-hero {
 
 @media (max-width: 640px) {
   body.motion-preview.multipage-route::before {
-    background-position: 61% bottom;
-    mask-image: linear-gradient(115deg, #0009 0%, #000e 62%, #000);
+    --night-position: 61% bottom;
+    --night-veil: linear-gradient(115deg, #070a1566 0%, #070a1511 62%, #070a1500);
     opacity: .57;
   }
 }
