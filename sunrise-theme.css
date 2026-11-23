@@ -56,7 +56,9 @@ html[data-theme="light"] {
     linear-gradient(180deg, #edf2f64f, #f3e4cd1a 48%, #f4e5d170 100%);
 }
 
-html[data-theme="light"] .theme-sunrise { opacity: 1; }
+html:is([data-theme-sky="light"], [data-theme="light"]:not([data-theme-sky])) .theme-sunrise {
+  opacity: 1;
+}
 
 html[data-theme="light"] body.motion-preview #motion-particles { opacity: 0; }
 

@@ -16,8 +16,12 @@
     return !introOpen && !document.hidden && !reduced.matches;
   }
 
+  function showsDawn() {
+    return (root.dataset.themeSky ?? root.dataset.theme) === 'light';
+  }
+
   function scheduleDepth() {
-    if (!depthFrame && canAnimate() && (hero || root.dataset.theme === 'light')) {
+    if (!depthFrame && canAnimate() && (hero || showsDawn())) {
       depthFrame = requestAnimationFrame(updateDepth);
     }
   }
@@ -34,7 +38,7 @@
       }
     }
 
-    if (root.dataset.theme !== 'light') return;
+    if (!showsDawn()) return;
     const rawDepth = Math.min(1, Math.max(0, window.scrollY / Math.max(1, window.innerHeight)));
     const target = rawDepth * rawDepth * (3 - 2 * rawDepth);
     dawnDepth ??= target;
@@ -67,7 +71,7 @@
   window.addEventListener('scroll', scheduleDepth, { passive: true });
   window.addEventListener('resize', measureHero, { passive: true });
   document.addEventListener('visibilitychange', refreshDepth);
-  document.addEventListener('portfolio:theme-change', refreshDepth);
+  document.addEventListener('portfolio:theme-intent', refreshDepth);
   if (hero && 'ResizeObserver' in window) new ResizeObserver(measureHero).observe(hero);
   reduced.addEventListener('change', () => {
     if (reduced.matches) {
