@@ -1,57 +1,74 @@
+/* The horizon, light, and decorative foreground travel on separate planes. */
 @media (prefers-reduced-motion: no-preference) {
-  html.theme-switching::view-transition {
-    pointer-events: none;
+  html {
+    --theme-shift-ease: cubic-bezier(.24, .5, .34, 1);
+    --theme-horizon-travel: 15px;
   }
 
-  html.theme-switching::view-transition-group(root),
-  html.theme-switching::view-transition-old(root) {
-    animation: none;
+  .theme-sunrise {
+    inset: -16px 0;
+    transform: translate3d(0, var(--theme-horizon-travel), 0) scale(1.018);
+    transform-origin: 62% 58%;
   }
 
-  html.theme-switching::view-transition-image-pair(root) { isolation: isolate; }
-
-  html.theme-switching::view-transition-old(root),
-  html.theme-switching::view-transition-new(root) {
-    mix-blend-mode: normal;
-    pointer-events: none;
+  html.theme-shifting .theme-sunrise {
+    transition: opacity 420ms var(--theme-shift-ease), transform 450ms var(--theme-shift-ease);
   }
 
-  html.theme-switching::view-transition-old(root) { z-index: 1; }
-
-  html.theme-switching::view-transition-new(root) {
-    z-index: 2;
-    animation: theme-switch-iris .56s var(--portfolio-ease-out, cubic-bezier(.22,.7,.26,1)) both;
+  html:is([data-theme-sky="light"], [data-theme="light"]:not([data-theme-sky])) .theme-sunrise {
+    transform: none;
   }
 
-  @keyframes theme-switch-iris {
-    from {
-      clip-path: circle(0 at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
-      opacity: .68;
-    }
-    45% {
-      opacity: 1;
-    }
-    to {
-      clip-path: circle(var(--theme-reveal-limit, 150vmax) at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
-    }
-  }
-
-  .theme-switch-glow {
+  html.theme-shifting body.motion-preview.multipage-route::after {
+    content: '';
     position: fixed;
-    z-index: 2100;
-    inset: 0;
-    opacity: 0;
+    z-index: -1;
+    inset: -8%;
     pointer-events: none;
-    background: radial-gradient(
-      ellipse at var(--theme-center-x, 74%) var(--theme-center-y, 66%),
-      #f2d9ad, transparent 63%
-    );
+    background:
+      radial-gradient(ellipse at 67% 54%, #536ea85e, transparent 57%),
+      radial-gradient(ellipse at 29% 78%, #3655784f, transparent 50%);
+    animation: night-atmosphere 450ms var(--theme-shift-ease) both;
   }
 
-  .theme-switch-glow--dark {
-    background: radial-gradient(
-      ellipse at var(--theme-center-x, 25%) var(--theme-center-y, 28%),
-      #365475, transparent 65%
-    );
+  html.theme-shifting[data-theme-sky="light"] body.motion-preview.multipage-route::after {
+    background:
+      radial-gradient(ellipse at 67% 54%, #f2cc8166, transparent 57%),
+      radial-gradient(ellipse at 29% 78%, #f4d7a457, transparent 50%);
+    animation-name: dawn-atmosphere;
+  }
+
+  html.theme-shifting body.motion-preview .route-hero::before,
+  html.theme-shifting body.motion-preview .motion-hero::after {
+    animation: theme-near-plane 450ms var(--theme-shift-ease) both;
+  }
+
+  .theme-sunrise > img {
+    animation: sunrise-photo-in 240ms ease-out;
+  }
+
+  @keyframes sunrise-photo-in {
+    from { opacity: 0; }
+  }
+
+  @keyframes dawn-atmosphere {
+    0% { opacity: 0; transform: translate3d(4%, 3%, 0) scale(.96); }
+    37% { opacity: .65; }
+    100% { opacity: 0; transform: translate3d(-3%, -2%, 0) scale(1.04); }
+  }
+
+  @keyframes night-atmosphere {
+    0% { opacity: 0; transform: translate3d(-3%, -2%, 0) scale(1.04); }
+    37% { opacity: .65; }
+    100% { opacity: 0; transform: translate3d(4%, 3%, 0) scale(.96); }
+  }
+
+  @keyframes theme-near-plane {
+    0%, 100% { opacity: 1; translate: none; }
+    38% { opacity: .64; translate: 0 -7px; }
+  }
+
+  @media (max-width: 640px) {
+    html { --theme-horizon-travel: 8px; }
   }
 }

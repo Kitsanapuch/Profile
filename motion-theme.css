@@ -35,7 +35,7 @@
 }
 html { scroll-behavior: smooth; scroll-padding-top: 90px; }
 html[lang="th"] { --motion-display: 'Noto Sans Thai', Tahoma, sans-serif; }
-body.motion-preview { margin: 0; background: radial-gradient(ellipse at 60% 0%, #24275245, transparent 30%), radial-gradient(ellipse at 10% 47%, #142d4840, transparent 36%), var(--bg); background-attachment: fixed; color: var(--text); font-family: 'DM Sans', Inter, sans-serif; overflow-x: clip; }
+body.motion-preview { margin: 0; background: radial-gradient(ellipse at 60% 0%, #24275245, transparent 30%), radial-gradient(ellipse at 10% 47%, #142d4840, transparent 36%), #070a15; background-attachment: fixed; color: var(--text); font-family: 'DM Sans', Inter, sans-serif; overflow-x: clip; transition: none; }
 html[lang="th"] body.motion-preview { font-family: 'Noto Sans Thai', Tahoma, sans-serif; }
 body.motion-preview ::selection { background: #8b7dff; color: #fff; }
 body.motion-preview a:focus-visible, body.motion-preview button:focus-visible, body.motion-preview .zoomable:focus-visible { outline: 2px solid #91e9ff; outline-offset: 4px; }

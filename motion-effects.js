@@ -251,9 +251,11 @@
     function syncAnimation() {
       cancelAnimationFrame(raf);
       if (document.hidden || introOpen || isLightTheme()) return;
-      lastFrame = performance.now();
-      draw(lastFrame);
-      if (animateParticles()) raf = requestAnimationFrame(tick);
+      raf = requestAnimationFrame((time) => {
+        lastFrame = time;
+        draw(time);
+        if (animateParticles()) raf = requestAnimationFrame(tick);
+      });
     }
 
     function refreshParticles() {
