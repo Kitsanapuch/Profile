@@ -142,8 +142,6 @@ body.motion-preview .motion-capability-rail::before {
   inset: 0 0 auto;
   height: 2px;
   background: linear-gradient(90deg, #7feaf1, #9c92ff 52%, #e3a6d2);
-  background-size: 180% 100%;
-  animation: polish-rail-flow 9s ease-in-out infinite alternate;
 }
 body.motion-preview .motion-capability-inner {
   display: flex;
@@ -190,10 +188,6 @@ body.motion-preview .motion-capability-rail li span {
   color: #84c9e8;
   font-size: 9px;
 }
-@keyframes polish-rail-flow {
-  to { background-position: 100% 50%; }
-}
-
 body.motion-preview .studio-focus {
   background:
     radial-gradient(ellipse at 78% 18%, #554b9d31, transparent 38%),
