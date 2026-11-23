@@ -2,6 +2,10 @@
 (() => {
   'use strict';
 
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const saveData = Boolean(navigator.connection?.saveData);
+  let scrollActive = false;
+
   function initRibbon() {
     const svg = document.querySelector('svg.motion-ribbon');
     if (!svg) return;
@@ -95,14 +99,13 @@
       runner.setAttribute('r', '3.5');
       svg.appendChild(runner);
     }
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const saveData = Boolean(navigator.connection?.saveData);
     let raf = 0;
     let lastFrame = 0;
+    let elapsedTime = performance.now();
     let visible = true;
     let introOpen = Boolean(document.querySelector('.intro-loader'));
-    function render(time) {
-      const progress = reduced.matches || saveData ? .62 : (time % 11000) / 11000;
+    function render() {
+      const progress = reducedMotion.matches || saveData ? .62 : (elapsedTime % 11000) / 11000;
       const distance = length * progress;
       const point = base.getPointAtLength(distance);
       flow.setAttribute('stroke-dashoffset', String(trailLength - distance));
@@ -112,24 +115,27 @@
       runnerGlow.setAttribute('cy', point.y);
     }
     function frame(time) {
-      if (document.hidden || introOpen || reduced.matches || saveData || !visible) return;
+      if (document.hidden || introOpen || reducedMotion.matches || saveData || !visible || scrollActive) return;
       raf = requestAnimationFrame(frame);
-      if (time - lastFrame < 30) return;
+      const interval = time - lastFrame;
+      if (interval < 30) return;
+      elapsedTime += interval;
       lastFrame = time;
-      render(time);
+      render();
     }
     function sync() {
       cancelAnimationFrame(raf);
-      if (document.hidden || introOpen) return;
-      render(performance.now());
-      if (!reduced.matches && !saveData && visible) raf = requestAnimationFrame(frame);
+      if (document.hidden || introOpen || !visible || scrollActive) return;
+      render();
+      lastFrame = performance.now();
+      if (!reducedMotion.matches && !saveData) raf = requestAnimationFrame(frame);
     }
     if (introOpen) document.addEventListener('portfolio:intro-end', () => {
       introOpen = false;
       sync();
     }, { once: true });
     document.addEventListener('visibilitychange', sync);
-    if (reduced.addEventListener) reduced.addEventListener('change', sync);
+    reducedMotion.addEventListener?.('change', sync);
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver((entries) => {
         visible = entries[0].isIntersecting;
@@ -138,6 +144,7 @@
       observer.observe(svg.closest('.motion-hero') || svg);
     }
     sync();
+    return sync;
   }
 
   function initParticles() {
@@ -146,9 +153,7 @@
     const context = canvas.getContext('2d', { alpha: true });
     if (!context) return;
     canvas.setAttribute('aria-hidden', 'true');
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const compact = window.matchMedia('(max-width: 760px), (pointer: coarse)');
-    const saveData = Boolean(navigator.connection && navigator.connection.saveData);
     const colors = ['#83e9ff', '#9c9cff', '#d8a1ff', '#ffc2bd'];
     const sprites = colors.map((color) => {
       const sprite = document.createElement('canvas');
@@ -171,10 +176,11 @@
     let particles = [];
     let raf = 0;
     let lastFrame = 0;
+    let elapsedTime = performance.now();
     let introOpen = Boolean(document.querySelector('.intro-loader'));
 
     function animateParticles() {
-      return !reduceMotion.matches && !compact.matches && !saveData;
+      return !reducedMotion.matches && !compact.matches && !saveData;
     }
 
     function random(seed) {
@@ -200,7 +206,6 @@
         wave: random(index + 307) * Math.PI * 2,
         color: Math.floor(random(index + 413) * colors.length),
         alpha: .48 + random(index + 519) * .38,
-        depth: .02 + random(index + 629) * .08,
         signal: random(index + 757) > .9
       }));
     }
@@ -209,13 +214,11 @@
       context.clearRect(0, 0, width, height);
       const seconds = time / 1000;
       const active = animateParticles();
-      const scrollY = active ? window.scrollY : 0;
       for (const p of particles) {
         const driftX = active ? Math.sin(seconds * p.speed + p.wave) * (4 + p.size * 2) : 0;
         const driftY = active ? Math.cos(seconds * p.speed * .63 + p.wave) * 7 : 0;
-        const parallax = active ? (scrollY * p.depth) % Math.max(height, 1) : 0;
         const x = p.x + driftX;
-        const y = (p.y - parallax + driftY + height) % height;
+        const y = (p.y + driftY + height) % height;
         const twinkle = active ? .76 + Math.sin(seconds * (1.2 + p.speed) + p.wave) * .18 : 1;
         const size = p.size * (width < 700 ? 8 : 10);
         context.globalAlpha = p.alpha * twinkle * .82;
@@ -240,20 +243,22 @@
     const isLightTheme = () => document.documentElement.dataset.theme === 'light';
 
     function tick(time) {
-      if (document.hidden || introOpen || !animateParticles() || isLightTheme()) return;
+      if (document.hidden || introOpen || !animateParticles() || isLightTheme() || scrollActive) return;
       raf = requestAnimationFrame(tick);
       const elapsed = time - lastFrame;
       if (elapsed < 41) return;
-      lastFrame = time - elapsed % 41;
-      draw(time);
+      const interval = elapsed - elapsed % 41;
+      lastFrame += interval;
+      elapsedTime += interval;
+      draw(elapsedTime);
     }
 
     function syncAnimation() {
       cancelAnimationFrame(raf);
-      if (document.hidden || introOpen || isLightTheme()) return;
+      if (document.hidden || introOpen || isLightTheme() || (scrollActive && animateParticles())) return;
       raf = requestAnimationFrame((time) => {
         lastFrame = time;
-        draw(time);
+        draw(elapsedTime);
         if (animateParticles()) raf = requestAnimationFrame(tick);
       });
     }
@@ -275,14 +280,44 @@
       introOpen = false;
       syncAnimation();
     }, { once: true });
-    reduceMotion.addEventListener?.('change', refreshParticles);
+    reducedMotion.addEventListener?.('change', refreshParticles);
     compact.addEventListener?.('change', refreshParticles);
     refreshParticles();
+    return () => {
+      if (animateParticles()) syncAnimation();
+    };
   }
 
   function start() {
-    initRibbon();
-    initParticles();
+    const effects = [initRibbon(), initParticles()].filter(Boolean);
+    if (!effects.length || saveData) return;
+
+    let idleTimer = 0;
+    function setScrollActive(active) {
+      if (scrollActive === active) return;
+      scrollActive = active;
+      document.body.classList.toggle('ambient-scroll', active);
+      effects.forEach((sync) => sync());
+    }
+
+    function endScroll() {
+      clearTimeout(idleTimer);
+      setScrollActive(false);
+    }
+
+    // Leave the last frame visible while prioritizing native scroll rendering.
+    window.addEventListener('scroll', () => {
+      if (document.hidden || reducedMotion.matches) return;
+      setScrollActive(true);
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(endScroll, 160);
+    }, { passive: true });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) endScroll();
+    });
+    reducedMotion.addEventListener?.('change', () => {
+      if (reducedMotion.matches) endScroll();
+    });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
   else start();
