@@ -3,6 +3,10 @@
   'use strict';
   const isFile = location.protocol === 'file:';
 
+  function markInternalNavigation() {
+    try { sessionStorage.setItem('kitsanapuch-skip-intro-once', '1'); } catch (_) {}
+  }
+
   // Keep a section's hash when switching languages.
   document.querySelectorAll('a[data-language]').forEach((link) => {
     const target = new URL(link.href, location.href);
@@ -18,7 +22,7 @@
     try {
       const destination = new URL(link.href, location.href);
       if (destination.origin === location.origin && destination.pathname !== location.pathname) {
-        sessionStorage.setItem('kitsanapuch-skip-intro-once', '1');
+        markInternalNavigation();
       }
     } catch (_) {
       // Navigation still works if session storage is disabled.
@@ -59,6 +63,7 @@
     if (route) {
       const target = new URL(route + '/' + (isFile ? 'index.html' : ''), location.href);
       target.hash = id;
+      markInternalNavigation();
       location.replace(target.href);
     }
   }
