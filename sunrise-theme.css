@@ -29,9 +29,9 @@ html[data-theme="light"] body.motion-preview {
 
 html[data-theme="light"] body.motion-preview.multipage-route::before {
   inset: -34px 0;
-  opacity: calc(.96 - var(--dawn-depth, 0) * .26);
+  opacity: calc(.9 - var(--dawn-depth, 0) * .22);
   background: url('assets/sunrise-clouds.jpg') var(--dawn-image-x) center / cover no-repeat;
-  filter: none;
+  filter: saturate(.87);
   mix-blend-mode: normal;
   mask-image: none;
 }
@@ -44,8 +44,8 @@ html[data-theme="light"] body.motion-preview.multipage-route::after {
   pointer-events: none;
   opacity: calc(.68 + var(--dawn-depth, 0) * .25);
   background:
-    linear-gradient(105deg, #fff9eced 0%, #fff8e8a8 31%, transparent 69%),
-    linear-gradient(180deg, #f1f6fa4f, #fff2d011 45%, #fff1da70 100%);
+    linear-gradient(105deg, #f8efe2e6 0%, #faf0dfa8 35%, #f9e4c92b 73%),
+    linear-gradient(180deg, #edf2f64f, #f3e4cd1a 48%, #f4e5d170 100%);
 }
 
 html[data-theme="light"] body.motion-preview #motion-particles { opacity: 0; }
@@ -60,7 +60,7 @@ html[data-theme="light"] body.motion-preview :is(a, button, input, textarea, .zo
 }
 
 html[data-theme="light"] body.motion-preview .nav {
-  background: linear-gradient(180deg, #fffdf5f5, #fff5e4ed);
+  background: linear-gradient(180deg, #faf4e8, #f5ead8);
   border-bottom-color: #a46f3445;
   box-shadow: 0 1px #fff9, 0 8px 30px #69441a12;
 }

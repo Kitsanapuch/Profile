@@ -1,5 +1,5 @@
 /* Multipage motion and depth. The existing blue, violet, and rose palette stays intact. */
-body.motion-preview #motion-particles { opacity: .26; }
+body.motion-preview #motion-particles { opacity: .21; }
 body.motion-preview .motion-ribbon { opacity: .42; }
 body.motion-preview .motion-ribbon .motion-ribbon-flow { opacity: .7; }
 body.motion-preview a:focus-visible,
@@ -40,9 +40,14 @@ body.motion-preview .nav-links a {
   border: 1px solid transparent;
   border-radius: 999px;
   color: #bbc5da;
-  font: 600 10px/1.1 var(--motion-mono);
+  font: 600 11px/1.2 var(--motion-mono);
   letter-spacing: -.015em;
   transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+html[lang="th"] body.motion-preview .nav-links a {
+  font-family: var(--motion-display);
+  line-height: 1.35;
+  letter-spacing: normal;
 }
 body.motion-preview .nav-links a:hover {
   color: #f0f5ff;
@@ -91,7 +96,7 @@ body.motion-preview .route-hero::before {
   top: -54%;
   border: 1px solid #b4a5ff2e;
   border-radius: 50%;
-  box-shadow: 0 0 0 70px #8588f80a, 0 0 0 160px #72c3e906;
+  box-shadow: 0 0 0 58px #8588f808;
   transform: translateY(calc(var(--route-scroll, 0) * 54px));
   pointer-events: none;
 }
@@ -100,16 +105,24 @@ body.motion-preview .route-hero-rule {
 }
 body.motion-preview .route-summary-card,
 body.motion-preview .route-content .card {
-  box-shadow: 0 18px 44px #0002, inset 0 1px #ffffff08;
+  box-shadow: 0 12px 32px #0003, inset 0 1px #ffffff0c;
   transition: transform .35s cubic-bezier(.2,.8,.2,1), border-color .3s ease, box-shadow .3s ease;
 }
 @media (hover: hover) {
   body.motion-preview .route-summary-card:hover,
   body.motion-preview .route-content .card:hover {
     transform: translateY(-3px);
-    border-color: #91cfff8a;
-    box-shadow: 0 23px 50px #0004, 0 0 24px #7a90ff0e;
+    border-color: #91cfff70;
+    box-shadow: 0 18px 38px #0005, inset 0 1px #ffffff12;
   }
+}
+/* Keep interface details readable when the viewer indicates focus. */
+body.motion-preview :is(.route-content, .home-summary) img.zoomable:is(:hover, :focus-visible) {
+  opacity: 1;
+}
+html[lang="th"] body.motion-preview :is(.route-hero h1, .studio-focus-head h2, .home-summary-head h2) {
+  line-height: 1.24;
+  letter-spacing: -.025em;
 }
 body.motion-preview .route-summary-card:hover .route-summary-link span {
   transform: translate(4px, -4px);
@@ -154,7 +167,7 @@ body.motion-preview .route-summary-card:hover .route-summary-link span {
 }
 body.motion-preview .scene-guide { display: none; }
 @media (max-width: 1300px) {
-  body.motion-preview .nav-links a { padding-inline: 7px; font-size: 9px; }
+  body.motion-preview .nav-links a { padding-inline: 7px; }
   body.motion-preview .brand-name { max-width: 150px; font-size: 12px; }
 }
 @media (max-width: 1050px) {
@@ -185,8 +198,7 @@ body.motion-preview .scene-guide { display: none; }
   body.motion-preview .nav-links::-webkit-scrollbar { display: none; }
   body.motion-preview .nav-links a {
     flex: 0 0 auto;
-    font-size: 10px;
-    padding: 8px 11px;
+    padding: 9px 11px;
   }
   body.motion-preview .nav-burger { display: none; }
   body.motion-preview .brand-name { max-width: none; }

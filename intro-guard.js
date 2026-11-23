@@ -45,71 +45,9 @@
     }
   }
 
-  let activeCapture;
-  let snapshot;
-  function clearCapture() {
-    root.classList.remove('section-capture', 'section-capture-from', 'section-capture-to');
-    snapshot?.classList.remove('section-snapshot');
-    snapshot = null;
-    activeCapture = null;
-  }
-
-  function captureSection(transition, incoming) {
-    clearCapture();
-    activeCapture = transition;
-    root.classList.add('section-capture', incoming ? 'section-capture-to' : 'section-capture-from');
-    if (incoming) root.classList.add('section-bridged');
-
-    const heading = document.getElementById('section-view-heading');
-    if (heading) {
-      const box = heading.getBoundingClientRect();
-      const navBottom = document.querySelector('.nav')?.getBoundingClientRect().bottom ?? 0;
-      // Avoid drawing a scrolled-away heading above the live sticky menu.
-      if (box.height > 0 && box.top >= navBottom - 1 && box.top < window.innerHeight) {
-        snapshot = heading;
-        snapshot.classList.add('section-snapshot');
-      }
-    }
-
-    transition.ready.catch(() => {
-      if (incoming && activeCapture === transition) root.classList.remove('section-bridged');
-    });
-    const finishCapture = () => {
-      if (activeCapture === transition) clearCapture();
-    };
-    transition.finished.then(finishCapture, finishCapture);
-  }
-
   if (skipIntro && !reducedMotion.matches) updateDirection(window.navigation?.activation);
-
-  function openingIsVisible() {
-    return !root.classList.contains('intro-skip') && document.querySelector('.intro-loader');
-  }
-
-  function skipCapture(transition) {
-    if (!transition) return;
-    transition.ready.catch(() => {});
-    transition.finished.catch(() => {});
-    transition.skipTransition();
-  }
-
-  window.addEventListener('pageswap', ({ viewTransition }) => {
-    if (!viewTransition) return;
-    if (reducedMotion.matches || root.classList.contains('theme-switching') ||
-      openingIsVisible()) {
-      skipCapture(viewTransition);
-      return;
-    }
-    captureSection(viewTransition, false);
-  });
-
-  window.addEventListener('pagereveal', ({ viewTransition }) => {
-    if (!viewTransition || reducedMotion.matches || openingIsVisible()) {
-      clearCapture();
-      skipCapture(viewTransition);
-      return;
-    }
+  window.addEventListener('pagereveal', () => {
+    if (!root.classList.contains('intro-skip') || reducedMotion.matches) return;
     updateDirection(window.navigation?.activation);
-    captureSection(viewTransition, true);
   });
 })();
