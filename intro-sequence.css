@@ -30,6 +30,7 @@ body.motion-preview .intro-loader::after {
 /* Keep the horizon fixed while the intro dissolves into the page's backdrop. */
 body.motion-preview .intro-loader::before {
   background: radial-gradient(ellipse at 50% 58%, #152642, #080d1a 70%);
+  animation-name: intro-background-handoff;
 }
 
 body.motion-preview .intro-loader::after {
@@ -185,6 +186,10 @@ body.motion-preview .intro-progress-track span {
 @keyframes intro-backdrop-out {
   from { opacity: 1; }
   to { opacity: 0; }
+}
+@keyframes intro-background-handoff {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(1.026); }
 }
 @keyframes intro-cover {
   from { visibility: visible; }

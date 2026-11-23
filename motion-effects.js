@@ -147,6 +147,7 @@
     if (!context) return;
     canvas.setAttribute('aria-hidden', 'true');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const compact = window.matchMedia('(max-width: 760px), (pointer: coarse)');
     const saveData = Boolean(navigator.connection && navigator.connection.saveData);
     const colors = ['#83e9ff', '#9c9cff', '#d8a1ff', '#ffc2bd'];
     const sprites = colors.map((color) => {
@@ -167,12 +168,14 @@
 
     let width = 0;
     let height = 0;
-    let dpr = 1;
     let particles = [];
     let raf = 0;
     let lastFrame = 0;
-    let scrollY = window.scrollY || 0;
     let introOpen = Boolean(document.querySelector('.intro-loader'));
+
+    function animateParticles() {
+      return !reduceMotion.matches && !compact.matches && !saveData;
+    }
 
     function random(seed) {
       const value = Math.sin(seed * 78.233 + 27.861) * 43758.5453;
@@ -182,13 +185,13 @@
     function configure() {
       width = window.innerWidth;
       height = window.innerHeight;
-      const pixelCap = Math.max(1, Math.sqrt(4000000 / Math.max(1, width * height)));
-      dpr = Math.min(window.devicePixelRatio || 1, 2, pixelCap);
+      const pixelCap = Math.sqrt(2000000 / Math.max(1, width * height));
+      const dpr = Math.min(window.devicePixelRatio || 1, compact.matches ? 1 : 1.5, pixelCap);
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
-      const fullCount = Math.max(18, Math.min(44, Math.round(width * height / 26000)));
-      const count = reduceMotion.matches || saveData ? Math.max(12, Math.round(fullCount / 2)) : fullCount;
+      const fullCount = Math.max(18, Math.min(38, Math.round(width * height / 26000)));
+      const count = animateParticles() ? fullCount : Math.max(12, Math.round(fullCount / 2));
       particles = Array.from({ length: count }, (_, index) => ({
         x: random(index + 1) * width,
         y: random(index + 87) * height,
@@ -200,13 +203,13 @@
         depth: .02 + random(index + 629) * .08,
         signal: random(index + 757) > .9
       }));
-      if (!document.hidden && !introOpen && !isLightTheme() && (reduceMotion.matches || saveData)) draw(0);
     }
 
     function draw(time) {
       context.clearRect(0, 0, width, height);
       const seconds = time / 1000;
-      const active = !reduceMotion.matches && !saveData;
+      const active = animateParticles();
+      const scrollY = active ? window.scrollY : 0;
       for (const p of particles) {
         const driftX = active ? Math.sin(seconds * p.speed + p.wave) * (4 + p.size * 2) : 0;
         const driftY = active ? Math.cos(seconds * p.speed * .63 + p.wave) * 7 : 0;
@@ -237,24 +240,32 @@
     const isLightTheme = () => document.documentElement.dataset.theme === 'light';
 
     function tick(time) {
-      if (document.hidden || introOpen || reduceMotion.matches || saveData || isLightTheme()) return;
+      if (document.hidden || introOpen || !animateParticles() || isLightTheme()) return;
       raf = requestAnimationFrame(tick);
-      if (time - lastFrame < 30) return; // Cap at roughly 30 fps.
-      lastFrame = time;
+      const elapsed = time - lastFrame;
+      if (elapsed < 41) return;
+      lastFrame = time - elapsed % 41;
       draw(time);
     }
 
     function syncAnimation() {
       cancelAnimationFrame(raf);
       if (document.hidden || introOpen || isLightTheme()) return;
-      draw(performance.now());
-      if (!reduceMotion.matches && !saveData) raf = requestAnimationFrame(tick);
+      lastFrame = performance.now();
+      draw(lastFrame);
+      if (animateParticles()) raf = requestAnimationFrame(tick);
     }
 
-    window.addEventListener('resize', () => { configure(); syncAnimation(); }, { passive: true });
-    window.addEventListener('scroll', () => {
-      scrollY = window.scrollY || 0;
-      if (!document.hidden && !introOpen && !isLightTheme() && (reduceMotion.matches || saveData)) draw(0);
+    function refreshParticles() {
+      configure();
+      syncAnimation();
+    }
+
+    window.addEventListener('resize', () => {
+      // Keep the static backing layer while mobile browser chrome changes height.
+      if (window.innerWidth !== width || (!compact.matches && window.innerHeight !== height)) {
+        refreshParticles();
+      }
     }, { passive: true });
     document.addEventListener('visibilitychange', syncAnimation);
     document.addEventListener('portfolio:theme-change', syncAnimation);
@@ -262,9 +273,9 @@
       introOpen = false;
       syncAnimation();
     }, { once: true });
-    if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', () => { configure(); syncAnimation(); });
-    configure();
-    syncAnimation();
+    reduceMotion.addEventListener?.('change', refreshParticles);
+    compact.addEventListener?.('change', refreshParticles);
+    refreshParticles();
   }
 
   function start() {

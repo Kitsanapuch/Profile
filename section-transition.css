@@ -64,13 +64,13 @@
     50% { opacity: .19; }
     to {
       opacity: 0;
-      transform: translate3d(calc(var(--section-direction, 1) * clamp(-21px, -1.9vw, -12px)), -4px, 0) scale(.992);
+      transform: translate3d(calc(var(--section-direction, 1) * clamp(-21px, -1.9vw, -12px)), -4px, 0) scale(1.018);
     }
   }
 
   @keyframes section-handoff-in {
     from {
-      transform: translate3d(calc(var(--section-direction, 1) * clamp(12px, 1.9vw, 21px)), 6px, 0) scale(.992);
+      transform: translate3d(calc(var(--section-direction, 1) * clamp(12px, 1.9vw, 21px)), 6px, 0) scale(.983);
     }
     to { transform: none; }
   }
