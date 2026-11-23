@@ -42,15 +42,14 @@ html[data-theme="light"] {
   height: calc(100% + 68px);
   object-fit: cover;
   object-position: var(--dawn-image-x) center;
-  opacity: calc(.9 - var(--dawn-depth, 0) * .22);
-  filter: saturate(.87);
+  opacity: .84;
 }
 
 .theme-sunrise::after {
   content: '';
   position: absolute;
   inset: 0;
-  opacity: calc(.68 + var(--dawn-depth, 0) * .25);
+  opacity: .78;
   background:
     linear-gradient(105deg, #f8efe2e6 0%, #faf0dfa8 35%, #f9e4c92b 73%),
     linear-gradient(180deg, #edf2f64f, #f3e4cd1a 48%, #f4e5d170 100%);
@@ -291,11 +290,6 @@ html[data-theme="light"] body.motion-preview .route-summary-card { box-shadow: v
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .theme-sunrise > img {
-    transform: translate3d(0, calc(var(--dawn-depth, 0) * -26px), 0)
-      scale(calc(1 + var(--dawn-depth, 0) * .065));
-  }
-
   html[data-theme="light"]:not(.intro-skip):not(.intro-finished) {
     --dawn-scan-delay: calc(var(--intro-reveal) + 145ms);
   }

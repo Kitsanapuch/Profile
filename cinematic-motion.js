@@ -19,9 +19,7 @@
   let scrollPosition = window.scrollY;
   let start = 0;
   let distance = 1;
-  let current = null;
   let lastDrawn = null;
-  let lastTime = null;
   let frame = 0;
 
   const clamp = (value) => Math.max(0, Math.min(1, value));
@@ -102,24 +100,18 @@
   function suspend() {
     if (frame) cancelAnimationFrame(frame);
     frame = 0;
-    lastTime = null;
   }
 
-  function paint(now) {
+  function scrollProgress() {
+    return Math.round(ease(clamp((scrollPosition - start) / distance)) * 10000) / 10000;
+  }
+
+  function paint() {
     frame = 0;
     if (!canAnimate()) return;
     if (needsMeasurement) measureScene();
 
-    const target = clamp((scrollPosition - start) / distance);
-    const elapsed = lastTime === null ? 1000 / 60 : Math.min(now - lastTime, 50);
-    lastTime = now;
-
-    // Use elapsed time so the camera travels at the same speed on 60Hz and 120Hz screens.
-    current = current === null || Math.abs(current - target) < .003
-      ? target
-      : target + (current - target) * Math.exp(-elapsed / 52);
-
-    const progress = Math.round(ease(current) * 10000) / 10000;
+    const progress = scrollProgress();
     if (progress !== lastDrawn) {
       scene.style.setProperty('--cinema-progress', progress);
       lastDrawn = progress;
@@ -132,9 +124,6 @@
         showCallouts = shouldShow;
       }
     }
-
-    if (current !== target) schedule();
-    else lastTime = null;
   }
 
   function schedule() {
@@ -163,20 +152,14 @@
     }
 
     if (enabled) refreshLayout();
-    else {
-      current = null;
-      suspend();
-    }
+    else suspend();
   }
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(([entry]) => {
       visible = entry.isIntersecting;
       if (visible) refreshLayout();
-      else {
-        current = null;
-        suspend();
-      }
+      else suspend();
     }, { rootMargin: '100px' }).observe(subject);
   }
 
@@ -208,7 +191,7 @@
   });
   window.addEventListener('scroll', () => {
     scrollPosition = window.scrollY;
-    if (needsMeasurement || current !== clamp((scrollPosition - start) / distance)) schedule();
+    if (needsMeasurement || lastDrawn !== scrollProgress()) schedule();
   }, { passive: true });
   window.addEventListener('resize', refreshLayout, { passive: true });
   window.addEventListener('pageshow', refreshLayout);
