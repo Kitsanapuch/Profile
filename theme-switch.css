@@ -1,57 +1,14 @@
+/* Cross-fade the sky on a separate layer while the controls stay interactive. */
 @media (prefers-reduced-motion: no-preference) {
-  html.theme-switching::view-transition {
-    pointer-events: none;
+  .theme-sunrise {
+    transition: opacity 340ms cubic-bezier(.22, .61, .36, 1);
   }
 
-  html.theme-switching::view-transition-group(root),
-  html.theme-switching::view-transition-old(root) {
-    animation: none;
+  .theme-sunrise > img {
+    animation: sunrise-photo-in 240ms ease-out;
   }
 
-  html.theme-switching::view-transition-image-pair(root) { isolation: isolate; }
-
-  html.theme-switching::view-transition-old(root),
-  html.theme-switching::view-transition-new(root) {
-    mix-blend-mode: normal;
-    pointer-events: none;
-  }
-
-  html.theme-switching::view-transition-old(root) { z-index: 1; }
-
-  html.theme-switching::view-transition-new(root) {
-    z-index: 2;
-    animation: theme-switch-iris .56s var(--portfolio-ease-out, cubic-bezier(.22,.7,.26,1)) both;
-  }
-
-  @keyframes theme-switch-iris {
-    from {
-      clip-path: circle(0 at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
-      opacity: .68;
-    }
-    45% {
-      opacity: 1;
-    }
-    to {
-      clip-path: circle(var(--theme-reveal-limit, 150vmax) at var(--theme-center-x, 74%) var(--theme-center-y, 66%));
-    }
-  }
-
-  .theme-switch-glow {
-    position: fixed;
-    z-index: 2100;
-    inset: 0;
-    opacity: 0;
-    pointer-events: none;
-    background: radial-gradient(
-      ellipse at var(--theme-center-x, 74%) var(--theme-center-y, 66%),
-      #f2d9ad, transparent 63%
-    );
-  }
-
-  .theme-switch-glow--dark {
-    background: radial-gradient(
-      ellipse at var(--theme-center-x, 25%) var(--theme-center-y, 28%),
-      #365475, transparent 65%
-    );
+  @keyframes sunrise-photo-in {
+    from { opacity: 0; }
   }
 }
