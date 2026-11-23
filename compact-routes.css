@@ -61,20 +61,29 @@ body.route-activities .activity-gallery {
   margin-block: 15px 8px;
 }
 
-body.route-activities .activity-gallery img:not([src*="certificate"], .certificate-figure img) {
-  height: 110px;
+body.route-activities .activity-gallery > figure:not(.certificate-figure) > img {
+  height: auto;
+  aspect-ratio: var(--activity-photo-ratio, 3 / 2);
+  object-position: center 38%;
 }
 
 body.route-activities .activity-photo {
-  max-width: 265px;
+  max-width: 255px;
 }
 
 body.route-activities .activity-photo img {
-  max-height: 190px;
+  max-height: none;
 }
 
 body.route-activities .activity-gallery .certificate-figure {
-  max-width: 380px;
+  width: min(100%, 350px);
+  padding: clamp(6px, 1.4vw, 10px);
+}
+
+body.route-activities .activity-gallery .certificate-figure img {
+  aspect-ratio: auto;
+  border: 0;
+  box-shadow: none;
 }
 
 body.route-projects .studio-focus-inner {
@@ -105,12 +114,27 @@ body.route-projects .studio-focus-controls {
   padding-top: 17px;
 }
 
+body.route-projects .studio-focus-visual {
+  justify-content: center;
+}
+
+body.route-projects :is(.studio-focus-window, .studio-visual-note) {
+  width: min(100%, 540px);
+  margin-inline: auto;
+}
+
+body.route-projects .studio-focus-window {
+  flex: none;
+}
+
 body.route-projects .studio-image-viewport {
-  min-height: 218px;
+  min-height: 0;
+  aspect-ratio: 16 / 9;
 }
 
 body.route-projects .studio-image-viewport img {
-  max-height: 280px;
+  height: 100%;
+  max-height: none;
 }
 
 body.route-projects .studio-tab {
@@ -126,29 +150,47 @@ body.route-projects .project-title {
 }
 
 body.route-projects .project-thumb {
-  max-width: 425px;
-  height: 172px;
+  width: min(100%, 370px);
+  height: auto;
+  aspect-ratio: 3 / 2;
+  margin-inline: auto;
 }
 
 body.route-projects :is(.myschool-screen, .physics-showcase) {
-  max-width: 620px;
+  width: min(100%, 540px);
 }
 
-body.route-projects .physics-showcase img {
-  max-height: 302px;
+body.route-projects .physics-admin-feature {
+  width: min(100%, 560px);
+  margin-inline: auto;
 }
 
 body.route-projects .physics-admin-feature img {
-  max-height: 268px;
+  display: block;
+  height: auto;
+  max-height: none;
 }
 
-body.route-projects .myschool-screen img {
-  max-height: 215px;
+/* Match each screenshot's rendered height to its responsive frame width. */
+body.route-projects .physics-screen-grid img {
+  height: auto;
+  object-fit: contain;
+  background: #f1f3f9;
 }
 
-/* Match the specificity of the showcase's existing height override. */
-body.route-projects .scamgraph-showcase img {
-  max-height: 270px !important;
+body.route-projects .myschool-logo {
+  justify-self: center;
+}
+
+body.route-projects .shot-gallery.shot-gallery-2 {
+  grid-template-columns: minmax(0, 1fr);
+  width: min(100%, 370px);
+  padding: 8px;
+  margin-inline: auto;
+}
+
+body.route-projects .shot-gallery-2 img {
+  max-height: none;
 }
 
 body.route-skills .route-skill-grid {
@@ -251,20 +293,12 @@ body.route-contact #contact-form button[type="submit"] {
     padding-bottom: 54px;
   }
 
-  body.route-activities .activity-gallery img:not([src*="certificate"], .certificate-figure img) {
-    height: 98px;
+  body.route-activities .activity-gallery {
+    --activity-photo-ratio: 4 / 3;
   }
 
   body.route-projects .studio-focus-head > p {
     margin-top: 14px;
-  }
-
-  body.route-projects .studio-image-viewport {
-    min-height: 164px;
-  }
-
-  body.route-projects .studio-image-viewport img {
-    max-height: 225px;
   }
 
   body.route-projects .studio-tab {
