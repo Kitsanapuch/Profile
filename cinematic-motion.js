@@ -115,9 +115,9 @@
     lastTime = now;
 
     // Use elapsed time so the camera travels at the same speed on 60Hz and 120Hz screens.
-    current = current === null || Math.abs(current - target) < .002
+    current = current === null || Math.abs(current - target) < .003
       ? target
-      : target + (current - target) * Math.exp(-elapsed / 82);
+      : target + (current - target) * Math.exp(-elapsed / 52);
 
     const progress = Math.round(ease(current) * 10000) / 10000;
     if (progress !== lastDrawn) {
@@ -208,7 +208,7 @@
   });
   window.addEventListener('scroll', () => {
     scrollPosition = window.scrollY;
-    schedule();
+    if (needsMeasurement || current !== clamp((scrollPosition - start) / distance)) schedule();
   }, { passive: true });
   window.addEventListener('resize', refreshLayout, { passive: true });
   window.addEventListener('pageshow', refreshLayout);
