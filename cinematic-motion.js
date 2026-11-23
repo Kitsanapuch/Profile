@@ -4,158 +4,214 @@
   const motion = matchMedia('(prefers-reduced-motion: no-preference)');
   const hero = document.querySelector('.motion-hero');
   const visual = document.querySelector('.studio-focus-visual');
-  const image = document.getElementById('studio-focus-image');
-  if (!hero && !visual) return;
+  const viewport = visual?.querySelector('.studio-image-viewport');
+  const project = !hero && visual && viewport ? visual.closest('.studio-focus') : null;
+  const subject = hero || (project ? visual : null);
+  if (!subject) return;
 
-  const clamp = (number, low = 0, high = 1) => Math.max(low, Math.min(high, number));
-  const ease = (number) => number * number * (3 - 2 * number);
+  const scene = hero || project;
+  const nav = document.querySelector('.nav');
+  let overlay = null;
+  let showCallouts = false;
+  let introOpen = Boolean(document.querySelector('.intro-loader'));
+  let visible = !('IntersectionObserver' in window);
+  let needsMeasurement = true;
+  let scrollPosition = window.scrollY;
+  let start = 0;
+  let distance = 1;
+  let current = null;
+  let lastDrawn = null;
+  let lastTime = null;
+  let frame = 0;
+
+  const clamp = (value) => Math.max(0, Math.min(1, value));
+  const ease = (value) => value * value * (3 - 2 * value);
   const svg = (tag) => document.createElementNS('http://www.w3.org/2000/svg', tag);
 
   function buildProjectOverlay() {
-    const viewport = visual.querySelector('.studio-image-viewport');
-    const overlay = document.createElement('div');
-    const diagram = svg('svg');
-    const thai = document.documentElement.lang === 'th';
-    const texts = thai ? ['มุมมองแอป', 'พื้นที่ทำงาน'] : ['App preview', 'Workspace'];
-
-    viewport.style.position = 'relative';
-    for (const className of ['cinema-rear-plane--far', 'cinema-rear-plane--near']) {
+    const planes = ['far', 'near'].map((depth) => {
       const plane = document.createElement('span');
-      plane.classList.add('cinema-rear-plane', className);
+      plane.className = `cinema-rear-plane cinema-rear-plane--${depth}`;
       plane.setAttribute('aria-hidden', 'true');
-      visual.prepend(plane);
-    }
-    overlay.className = 'cinema-callouts';
-    overlay.setAttribute('aria-hidden', 'true');
-    overlay.append(diagram);
+      return plane;
+    });
+    visual.prepend(...planes);
 
-    const pins = texts.map((text) => {
-      const anchor = document.createElement('i');
-      const label = document.createElement('span');
+    const callouts = document.createElement('div');
+    callouts.className = 'cinema-callouts';
+    callouts.setAttribute('aria-hidden', 'true');
+    const diagram = svg('svg');
+    diagram.setAttribute('viewBox', '0 0 100 100');
+    diagram.setAttribute('preserveAspectRatio', 'none');
+    callouts.append(diagram);
+
+    const thai = document.documentElement.lang === 'th';
+    const features = [
+      { side: 'preview', label: thai ? 'มุมมองแอป' : 'App preview', x: 71, y: 25, endX: 89, endY: 15 },
+      { side: 'workspace', label: thai ? 'พื้นที่ทำงาน' : 'Workspace', x: 30, y: 65, endX: 14, endY: 77 },
+    ];
+
+    for (const { side, label, x, y, endX, endY } of features) {
       const line = svg('line');
-      const dot = svg('circle');
-      anchor.className = 'cinema-anchor';
-      anchor.setAttribute('aria-hidden', 'true');
-      label.className = 'cinema-callout';
-      label.textContent = text;
       line.setAttribute('pathLength', '1');
-      dot.setAttribute('r', '3');
-      viewport.append(anchor);
+      line.setAttribute('x1', x);
+      line.setAttribute('y1', y);
+      line.setAttribute('x2', endX);
+      line.setAttribute('y2', endY);
+
+      const dot = svg('circle');
+      dot.setAttribute('r', '.7');
+      dot.setAttribute('cx', x);
+      dot.setAttribute('cy', y);
       diagram.append(line, dot);
-      overlay.append(label);
-      return { anchor, label, line, dot };
-    });
-    visual.append(overlay);
-    return { overlay, pins, viewport };
+
+      const badge = document.createElement('span');
+      badge.className = `cinema-callout cinema-callout--${side}`;
+      badge.textContent = label;
+      callouts.append(badge);
+    }
+
+    // Callouts travel with the screenshot, without measuring the transformed frame.
+    viewport.append(callouts);
+    return callouts;
   }
 
-  const project = visual && image ? buildProjectOverlay() : null;
-  const heroValues = { current: null };
-  const boardValues = { current: null };
-  let frame = 0;
-  let heroVisible = true;
-  let projectVisible = true;
+  function measureScene() {
+    const box = subject.getBoundingClientRect();
+    const top = box.top + scrollPosition;
+    const height = window.innerHeight;
+    const navHeight = nav?.offsetHeight ?? 0;
 
-  function interpolate(state, target) {
-    const diff = target - (state.current ?? target);
-    state.current = Math.abs(diff) < .001 ? target : state.current + diff * .22;
-    if (state.current !== target) schedule();
-    return state.current;
+    if (hero) {
+      start = top - navHeight;
+      distance = Math.max(box.height * .65, 1);
+    } else {
+      // Start as the screen enters the viewport and arrive before it reaches the nav.
+      const readingLine = Math.max(navHeight + 40, height * .36);
+      start = Math.max(0, top - height * .91);
+      distance = Math.max(220, height * .34, top - readingLine - start);
+    }
+
+    needsMeasurement = false;
   }
 
-  function updateHero() {
-    const box = hero.getBoundingClientRect();
-    const navHeight = document.querySelector('.nav')?.offsetHeight ?? 0;
-    const t = ease(interpolate(heroValues, clamp((navHeight - box.top) / Math.max(box.height * .63, 1))));
-    const compact = matchMedia('(max-width: 640px)').matches;
-    hero.style.setProperty('--cinema-portrait-y', `${t * (compact ? 17 : 38)}px`);
-    hero.style.setProperty('--cinema-portrait-angle', `${-t * (compact ? 5 : 11)}deg`);
-    hero.style.setProperty('--cinema-portrait-scale', 1 + t * .085);
-    hero.style.setProperty('--cinema-terminal-y', `${-t * (compact ? 11 : 22)}px`);
-    hero.style.setProperty('--cinema-note-y', `${t * 6}px`);
+  function canAnimate() {
+    return motion.matches && visible && !introOpen && !document.hidden;
   }
 
-  function alignProjectCallouts(box) {
-    project.pins.forEach(({ anchor, label, line, dot }, index) => {
-      const point = anchor.getBoundingClientRect();
-      const px = point.left - box.left - visual.clientLeft;
-      const py = point.top - box.top - visual.clientTop;
-      const width = label.offsetWidth;
-      const height = label.offsetHeight;
-      const toRight = index === 0;
-      const x = clamp(px + (toRight ? 31 : -width - 31), 7, box.width - width - 7);
-      const y = clamp(py + (index === 0 ? -21 : 16), 5, box.height - height - 5);
-
-      label.style.transform = `translate(${x}px, ${y}px)`;
-      line.setAttribute('x1', px);
-      line.setAttribute('y1', py);
-      line.setAttribute('x2', toRight ? x : x + width);
-      line.setAttribute('y2', y + height / 2);
-      dot.setAttribute('cx', px);
-      dot.setAttribute('cy', py);
-    });
-  }
-
-  function updateProject() {
-    const box = visual.getBoundingClientRect();
-    const span = innerHeight * .74 + box.height;
-    const target = clamp((innerHeight * .95 - box.top) / span);
-    const progress = interpolate(boardValues, target);
-    const separation = Math.sin(Math.PI * progress);
-    const swing = Math.cos(Math.PI * progress);
-    const inspecting = project.viewport.classList.contains('is-zoomed');
-    visual.classList.toggle('cinema-inspecting', inspecting);
-    visual.style.setProperty('--cinema-depth', separation);
-    visual.style.setProperty('--cinema-turn', swing * separation);
-    visual.style.setProperty('--cinema-window-scale', .91 + .10 * separation);
-
-    const showLabels = progress > .20 && progress < .81 && !inspecting;
-    project.overlay.classList.toggle('is-visible', showLabels);
-    if (showLabels) alignProjectCallouts(box);
-  }
-
-  function paint() {
+  function suspend() {
+    if (frame) cancelAnimationFrame(frame);
     frame = 0;
-    if (!motion.matches) return;
-    if (hero && heroVisible) updateHero();
-    if (project && projectVisible) updateProject();
+    lastTime = null;
+  }
+
+  function paint(now) {
+    frame = 0;
+    if (!canAnimate()) return;
+    if (needsMeasurement) measureScene();
+
+    const target = clamp((scrollPosition - start) / distance);
+    const elapsed = lastTime === null ? 1000 / 60 : Math.min(now - lastTime, 50);
+    lastTime = now;
+
+    // Use elapsed time so the camera travels at the same speed on 60Hz and 120Hz screens.
+    current = current === null || Math.abs(current - target) < .002
+      ? target
+      : target + (current - target) * Math.exp(-elapsed / 82);
+
+    const progress = Math.round(ease(current) * 10000) / 10000;
+    if (progress !== lastDrawn) {
+      scene.style.setProperty('--cinema-progress', progress);
+      lastDrawn = progress;
+    }
+
+    if (overlay) {
+      const shouldShow = progress > .23 && progress < .89;
+      if (shouldShow !== showCallouts) {
+        overlay.classList.toggle('is-visible', shouldShow);
+        showCallouts = shouldShow;
+      }
+    }
+
+    if (current !== target) schedule();
+    else lastTime = null;
   }
 
   function schedule() {
-    if (motion.matches && !frame) frame = requestAnimationFrame(paint);
+    if (canAnimate() && !frame) frame = requestAnimationFrame(paint);
   }
 
-  function refreshPreference() {
-    hero?.classList.toggle('cinema-ready', motion.matches);
-    if (project) {
-      visual.classList.toggle('cinema-ready', motion.matches);
-      project.overlay.hidden = !motion.matches;
-      if (!motion.matches) project.overlay.classList.remove('is-visible');
-    }
+  function refreshLayout() {
+    scrollPosition = window.scrollY;
+    needsMeasurement = true;
     schedule();
   }
 
-  if ('IntersectionObserver' in window) {
-    const visible = new IntersectionObserver((entries) => {
-      for (const entry of entries) {
-        if (entry.target === hero) heroVisible = entry.isIntersecting;
-        if (entry.target === visual) projectVisible = entry.isIntersecting;
+  function refreshPreference() {
+    const enabled = motion.matches;
+    scene.classList.toggle('cinema-ready', enabled);
+    if (project) {
+      visual.classList.toggle('cinema-ready', enabled);
+      if (enabled && !overlay) overlay = buildProjectOverlay();
+      if (overlay) {
+        overlay.hidden = !enabled;
+        if (!enabled) {
+          overlay.classList.remove('is-visible');
+          showCallouts = false;
+        }
       }
-      schedule();
-    }, { rootMargin: '100px' });
-    if (hero) visible.observe(hero);
-    if (project) visible.observe(visual);
+    }
+
+    if (enabled) refreshLayout();
+    else {
+      current = null;
+      suspend();
+    }
   }
 
-  if (project) {
-    new MutationObserver(schedule).observe(project.viewport, { attributes: true, attributeFilter: ['class'] });
-    image.addEventListener('load', schedule);
-    if ('ResizeObserver' in window) new ResizeObserver(schedule).observe(visual);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) refreshLayout();
+      else {
+        current = null;
+        suspend();
+      }
+    }, { rootMargin: '100px' }).observe(subject);
+  }
+
+  if ('ResizeObserver' in window) {
+    const sizeObserver = new ResizeObserver(refreshLayout);
+    const heading = project && document.getElementById('section-view-heading');
+    for (const element of new Set([subject, scene, nav, heading])) {
+      if (element) sizeObserver.observe(element);
+    }
+  }
+
+  if (project && 'MutationObserver' in window) {
+    const syncZoom = () => visual.classList.toggle('cinema-inspecting', viewport.classList.contains('is-zoomed'));
+    new MutationObserver(syncZoom).observe(viewport, { attributes: true, attributeFilter: ['class'] });
+    syncZoom();
+  }
+
+  if (introOpen) {
+    document.addEventListener('portfolio:intro-end', () => {
+      introOpen = false;
+      refreshLayout();
+    }, { once: true });
   }
 
   motion.addEventListener('change', refreshPreference);
-  window.addEventListener('scroll', schedule, { passive: true });
-  window.addEventListener('resize', schedule, { passive: true });
-  document.fonts?.ready.then(schedule);
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) suspend();
+    else refreshLayout();
+  });
+  window.addEventListener('scroll', () => {
+    scrollPosition = window.scrollY;
+    schedule();
+  }, { passive: true });
+  window.addEventListener('resize', refreshLayout, { passive: true });
+  window.addEventListener('pageshow', refreshLayout);
+  document.fonts?.ready.then(refreshLayout);
   refreshPreference();
 })();
