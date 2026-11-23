@@ -109,7 +109,6 @@ body.motion-preview .motion-terminal-note {
 
 #motion-particles {
   opacity: .42;
-  mix-blend-mode: screen;
 }
 body.motion-preview .motion-ribbon .motion-ribbon-halo {
   stroke-width: 5;
